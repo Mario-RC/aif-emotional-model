@@ -1,0 +1,307 @@
+{
+    "args" : {
+        "model" : "",
+        "gpu" : 0,
+        "dev" : true,
+        "dataset" : ""
+    },
+    "trustedremotecode" : {
+        "models" : [
+            "chatglm2-6b",
+            "dolly-v2-7b",
+            "falcon-7b-instruct",
+            "moss-moon-003-sft",
+            "Phi-3-mini-4k-instruct",
+            "Phi-3-mini-128k-instruct",
+            "Phi-3-small-8k-instruct",
+            "Phi-3-small-128k-instruct",
+            "chatglm3-6b",
+            "chatglm3-6b-32k",
+            "chatglm3-6b-128k",
+            "internlm2-7b",
+            "internlm2-chat-7b",
+            "internlm2_5-7b-chat",
+            "internlm2_5-7b-chat-1m",
+            "glm-4-9b",
+            "glm-4-9b-chat",
+            "glm-4-9b-chat-1m"
+        ]
+    },
+    "repeatedprompts" : {
+        "models" : [
+            "opt-iml-max-1.3b",
+            "chatglm2-6b",
+            "minotaur-7b",
+            "falcon-7b-instruct",
+            "Guanaco",
+            "Nous-Hermes-llama-2-7b",
+            "vicuna-7b-v1.5",
+            "airoboros-l2-7b-2.2.1",
+            "airoboros-l2-7b-gpt4-2.0",
+            "airoboros-l2-7b-gpt4-m2.0",
+            "llama-2-7b-claude-chat",
+            "llama-2-7b-claude-instruct",
+            "Llama-2-7b-hf",
+            "Llama-2-7b-chat-hf"
+        ]
+    },
+    "repeatedpromptsmistral" : {
+        "models" : [
+            "Mistral-7B-Instruct-v0.1",
+            "Mistral-7B-Instruct-v0.3"
+        ]
+    },
+    "repeatedpromptsgemma" : {
+        "models" : [
+            "gemma-1.1-7b-it",
+            "gemma-2-9b-it"
+        ]
+    },
+    "repeatedpromptsllama3" : {
+        "models" : [
+            "Meta-Llama-3-8B",
+            "Meta-Llama-3-8B-Instruct"
+        ]
+    },
+    "repeatedpromptschatglm3" : {
+        "models" : [
+            "chatglm3-6b",
+            "chatglm3-6b-32k",
+            "chatglm3-6b-128k"
+        ]
+    },
+    "repeatedpromptsbloomz" : {
+        "models" : [
+            "bloomz-3b",
+            "bloomz-7b1"
+        ]
+    },
+    "repeatedpromptsphi3" : {
+        "models" : [
+            "Phi-3-mini-4k-instruct",
+            "Phi-3-mini-128k-instruct",
+            "Phi-3-small-8k-instruct",
+            "Phi-3-small-128k-instruct"
+        ]
+    },
+    "repeatedpromptsairboros" : {
+        "models" : [
+            "airoboros-l2-7b-3.0"
+        ]
+    },
+    "repeatedpromptszephyralpha" : {
+        "models" : [
+            "zephyr-7b-alpha"
+        ]
+    },
+    "repeatedpromptszephyrbeta" : {
+        "models" : [
+            "zephyr-7b-beta"
+        ]
+    },
+    "repeatedpromptszephyrgemma" : {
+        "models" : [
+            "zephyr-7b-gemma-v0.1"
+        ]
+    },
+    "repeatedpromptsinternlm" : {
+        "models" : [
+            "internlm2-7b",
+            "internlm2-chat-7b",
+            "internlm2_5-7b-chat",
+            "internlm2_5-7b-chat-1m"
+        ]
+    },
+    "repeatedpromptsglm4" : {
+        "models" : [
+            "glm-4-9b",
+            "glm-4-9b-chat",
+            "glm-4-9b-chat-1m"
+        ]
+    },
+    "automodelforcasuallm" : {
+        "models" : [
+            "WizardLM-7B-V1.0",
+            "WizardCoder-3B-V1.0",
+            "opt-iml-max-1.3b",
+            "dolly-v2-7b",
+            "falcon-7b-instruct",
+            "Nous-Hermes-llama-2-7b",
+            "tulu-7b",
+            "moss-moon-003-sft",
+            "airoboros-l2-7b-2.2.1",
+            "airoboros-l2-7b-gpt4-2.0",
+            "airoboros-l2-7b-gpt4-m2.0",
+            "airoboros-l2-7b-3.0",
+            "UltraLM-13b",
+            "llama-2-7b-claude-instruct",
+            "llama-2-7b-claude-chat",
+            "zephyr-7b-alpha",
+            "zephyr-7b-beta",
+            "zephyr-7b-gemma-v0.1",
+            "Mistral-7B-Instruct-v0.1",
+            "Meta-Llama-3-8B",
+            "Meta-Llama-3-8B-Instruct",
+            "gemma-1.1-7b-it",
+            "gemma-2-9b-it",
+            "Phi-3-mini-4k-instruct",
+            "Phi-3-mini-128k-instruct",
+            "Phi-3-small-8k-instruct",
+            "Phi-3-small-128k-instruct",
+            "Mistral-7B-Instruct-v0.3",
+            "bloomz-3b",
+            "bloomz-7b1",
+            "internlm2-7b",
+            "internlm2-chat-7b"
+        ]
+    },
+    "automodel" : {
+        "models" : [
+            "chatglm2-6b",
+            "chatglm3-6b",
+            "chatglm3-6b-32k",
+            "chatglm3-6b-128k",
+            "glm-4-9b",
+            "glm-4-9b-chat",
+            "glm-4-9b-chat-1m",
+            "internlm2_5-7b-chat",
+            "internlm2_5-7b-chat-1m"
+        ]
+    },
+    "llamaforcasuallm" : {
+        "models" : [
+            "vicuna-7b-v1.5",
+            "Guanaco",
+            "minotaur-7b",
+            "YuLan-Chat-2-13b-fp16",
+            "Mistral-7B-claude-instruct",
+            "Llama-2-7b-hf",
+            "Llama-2-7b-chat-hf"
+        ]
+    },
+    "automodelforseq2seqlm" : {
+        "models" : [
+            "flan-alpaca-xl",
+            "flan-sharegpt-xl",
+            "flan-gpt4all-xl",
+            "flan-alpaca-gpt4-xl"
+        ]
+    },
+    "inputtemplate1" : {
+        "type" : [ ":" ],
+        "models" : [
+            "llama-2-7b-claude-chat"
+        ],
+        "hide" : [
+            "falcon-7b-instruct",
+            "minotaur-7b",
+            "airoboros-l2-7b-2.2.1",
+            "UltraLM-13b",
+            "WizardLM-7B-V1.0"
+        ]
+    },
+    "inputtemplate2" : {
+        "type" : [ "###" ],
+        "models" : [
+            "llama-2-7b-claude-instruct"
+        ],
+        "hide" : [
+            "flan-alpaca-xl",
+            "dolly-v2-7b",
+            "Guanaco",
+            "Nous-Hermes-llama-2-7b",
+            "Mistral-7B-claude-instruct"
+        ]
+    },
+    "inputtemplate3" : {
+        "type" : [ "<|" ],
+        "models" : [
+            "flan-sharegpt-xl",
+            "flan-gpt4all-xl",
+            "chatglm2-6b",
+            "zephyr-7b-alpha",
+            "zephyr-7b-beta",
+            "zephyr-7b-gemma-v0.1"
+        ],
+        "hide" : [
+            "tulu-7b",
+            "moss-moon-003-sft"
+        ]
+    },
+    "inputtemplatellama2" : {
+        "type" : [ "LLAMA2" ],
+        "models" : [
+            "Llama-2-7b-hf",
+            "Llama-2-7b-chat-hf"
+        ],
+        "hide" : [
+            "airoboros-l2-7b-3.0"
+        ]
+    },
+    "inputtemplatellama3" : {
+        "type" : [ "LLAMA3" ],
+        "models" : [
+            "Meta-Llama-3-8B",
+            "Meta-Llama-3-8B-Instruct"
+        ],
+        "hide" : [
+        ]
+    },
+    "inputtemplategemma" : {
+        "type" : [ "GEMMA" ],
+        "models" : [
+            "gemma-1.1-7b-it",
+            "gemma-2-9b-it"
+        ],
+        "hide" : [
+        ]
+    },
+    "inputtemplatephi3" : {
+        "type" : [ "PHI3" ],
+        "models" : [
+            "Phi-3-mini-4k-instruct",
+            "Phi-3-mini-128k-instruct",
+            "Phi-3-small-8k-instruct",
+            "Phi-3-small-128k-instruct"
+        ],
+        "hide" : [
+        ]
+    },
+    "inputtemplatemistral" : {
+        "type" : [ "MISTRAL" ],
+        "models" : [
+            "Mistral-7B-Instruct-v0.3"
+        ],
+        "hide" : [
+        ]
+    },
+    "inputtemplatechatglm3" : {
+        "type" : [ "CHATGLM3" ],
+        "models" : [
+            "chatglm3-6b",
+            "chatglm3-6b-32k",
+            "chatglm3-6b-128k"
+        ],
+        "hide" : [
+        ]
+    },
+    "inputtemplateglm4" : {
+        "type" : [ "GLM4" ],
+        "models" : [
+            "glm-4-9b",
+            "glm-4-9b-chat",
+            "glm-4-9b-chat-1m"
+        ],
+        "hide" : [
+        ]
+    },
+    "inputtemplateinternlm" : {
+        "type" : [ "INTERNLM" ],
+        "models" : [
+            "internlm2-7b",
+            "internlm2-chat-7b"
+        ],
+        "hide" : [
+        ]
+    }
+}
