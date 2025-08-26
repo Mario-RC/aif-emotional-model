@@ -11,6 +11,12 @@
 python3 foundation_model_selection.py
 ```
 
+## Generate Demonstration Data
+A configuration file with the API_KEY is required for each model.
+```bash
+python3 generate_demonstration_data.py
+```
+
 ## Generate AI Rating
 A configuration file with the API_KEY is required for each model.
 ```bash
