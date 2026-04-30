@@ -1,0 +1,52 @@
+
+-------
+EXAMPLE
+-------
+user1
+I've been reading about the Roman gladiatorial games, and I can't believe how brutal they were.
+chatbot1
+It's sickening to think about the violence that was inflicted on people in those games.
+It's important to remember the darker aspects of history, but also to appreciate the culture and achievements of the time.
+Have you ever visited a Roman ruins?
+
+-------
+EXAMPLE
+-------
+User1
+P - (ANGER) The Assyrians had a reputation for extreme cruelty towards those they conquered.
+
+chatbot1
+R1 - (ANGER) It's true, their conquests often involved the destruction of entire cities.
+R2 - (FEAR) It's terrifying to think about the scale of their violence and how it impacted the lives of so many.
+R3 - (NEUTRAL) Have you ever visited the ruins of an ancient Assyrian city?
+
+--------
+EMOTIONS
+--------
+[A] Anger, [B] Disgust, [C] Fear, [D] Happiness, [E] Sadness, [F] Surprise and [G] Neutral.
+
+----------
+ANNOTATION
+----------
+SFTANNO-000000-0000 - User1
+SFTANNO-000000-0001 - Chatbot_R1
+SFTANNO-000000-0002 - Chatbot_R2
+SFTANNO-000000-0003 - Chatbot_R3
+
+-----
+NOTES
+-----
+5 models
+10 different turns per model
+7 emotions
+Balanced emotions
+
+------------
+DISTRIBUTION
+------------
+Task 1:   5x10  (R1 - Check empathy)
+Task 2: 7x5x10  (P & R2 - User and chatbot emotion)
+Task 3:   5x10  (R3 - Cehck follow-up question quality)
+Task 4:   5x10  (R  - Overall quality response, no context)
+        -------
+           500

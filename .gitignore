@@ -51,14 +51,42 @@ wandb/
 # =========================
 # Data
 # =========================
+**/data/**
+**/demonstration_data/**
 */data/*.json
 */data/*.csv
 */data/**/*.json
 */data/**/*.csv
+**/data/*.json
+**/data/*.csv
+**/data/**/*.json
+**/data/**/*.csv
+**/data/*.xlsx
+**/data/**/*.xlsx
+**/data/*.arrow
+**/data/**/*.arrow
+**/data/*.png
+**/data/**/*.png
+**/data/*.pdf
+**/data/**/*.pdf
 */demonstration_data/*.json
 */demonstration_data/*.csv
 */demonstration_data/**/*.json
 */demonstration_data/**/*.csv
+**/demonstration_data/*.json
+**/demonstration_data/*.csv
+**/demonstration_data/**/*.json
+**/demonstration_data/**/*.csv
+
+# =========================
+# Generated Dataset Artifacts
+# =========================
+tokenized_datasets.hf/
+*.arrow
+*.xlsx
+hist/
+**/rm_preference_dataset_test/*.json
+=1.4.0
 
 # =========================
 # OS / System
