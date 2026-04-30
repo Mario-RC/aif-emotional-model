@@ -1,0 +1,67 @@
+# =========================
+# Secrets
+# =========================
+.env
+*.env
+.env*
+*.key
+secret*
+*config*.json
+README_aux*
+
+# =========================
+# Large Files / Models
+# =========================
+saves/
+*.safetensors
+*.bin
+*.pt
+*.pth
+checkpoint-*/
+
+# =========================
+# Junk / Legacy
+# =========================
+bck/
+*legacy/
+
+# =========================
+# Cache / Agents / IDE
+# =========================
+__pycache__/
+.venv/
+venv/
+.vscode/
+.claude/
+.vrlaif/
+.codex
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# =========================
+# Outputs
+# =========================
+logs/
+results/
+runs/
+wandb/
+
+# =========================
+# Data
+# =========================
+*/data/*.json
+*/data/*.csv
+*/data/**/*.json
+*/data/**/*.csv
+*/demonstration_data/*.json
+*/demonstration_data/*.csv
+*/demonstration_data/**/*.json
+*/demonstration_data/**/*.csv
+
+# =========================
+# OS / System
+# =========================
+.DS_Store
+Thumbs.db
