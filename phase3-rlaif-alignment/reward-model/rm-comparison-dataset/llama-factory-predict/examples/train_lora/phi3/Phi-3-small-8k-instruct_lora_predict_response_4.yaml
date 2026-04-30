@@ -1,0 +1,31 @@
+### model
+model_name_or_path: microsoft/Phi-3-small-8k-instruct
+adapter_name_or_path: saves/Phi-3-small-8k-instruct/lora/sft
+
+### method
+stage: sft
+do_predict: true
+finetuning_type: lora
+
+### dataset
+dataset: rm_prompt_dataset
+# eval_dataset: prompt_dataset_handmade
+template: phi
+cutoff_len: 1024
+max_samples: 10000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/Phi-3-small-8k-instruct/lora/train/predict_4
+overwrite_output_dir: true
+
+### train
+temperature: 1.1
+top_k: 120
+top_p: 0.5
+
+### eval
+per_device_eval_batch_size: 1
+predict_with_generate: true
+ddp_timeout: 180000000

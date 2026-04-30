@@ -1,0 +1,31 @@
+### model
+model_name_or_path: THUDM/glm-4-9b-chat-1m
+adapter_name_or_path: saves/glm-4-9b-chat-1m/lora/sft
+trust_remote_code: True
+
+### method
+stage: sft
+do_predict: true
+finetuning_type: lora
+
+### dataset
+eval_dataset: ppo_unlabeled_prompts_dataset_1k_test
+template: glm4
+cutoff_len: 1024
+max_samples: 10000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/glm-4-9b-chat-1m/lora/test/predict_3
+overwrite_output_dir: true
+
+### train
+temperature: 0.9
+top_k: 100
+top_p: 0.9
+
+### eval
+per_device_eval_batch_size: 1
+predict_with_generate: true
+ddp_timeout: 180000000

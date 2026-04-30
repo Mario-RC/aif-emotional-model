@@ -1,0 +1,30 @@
+### model
+model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
+adapter_name_or_path: saves/Meta-Llama-3-8B-Instruct/lora/sft
+
+### method
+stage: sft
+do_predict: true
+finetuning_type: lora
+
+### dataset
+eval_dataset: ppo_unlabeled_prompts_dataset_1k
+template: llama3
+cutoff_len: 1024
+max_samples: 10000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/Meta-Llama-3-8B-Instruct/lora/train/predict_6
+overwrite_output_dir: true
+
+### train
+temperature: 1.7
+top_k: 50
+top_p: 0.7
+
+### eval
+per_device_eval_batch_size: 1
+predict_with_generate: true
+ddp_timeout: 180000000

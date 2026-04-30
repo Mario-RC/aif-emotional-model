@@ -1,0 +1,244 @@
+"""Combine the per-model chosen predictions, score and filter the worst per row.
+
+Pipeline:
+1. Read each ``data/<model>/dpo_comparison_dataset_<short>_predict_sft_chosen.csv`` and
+   write a tidy per-model JSON keeping only ``predict_sft_0`` and ``predict_sft_chosen``.
+2. Combine the five per-model JSONs into ``data/dpo_comparison_dataset_joined.json``.
+3. Recompute embeddings, semantic similarity, distinct-2 and the score.
+4. For each row drop the ``predict_sft_*`` column with the lowest score and write
+   the filtered result to ``data/dpo_comparison_dataset_filtered.json``.
+"""
+
+from __future__ import annotations
+
+import argparse
+import ast
+import os
+import random
+import re
+
+import numpy as np
+import pandas as pd
+from sentence_transformers import SentenceTransformer
+
+from _lib import (
+    MODELS,
+    MODEL_TO_NAME,
+    get_distinct_n_for_columns,
+    get_embeddings,
+    normalize_lengths,
+    per_row_semantic_similarity,
+    read_json,
+    rescale_distinct,
+    score_equation,
+    split_emotions_for_columns,
+    with_suffix,
+    write_json,
+)
+
+CHOSEN_COLUMNS = [
+    "instruction", "history", "prompt", "target",
+    "predict_sft_0", "predict_sft_chosen", "model", "did",
+]
+PREDICT_SFT_KEYS = [f"predict_sft_{m}_{stage}" for m in ["gemma2", "glm4", "llama3", "mistral", "phi3"] for stage in ("0", "x")]
+PREDICT_SFT_COLUMNS = ["target"] + PREDICT_SFT_KEYS
+SPLIT_COLUMNS = [f"{c}_split" for c in PREDICT_SFT_COLUMNS]
+EMB_COLUMNS = [f"{c}_emb" for c in PREDICT_SFT_COLUMNS]
+
+
+def _short(model: str) -> str:
+    return MODEL_TO_NAME[model]
+
+
+def _per_model_path(model: str, suffix: str, is_test: bool, ext: str = "csv") -> str:
+    base = f"data/{model}/dpo_comparison_dataset_{_short(model)}{suffix}"
+    return with_suffix(base, ext, is_test)
+
+
+def per_model_csv_to_json(is_test: bool) -> None:
+    for model in MODELS:
+        in_path = _per_model_path(model, "_predict_sft_chosen", is_test)
+        df = pd.read_csv(in_path, encoding="utf-8")
+        subset = df[CHOSEN_COLUMNS].copy()
+        subset["history"] = subset["history"].apply(ast.literal_eval)
+        out_path = _per_model_path(model, "", is_test, ext="json")
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        write_json(subset.to_dict(orient="records"), out_path)
+
+
+def combine_models(is_test: bool) -> None:
+    per_model = {model: read_json(_per_model_path(model, "", is_test, ext="json")) for model in MODELS}
+    base_model = MODELS[0]
+    combined: list[dict] = []
+    for idx in range(len(per_model[base_model])):
+        entry = {
+            "instruction": per_model[base_model][idx]["instruction"],
+            "history": per_model[base_model][idx]["history"],
+            "prompt": per_model[base_model][idx]["prompt"],
+            "target": per_model[base_model][idx]["target"],
+        }
+        for model in MODELS:
+            short = _short(model)
+            entry[f"predict_sft_{short}_0"] = per_model[model][idx]["predict_sft_0"]
+            entry[f"predict_sft_{short}_x"] = per_model[model][idx]["predict_sft_chosen"]
+        entry.update({
+            "predict_sft_modified": "",
+            "predict_sft_modified_label": "",
+            "scores": [],
+            "did": per_model[base_model][idx]["did"],
+        })
+        combined.append(entry)
+
+    write_json(combined, f"data/{with_suffix('dpo_comparison_dataset_joined', 'json', is_test)}")
+
+
+EMO_RE = re.compile(r"\(.*?\)")
+
+
+def _safe_three_emotions(text: str) -> tuple[str, str, str]:
+    found = EMO_RE.findall(text)
+    found += [""] * (3 - len(found))
+    return tuple(found[:3])
+
+
+def report_emotion_agreement(is_test: bool) -> None:
+    combined = read_json(f"data/{with_suffix('dpo_comparison_dataset_joined', 'json', is_test)}")
+    keys = [k for k in PREDICT_SFT_KEYS if k.endswith(("_0", "_x"))]
+
+    for key in keys:
+        user, chat, neutral = 0, 0, 0
+        for entry in combined:
+            t_user, t_chat, _ = _safe_three_emotions(entry["target"])
+            p_user, p_chat, p_neutral = _safe_three_emotions(entry[key])
+            user += p_user == t_user
+            chat += p_chat == t_chat
+            neutral += p_neutral == "(NEUTRAL)"
+        n = len(combined)
+        print(
+            f"{key}\n"
+            f"  user: {user/n*100:0.2f}%\n"
+            f"  chatbot: {chat/n*100:0.2f}%\n"
+            f"  neutral: {neutral/n*100:0.2f}%"
+        )
+
+
+def _score_row(df: pd.DataFrame, idx: int) -> list[float]:
+    target_sim = df["target_semantic_similarity"].iloc[idx][1:]
+    candidate_distinct = [rescale_distinct(df[f"{k}_distinct_2"].iloc[idx]) for k in PREDICT_SFT_KEYS]
+    candidate_lengths = [
+        len(df["target"].iloc[idx].split()),
+        *[len(df[k].iloc[idx].split()) for k in PREDICT_SFT_KEYS],
+    ]
+    length_scores = normalize_lengths(candidate_lengths, reference_idx_count=1, n=8, m=3)
+    return [
+        score_equation(sts, d_n, length, alpha=0.4, beta=0.4, gamma=0.2)
+        for sts, d_n, length in zip(target_sim, candidate_distinct, length_scores)
+    ]
+
+
+def add_scores(is_test: bool, model_name: str = "jinaai/jina-embeddings-v3") -> None:
+    in_json = f"data/{with_suffix('dpo_comparison_dataset_joined', 'json', is_test)}"
+    combined = read_json(in_json)
+    df = pd.DataFrame(combined)
+
+    splits = split_emotions_for_columns(df, PREDICT_SFT_COLUMNS)
+    for offset, split_col in enumerate(SPLIT_COLUMNS):
+        df.insert(4 + offset * 2, split_col, splits[offset][0])
+
+    encoder = SentenceTransformer(model_name, trust_remote_code=True)
+    embs = get_embeddings(df, SPLIT_COLUMNS, encoder)
+    for offset, emb_col in enumerate(EMB_COLUMNS):
+        df.insert(5 + offset * 3, emb_col, embs[offset].tolist())
+
+    sim_per_col, _ = per_row_semantic_similarity(df, EMB_COLUMNS)
+    for offset, col in enumerate(PREDICT_SFT_COLUMNS):
+        df.insert(6 + offset * 4, f"{col}_semantic_similarity", sim_per_col[offset])
+
+    distinct_2 = get_distinct_n_for_columns(df, PREDICT_SFT_KEYS, n=2)
+    for offset, key in enumerate(PREDICT_SFT_KEYS):
+        df[f"{key}_distinct_2"] = distinct_2[offset]
+
+    df["predict_sft_score"] = [_score_row(df, idx) for idx in range(len(df))]
+    df.to_csv(f"data/{with_suffix('df_combined_data', 'csv', is_test)}", index=False)
+
+    for idx, score in enumerate(df["predict_sft_score"]):
+        combined[idx]["scores"] = score
+    write_json(combined, in_json)
+
+
+def filter_worst_response(is_test: bool, n_drop: int = 3) -> None:
+    in_json = f"data/{with_suffix('dpo_comparison_dataset_joined', 'json', is_test)}"
+    combined = read_json(in_json)
+    random.seed(42)
+
+    for idx, entry in enumerate(combined):
+        scores = entry["scores"]
+        bottom_indices = sorted(range(len(scores)), key=lambda i: scores[i])[:n_drop]
+        random.seed(idx)
+        drop_idx = random.choice(bottom_indices)
+        entry.pop(PREDICT_SFT_KEYS[drop_idx], None)
+        entry["scores"].pop(drop_idx)
+
+    write_json(combined, f"data/{with_suffix('dpo_comparison_dataset_filtered', 'json', is_test)}")
+
+
+def validate_alpha_beta_gamma(is_test: bool) -> dict:
+    df = pd.read_csv(f"data/{with_suffix('df_combined_data', 'csv', is_test)}")
+    for col in [c for c in df.columns if c.endswith("semantic_similarity")]:
+        df[col] = df[col].apply(ast.literal_eval)
+
+    grid = {
+        "alpha": [0.5, 0.5, 0.45, 0.45, 0.4],
+        "beta":  [0.4, 0.3, 0.45, 0.35, 0.4],
+        "gamma": [0.1, 0.2, 0.10, 0.20, 0.2],
+    }
+    results = []
+    for alpha, beta, gamma in zip(grid["alpha"], grid["beta"], grid["gamma"]):
+        scores: list[float] = []
+        for idx in range(len(df)):
+            target_sim = df["target_semantic_similarity"].iloc[idx][1:]
+            candidate_distinct = [rescale_distinct(df[f"{k}_distinct_2"].iloc[idx]) for k in PREDICT_SFT_KEYS]
+            lengths = [
+                len(df["target"].iloc[idx].split()),
+                *[len(df[k].iloc[idx].split()) for k in PREDICT_SFT_KEYS],
+            ]
+            length_scores = normalize_lengths(lengths, reference_idx_count=1, n=8, m=3)
+            for sts, d_n, length in zip(target_sim, candidate_distinct, length_scores):
+                scores.append(score_equation(sts, d_n, length, alpha, beta, gamma))
+        mean_s = float(np.mean(scores))
+        std_s = float(np.std(scores))
+        results.append({
+            "alpha": alpha, "beta": beta, "gamma": gamma,
+            "mean_score": mean_s, "std_score": std_s,
+            "cv_score": std_s / mean_s if mean_s else 0.0,
+        })
+
+    best_mean = max(results, key=lambda r: r["mean_score"])
+    best_cv = min(results, key=lambda r: r["cv_score"])
+    print("Best by mean:", best_mean)
+    print("Best by CV  :", best_cv)
+    return {"best_mean": best_mean, "best_cv": best_cv}
+
+
+def run_pipeline(is_test: bool = False) -> None:
+    per_model_csv_to_json(is_test)
+    combine_models(is_test)
+    add_scores(is_test)
+    filter_worst_response(is_test)
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--test", action="store_true")
+    parser.add_argument("--report-emotions", action="store_true")
+    parser.add_argument("--validate", action="store_true")
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = _parse_args()
+    run_pipeline(is_test=args.test)
+    if args.report_emotions:
+        report_emotion_agreement(is_test=args.test)
+    if args.validate:
+        validate_alpha_beta_gamma(is_test=args.test)
