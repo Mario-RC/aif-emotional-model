@@ -31,7 +31,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(message)s")
 log = logging.getLogger("analyze_results")
 
 
-# Shared IAA dialogue prefixes (see human_annotations.txt).
+# Shared IAA dialogue prefixes from the sampling protocol.
 IAA_BASE_UIDS = (
     "SFTANNO-000006",
     "SFTANNO-000011",

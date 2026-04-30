@@ -98,7 +98,7 @@ def split_across_annotators(
     task_dfs: Dict[int, pd.DataFrame],
     annotators: Sequence[Annotator] = ANNOTATORS,
 ) -> List[AnnotatorSlice]:
-    """Replicate the sampling described in ``human_annotations.txt``.
+    """Replicate the human-evaluation sampling protocol.
 
     1. Grab the first ``SAMPLING.iaa_size`` rows whose user emotion
        matches the chatbot's R2 emotion (the IAA set — shared).

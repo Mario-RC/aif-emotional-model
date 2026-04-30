@@ -92,17 +92,16 @@ EMOTION_COLORS: Dict[str, str] = {
 
 @dataclass(frozen=True)
 class Annotator:
-    index: int          # 1-based slot (anno1 … anno5)
+    index: int          # 1-based slot (anno1 ... anno4)
     name: str           # folder name under results/
     included: bool      # whether the annotator's results are used in aggregation
 
 
 ANNOTATORS: Tuple[Annotator, ...] = (
-    Annotator(1, "kallirroi",    included=False),
-    Annotator(2, "marcos",       included=True),
-    Annotator(3, "jaime",        included=True),
-    Annotator(4, "luisfernando", included=True),
-    Annotator(5, "mario",        included=True),
+    Annotator(1, "anno1", included=True),
+    Annotator(2, "anno2", included=True),
+    Annotator(3, "anno3", included=True),
+    Annotator(4, "anno4", included=True),
 )
 
 
@@ -147,7 +146,7 @@ TASKS: Tuple[Task, ...] = (
 @dataclass(frozen=True)
 class SamplingConfig:
     """Parameters for the per-annotator split described in
-    ``human_annotations.txt``."""
+    the human-evaluation sampling protocol."""
 
     iaa_size: int = 7
     per_emotion_shared: int = 2
