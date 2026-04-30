@@ -1,0 +1,30 @@
+### model
+model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
+adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/sft
+
+### method
+stage: sft
+do_predict: true
+finetuning_type: lora
+
+### dataset
+eval_dataset: ppo_unlabeled_prompts_dataset_1k_test
+template: mistral
+cutoff_len: 1024
+max_samples: 10000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/Mistral-7B-Instruct-v0.3/lora/test/predict_4
+overwrite_output_dir: true
+
+### train
+temperature: 1.1
+top_k: 120
+top_p: 0.5
+
+### eval
+per_device_eval_batch_size: 1
+predict_with_generate: true
+ddp_timeout: 180000000

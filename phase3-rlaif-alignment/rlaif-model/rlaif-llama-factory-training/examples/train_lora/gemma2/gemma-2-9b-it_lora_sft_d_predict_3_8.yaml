@@ -1,0 +1,26 @@
+### model
+model_name_or_path: google/gemma-2-9b-it
+adapter_name_or_path: saves/gemma-2-9b-it/lora/sft_d_3_8
+trust_remote_code: true
+
+### method
+stage: sft
+do_predict: true
+finetuning_type: lora
+
+### dataset
+eval_dataset: sft_demonstration_dataset_test
+template: gemma
+cutoff_len: 2048
+max_samples: 1000000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/gemma-2-9b-it/lora/predict/sft_d_3_8
+overwrite_output_dir: true
+
+### eval
+per_device_eval_batch_size: 1
+predict_with_generate: true
+ddp_timeout: 180000000
