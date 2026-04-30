@@ -8,6 +8,8 @@
 secret*
 *config*.json
 README_aux*
+config.yaml
+init_venv.sh
 
 # =========================
 # Large Files / Models
