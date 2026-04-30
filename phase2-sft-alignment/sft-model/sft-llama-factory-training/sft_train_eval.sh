@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # GEMMA2 - google/gemma-2-9b-it
-CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/train_lora/gemma2/gemma-2-9b-it_lora_sft_1.yaml
-CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/train_lora/gemma2/gemma-2-9b-it_lora_sft_2.yaml
-CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/train_lora/gemma2/gemma-2-9b-it_lora_sft_3.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/train_lora/gemma2/gemma-2-9b-it_lora_sft_1ep.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/train_lora/gemma2/gemma-2-9b-it_lora_sft_2ep.yaml
+CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/train_lora/gemma2/gemma-2-9b-it_lora_sft_3ep.yaml
 CUDA_VISIBLE_DEVICES=0 llamafactory-cli chat examples/inference/gemma2/gemma-2-9b-it_lora_ppo.yaml
 
 # GLM4 - THUDM/glm-4-9b-chat-1m
