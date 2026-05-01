@@ -21,6 +21,7 @@ from .config import EMOTION_COLORS, HIST_DIR, MODEL_LABELS
 
 
 DEFAULT_BAR_COLOR = "#b6e3d1"
+DEFAULT_YTICKS = [0, 5, 15, 25, 35, 45]
 
 
 def _finalize_axes() -> None:
@@ -53,6 +54,7 @@ def plot_hits_by_model(
     else:
         plt.bar(x, height=hits, color=bar_color)
     plt.xticks(x, list(columns), fontsize=12)
+    plt.yticks(DEFAULT_YTICKS, fontsize=12)
     _finalize_axes()
     plt.tight_layout()
     if save_path is not None:
@@ -89,6 +91,7 @@ def plot_hits_by_emotion(
     else:
         plt.bar(labels, values, color=bar_colors)
     plt.xticks(fontsize=12)
+    plt.yticks(DEFAULT_YTICKS, fontsize=12)
     _finalize_axes()
     plt.tight_layout()
     if save_path is not None:

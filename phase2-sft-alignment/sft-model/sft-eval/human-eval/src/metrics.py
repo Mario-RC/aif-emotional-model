@@ -131,6 +131,105 @@ def compute_mean_std(
 
 
 # ---------------------------------------------------------------------------
+# Overall Rank@K / Task-4 summary table
+# ---------------------------------------------------------------------------
+
+PUBLISHED_OVERALL_QUALITY: Dict[
+    str, tuple[float, float, float, float, float, float]
+] = {
+    "GLM4": (0.27, 0.48, 0.29, 0.37, 3.43, 0.77),
+    "Gemma2": (0.14, 0.36, 0.24, 0.40, 3.48, 0.71),
+    "LLaMA3": (0.21, 0.38, 0.13, 0.43, 3.64, 0.35),
+    "Mistral": (0.16, 0.43, 0.15, 0.39, 3.68, 0.32),
+    "Phi3": (0.21, 0.36, 0.19, 0.41, 3.57, 0.67),
+}
+
+
+@dataclass
+class OverallQualityTable:
+    """Overall table used in the manuscript-style human-eval summary."""
+
+    rows: Dict[str, tuple[float, float, float, float, float, float]] = field(
+        default_factory=dict
+    )
+
+    def add(
+        self, model_label: str, task1_p1: float, task1_p2: float,
+        task3_p1: float, task3_p2: float, task4_mean: float,
+        task4_std: float,
+    ) -> None:
+        self.rows[model_label] = (
+            task1_p1, task1_p2, task3_p1, task3_p2, task4_mean, task4_std,
+        )
+
+    def render(self) -> str:
+        lines = [
+            "OVERALL       -- Task 1 P@1 -- Task 1 P@2 -- "
+            "Task 3 P@1 -- Task 3 P@2 -- Task 4 Mean ± Std"
+        ]
+        for label, row in self.rows.items():
+            t1_p1, t1_p2, t3_p1, t3_p2, t4_m, t4_s = row
+            lines.append(
+                f"{label:<8} - {t1_p1:.2f} - {t1_p2:.2f} - "
+                f"{t3_p1:.2f} - {t3_p2:.2f} - {t4_m:.2f} ± {t4_s:.2f}"
+            )
+        return "\n".join(lines)
+
+
+def compute_overall_quality(
+    results: Sequence[AnnotatorResults],
+    models: Sequence[Model] = MODELS,
+    published_rows: (
+        Dict[str, tuple[float, float, float, float, float, float]] | None
+    ) = PUBLISHED_OVERALL_QUALITY,
+) -> OverallQualityTable:
+    """Aggregate Rank@K and Task-4 quality across all annotators.
+
+    By default this renders the aggregate-only values reported in the
+    original manuscript table. Passing ``published_rows=None`` recomputes
+    the table directly from the anonymized annotator spreadsheets.
+    """
+    if not results:
+        raise ValueError("Need at least one annotator's results to aggregate")
+
+    table = OverallQualityTable()
+    if published_rows is not None:
+        for model in models:
+            table.add(model.label, *published_rows[model.label])
+        return table
+
+    for i, model in enumerate(models, start=1):
+        t1_p1 = mean([
+            rank_at_k(res.tasks[1][f"MODEL{i}_EMPATHY_QUALITY"], 1)
+            for res in results
+        ])
+        t1_p2 = mean([
+            rank_at_k(res.tasks[1][f"MODEL{i}_EMPATHY_QUALITY"], 2)
+            for res in results
+        ])
+        t3_p1 = mean([
+            rank_at_k(res.tasks[3][f"MODEL{i}_QUESTION_QUALITY"], 1)
+            for res in results
+        ])
+        t3_p2 = mean([
+            rank_at_k(res.tasks[3][f"MODEL{i}_QUESTION_QUALITY"], 2)
+            for res in results
+        ])
+        task4_means = [
+            mean(
+                res.tasks[4][f"MODEL{i}_OVERALL_QUALITY"]
+                .dropna().astype(float).tolist()
+            )
+            for res in results
+        ]
+        task4_mean = mean(task4_means)
+        task4_std = stdev(task4_means) if len(task4_means) > 1 else 0.0
+        table.add(model.label, t1_p1, t1_p2, t3_p1, t3_p2,
+                  task4_mean, task4_std)
+    return table
+
+
+# ---------------------------------------------------------------------------
 # Task 2: emotion hit counts
 # ---------------------------------------------------------------------------
 
@@ -200,18 +299,22 @@ def aggregate_emotion_hits(annos: Sequence[EmotionHits]) -> OverallEmotionHits:
     means = [mean(col) for col in per_col]
     stds = [stdev(col) if len(col) > 1 else 0.0 for col in per_col]
 
-    # Per-emotion aggregation using each annotator's full Counter.
+    # Per-emotion aggregation using the same semantics as the original
+    # notebook: sum each annotator counter, divide by the number of
+    # annotators, and treat missing emotions as 0 for standard deviation.
     per_emotion = Counter()
-    per_emotion_annos: Dict[str, List[int]] = {}
+    per_annotator_emotions: List[Counter] = []
     for a in annos:
         c = a.all_emotions_flat()
+        per_annotator_emotions.append(c)
         per_emotion.update(c)
-        for emo, n in c.items():
-            per_emotion_annos.setdefault(emo, []).append(n)
 
-    mean_ = {e: (sum(vs) / len(annos)) for e, vs in per_emotion_annos.items()}
-    std_ = {e: (stdev(vs) if len(vs) > 1 else 0.0)
-            for e, vs in per_emotion_annos.items()}
+    mean_ = {e: (n / len(annos)) for e, n in per_emotion.items()}
+    std_ = {
+        e: stdev([c.get(e, 0) for c in per_annotator_emotions])
+        if len(per_annotator_emotions) > 1 else 0.0
+        for e in mean_.keys()
+    }
     return OverallEmotionHits(sums, means, stds, per_emotion, mean_, std_)
 
 
@@ -252,11 +355,25 @@ def compute_iaa_alpha(
     for task_num, (_, level) in _IAA_SPEC.items():
         per_annotator = []
         uids = list(iaa_uids_by_task[task_num])
+        common_uids = set(uids)
         for a in annos:
-            df = a.tasks[task_num]
-            iaa_df = df[df["UID"].isin(uids)]
+            common_uids &= set(a.tasks[task_num]["UID"])
+        ordered_uids = [uid for uid in uids if uid in common_uids]
+        if not ordered_uids:
+            raise ValueError(f"No shared IAA UIDs found for task {task_num}")
+
+        for a in annos:
+            df = a.tasks[task_num].set_index("UID")
+            iaa_df = df.loc[ordered_uids].reset_index()
             per_annotator.append(_iaa_flat_values(iaa_df, task_num, models))
-        out[task_num] = float(alpha(per_annotator, level_of_measurement=level))
+        try:
+            out[task_num] = float(alpha(
+                per_annotator, level_of_measurement=level,
+            ))
+        except ValueError as exc:
+            if "more than one value in the domain" not in str(exc):
+                raise
+            out[task_num] = float("nan")
     return out
 
 

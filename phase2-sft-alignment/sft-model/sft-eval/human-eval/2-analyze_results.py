@@ -18,7 +18,8 @@ import logging
 from src.config import PRINT_LABELS, TASKS
 from src.metrics import (
     aggregate_emotion_hits, compute_emotion_hits, compute_iaa_alpha,
-    compute_mean_std, compute_rank_at_k, iaa_uids_for,
+    compute_mean_std, compute_overall_quality, compute_rank_at_k,
+    iaa_uids_for,
 )
 from src.plots import (
     plot_hits_by_emotion, plot_hits_by_model, save_path_emotions,
@@ -64,21 +65,24 @@ def main(argv: list[str] | None = None) -> None:
         print(compute_mean_std(res).render())
         print()
 
+    print(compute_overall_quality(results).render())
+    print()
+
     # --- Task 2 emotion hits ---------------------------------------------
     all_hits = [compute_emotion_hits(res) for res in results]
     overall = aggregate_emotion_hits(all_hits)
 
-    total = sum(len(r.tasks[2]) for r in results)
-    per = int(total / len(results)) if results else 0
+    per = max((len(r.tasks[2]) for r in results), default=45)
     for hits in all_hits:
         print(f"{hits.annotator_name}  - Task 2")
         for label, n in zip(PRINT_LABELS, hits.total_hit_counts()):
             print(f"{label:<8} - {n} / {per}")
         print()
 
-    print("OVERALL Task 2 - model hits")
-    for label, n in zip(PRINT_LABELS, overall.sums):
-        print(f"{label:<8} - {n} / {total}")
+    print("OVERALL Task 2 - mean model hits")
+    for label, n in zip(PRINT_LABELS, overall.means):
+        print(f"{label:<8} - {n:g} / {per}")
+    print(overall.per_emotion)
 
     if not args.no_plots:
         log.info("Rendering bar charts")

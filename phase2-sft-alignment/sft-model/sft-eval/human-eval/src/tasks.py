@@ -16,8 +16,9 @@ from typing import Dict, List, Sequence
 import pandas as pd
 
 from .config import (
-    ANNOTATORS, AUX_DIR, FINAL_DIR, MODELS, SAMPLING, TASKS, TASKS_DIR,
-    Annotator, Model, Task, task_uid_suffix,
+    ANNOTATORS, AUX_DIR, FINAL_DIR, MODELS, SAMPLING,
+    TASK2_REFERENCE_LABELS_PATH, TASKS, TASKS_DIR, Annotator, Model, Task,
+    task_uid_suffix,
 )
 
 
@@ -65,6 +66,48 @@ def save_task_dataframes(dfs: Dict[int, pd.DataFrame],
     tasks_dir.mkdir(parents=True, exist_ok=True)
     for num, df in dfs.items():
         df.to_excel(tasks_dir / f"task{num}.xlsx", index=False)
+
+
+def build_task2_reference_labels(
+    wide: pd.DataFrame, models: Sequence[Model] = MODELS,
+) -> pd.DataFrame:
+    """Build the long Task-2 reference-label table.
+
+    The annotator-facing Task 2 file is wide: one row per prompt, with
+    five model responses. The analysis also needs a long reference table
+    with one row per prompt/model response. That table is
+    the canonical source for the hidden prompt/response emotion labels
+    when analyzing filled-in annotations.
+    """
+    columns = [
+        "UID", "SID", "MODEL", "PROMPT", "PROMPT_EMOTION",
+        "SFT_RESPONSE", "SFT_EMOTION", "TARGET_RESPONSE", "TARGET_EMOTION",
+    ]
+    rows = []
+    wide = wide.reset_index(drop=True)
+    n_rows = len(wide)
+
+    for model_idx, model in enumerate(models):
+        for row_idx, row in wide.iterrows():
+            rows.append({
+                "UID": f"SFTANNO-{model_idx * n_rows + row_idx:06d}-0002",
+                "SID": "P-R2",
+                "MODEL": model.name,
+                "PROMPT": row["HUMAN_UTT"],
+                "PROMPT_EMOTION": row["HUMAN_EMO"],
+                "SFT_RESPONSE": row[f"SFT_R2_{model.short}"],
+                "SFT_EMOTION": row[f"SFT_EMO2_{model.short}"],
+                "TARGET_RESPONSE": row["TARGET_R2"],
+                "TARGET_EMOTION": row["TARGET_EMO2"],
+            })
+    return pd.DataFrame(rows, columns=columns)
+
+
+def save_task2_reference_labels(
+    df: pd.DataFrame, path: Path = TASK2_REFERENCE_LABELS_PATH,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_excel(path, index=False)
 
 
 # ---------------------------------------------------------------------------
@@ -173,7 +216,7 @@ def split_across_annotators(
                 frac=1, random_state=SAMPLING.shuffle_random_state,
             ).reset_index(drop=True)
 
-    return slices
+    return [slice_ for slice_ in slices if slice_.annotator.included]
 
 
 def save_aux_slices(slices: Sequence[AnnotatorSlice],
@@ -250,3 +293,4 @@ def save_final_slices(slices: Sequence[AnnotatorSlice],
             formatted.to_excel(
                 final_dir / f"anno{i}_{task.slug}.xlsx", index=False,
             )
+

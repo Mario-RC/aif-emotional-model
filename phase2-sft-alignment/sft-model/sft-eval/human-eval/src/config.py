@@ -28,10 +28,14 @@ RESULTS_DIR = HUMAN_EVAL_DIR / "results"
 HIST_DIR = HUMAN_EVAL_DIR / "hist"
 
 # SFT prediction JSONs live inside the Phase 2 LLaMA-Factory workspace.
-SFT_SAVES_DIR = HUMAN_EVAL_DIR.parent / "sft-model" / "sft-llama-factory-legacy" / "saves"
+SFT_SAVES_DIR = HUMAN_EVAL_DIR.parent.parent / "sft-llama-factory-training" / "saves"
 SFT_RESULTS_FILENAME = "emotional_balanced/demonstration_data_emotional_balanced_test_results.json"
 
 WIDE_CSV_PATH = DATA_DIR / "demonstration_data_emotional_balanced_test_results_dial.csv"
+
+# Active long-format Task 2 reference-label table. Backup folders are
+# intentionally ignored by the pipeline.
+TASK2_REFERENCE_LABELS_PATH = DATA_DIR / "task2_reference_labels.xlsx"
 
 
 # ---------------------------------------------------------------------------
@@ -92,12 +96,13 @@ EMOTION_COLORS: Dict[str, str] = {
 
 @dataclass(frozen=True)
 class Annotator:
-    index: int          # 1-based slot (anno1 ... anno4)
+    index: int          # anonymous output slot; 0 is the skipped non-submitter
     name: str           # folder name under results/
     included: bool      # whether the annotator's results are used in aggregation
 
 
 ANNOTATORS: Tuple[Annotator, ...] = (
+    Annotator(0, "unused", included=False),
     Annotator(1, "anno1", included=True),
     Annotator(2, "anno2", included=True),
     Annotator(3, "anno3", included=True),
