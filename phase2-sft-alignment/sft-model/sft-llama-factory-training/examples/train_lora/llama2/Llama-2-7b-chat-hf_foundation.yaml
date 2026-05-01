@@ -1,6 +1,5 @@
 ### model
-model_name_or_path: google/gemma-2-9b-it
-trust_remote_code: true
+model_name_or_path: meta-llama/Llama-2-7b-chat-hf
 
 ### method
 stage: sft
@@ -9,15 +8,15 @@ finetuning_type: lora
 lora_target: all
 
 ### dataset
-dataset: sft_demonstration_dataset
-template: gemma
-cutoff_len: 2048
-max_samples: 1000000
+dataset: sft_demonstration_dataset_foundation
+template: llama2
+cutoff_len: 1024
+max_samples: 10000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/gemma-2-9b-it/lora/sft_1ep
+output_dir: saves/Llama-2-7b-chat-hf/foundation/model
 logging_steps: 10
 save_steps: 500
 plot_loss: true
@@ -30,11 +29,10 @@ learning_rate: 1.0e-4
 num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
-bf16: true
-ddp_timeout: 180000000
+fp16: true
 
 ### eval
-val_size: 0.074
+val_size: 0.1
 per_device_eval_batch_size: 1
-eval_strategy: steps
-eval_steps: 100
+evaluation_strategy: steps
+eval_steps: 500

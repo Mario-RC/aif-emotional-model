@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
+model_name_or_path: THUDM/glm-4-9b-chat-1m
 trust_remote_code: true
 
 ### method
@@ -10,14 +10,14 @@ lora_target: all
 
 ### dataset
 dataset: sft_demonstration_dataset
-template: llama3
+template: glm4
 cutoff_len: 2048
 max_samples: 1000000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Meta-Llama-3-8B-Instruct/lora/sft_3
+output_dir: saves/glm-4-9b-chat-1m/lora/sft_3ep
 logging_steps: 10
 save_steps: 500
 plot_loss: true

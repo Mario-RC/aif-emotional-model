@@ -1,6 +1,36 @@
 {
+  "sft_demonstration_dataset_foundation": {
+    "file_name": "sft_demonstration_dataset_foundation.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history",
+      "system": "system"
+    }
+  },
+  "sft_demonstration_dataset_test_history": {
+    "file_name": "sft_demonstration_dataset_test_history.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history",
+      "system": "system"
+    }
+  },
   "sft_demonstration_dataset": {
     "file_name": "sft_demonstration_dataset.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history",
+      "system": "system"
+    }
+  },
+  "sft_demonstration_dataset_test": {
+    "file_name": "sft_demonstration_dataset_test.json",
     "columns": {
       "prompt": "instruction",
       "query": "input",
