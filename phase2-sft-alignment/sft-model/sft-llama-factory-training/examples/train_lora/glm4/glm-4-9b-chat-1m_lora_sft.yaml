@@ -1,6 +1,5 @@
 ### model
-model_name_or_path: microsoft/Phi-3-small-8k-instruct
-trust_remote_code: true
+model_name_or_path: THUDM/glm-4-9b-chat-1m
 
 ### method
 stage: sft
@@ -10,14 +9,14 @@ lora_target: all
 
 ### dataset
 dataset: sft_demonstration_dataset
-template: phi
-cutoff_len: 2048
-max_samples: 1000000
+template: glm4
+cutoff_len: 1024
+max_samples: 10000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Phi-3-small-8k-instruct/lora/sft_1
+output_dir: saves/glm-4-9b-chat-1m/lora/sft
 logging_steps: 10
 save_steps: 500
 plot_loss: true
@@ -27,14 +26,13 @@ overwrite_output_dir: true
 per_device_train_batch_size: 1
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 1.0
+num_train_epochs: 3.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
-bf16: true
-ddp_timeout: 180000000
+fp16: true
 
 ### eval
-val_size: 0.074
+val_size: 0.1
 per_device_eval_batch_size: 1
-eval_strategy: steps
-eval_steps: 100
+evaluation_strategy: steps
+eval_steps: 500
