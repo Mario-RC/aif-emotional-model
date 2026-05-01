@@ -11,7 +11,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Sequence, Tuple
 
-import openai
 import pandas as pd
 from tqdm import tqdm
 
@@ -23,7 +22,7 @@ warnings.simplefilter("ignore")
 # Constants
 # ---------------------------------------------------------------------------
 
-CONFIG_PATH = Path("config_chatgpt.json")
+CONFIG_PATH = Path("config.json")
 OUTPUT_DIR = Path("data")
 CHECKPOINT_EVERY = 30
 DIALOGUES_PER_REQUEST = 3
@@ -228,10 +227,37 @@ class OpenAIConfig:
             ),
         )
 
-    def apply(self) -> None:
-        openai.api_key = self.api_key
-        openai.api_base = self.api_base
-        openai.api_version = self.api_version
+    @staticmethod
+    def _is_placeholder(value: str) -> bool:
+        return not value or (value.startswith("<") and value.endswith(">"))
+
+    def validate(self) -> None:
+        missing = []
+        if self._is_placeholder(self.api_base):
+            missing.append("AZURE_OPENAI_ENDPOINT")
+        if self._is_placeholder(self.api_key):
+            missing.append("AZURE_OPENAI_API_KEY")
+        if missing:
+            raise ValueError(
+                "Missing Azure OpenAI configuration: "
+                + ", ".join(missing)
+                + ". Set them in config.json or as environment variables."
+            )
+
+    def create_client(self):
+        self.validate()
+        try:
+            from openai import AzureOpenAI
+        except ImportError as exc:
+            raise RuntimeError(
+                "The 'openai' package is required to generate the dataset. "
+                "Install the project requirements before running this script."
+            ) from exc
+        return AzureOpenAI(
+            api_key=self.api_key,
+            azure_endpoint=self.api_base,
+            api_version=self.api_version,
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -339,13 +365,12 @@ class DialogueGenerator:
         self,
         config: OpenAIConfig,
         prompt_builder: PromptBuilder,
-        engine: str = "ChatGPT",
         request_delay: float = 1.0,
         max_retries: int = 3,
         retry_backoff: float = 2.0,
     ) -> None:
-        config.apply()
-        self.engine = engine
+        self.client = config.create_client()
+        self.deployment = config.model
         self.prompt_builder = prompt_builder
         self.request_delay = request_delay
         self.max_retries = max_retries
@@ -364,10 +389,10 @@ class DialogueGenerator:
         for attempt in range(1, self.max_retries + 1):
             time.sleep(self.request_delay)
             try:
-                response = openai.ChatCompletion.create(
-                    engine=self.engine, messages=messages
+                response = self.client.chat.completions.create(
+                    model=self.deployment, messages=messages
                 )
-                return response.choices[0]["message"]["content"]
+                return response.choices[0].message.content
             except Exception as exc:
                 last_error = exc
                 logging.warning(
