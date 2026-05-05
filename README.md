@@ -16,37 +16,32 @@ The codebase is organized as an experimental workspace rather than as a single P
 
 ```text
 rlaif/
-├── llama-factory/             ← canonical LLaMA-Factory (installed via pip -e)
+├── llama-factory/
 ├── phase1-foundation-eval/
-│   ├── 1-foundation_eval.py
-│   ├── config.json
-│   ├── data/
-│   └── logs/
+│   └── 1-foundation_eval.py
 ├── phase2-sft-alignment/
 │   └── sft-model/
 │       ├── sft-demonstration-dataset/
-│       ├── sft-llama-factory-legacy/       ← workspace (data, examples, saves, .sh)
-│       ├── sft-llama-factory-training/     ← workspace
+│       ├── sft-llama-factory-training/
 │       └── sft-eval/
 │           └── human-eval/
 └── phase3-rlaif-alignment/
     ├── reward-model/
     │   ├── rm-prompt-dataset/
     │   ├── rm-comparison-dataset/
-    │   │   ├── llama-factory-predict/       ← workspace
+    │   │   ├── llama-factory-predict/
     │   │   └── candidate-curation/
     │   ├── rm-preference-dataset/
-    │   ├── rm-llama-factory-training/       ← workspace
+    │   ├── rm-llama-factory-training/
     │   └── rm-eval/
     │       └── human-eval/
     └── rlaif-model/
         ├── ppo-unlabeled-prompts-dataset/
         ├── dpo-comparison-dataset/
-        │   ├── llama-factory-predict/       ← workspace
+        │   ├── llama-factory-predict/
         │   └── candidate-curation/
         ├── dpo-preference-dataset/
-        ├── rlaif-llama-factory-legacy/      ← workspace
-        ├── rlaif-llama-factory-training/    ← workspace
+        ├── rlaif-llama-factory-training/
         └── rlaif-eval/
             └── human-eval/
 ```
@@ -210,19 +205,19 @@ For that reason, the base installation favors a reproducible default environment
 
 ## Configuration
 
-Several scripts expect local JSON configuration files containing model settings, dataset options and API credentials. Typical filenames include:
+Several scripts expect local JSON configuration files. Naming follows a single convention across phases:
 
-- `phase1-foundation-eval/config.json`
-- `config_gpt.json`
-- `config_llm.json`
+- `config.json` — non-secret model registry / template settings (e.g. [phase1-foundation-eval/config.json](./phase1-foundation-eval/config.json)).
+- `config_gpt.json` — Azure OpenAI deployments. Used by the Phase 2 demonstration generator and the Phase 3 prompt / PPO-prompt scripts.
+- `config_llm.json` — multi-provider LLM judges (Azure OpenAI + Anthropic + Gemini + Llama). Used by the Phase 3 preference-rating scripts.
 
-Depending on the workflow, these configs may define:
+All `config_gpt.json` and `config_llm.json` files share the same nested-by-deployment schema (`{"<DEPLOYMENT>": {"MODEL": ..., "AZURE_OPENAI_ENDPOINT": ..., ...}}`) so the same loader code works in every phase.
 
-- Base model names or checkpoints.
-- Dataset names and paths.
-- Azure OpenAI settings.
-- API keys.
-- Azure AI Inference endpoints and credentials.
+Recommended practice:
+
+- Keep secrets outside versioned source files whenever possible.
+- Use environment variables or ignored local config files for real credentials.
+- Avoid committing API keys, endpoints or other sensitive data into notebooks and scripts.
 
 Recommended practice:
 
@@ -293,7 +288,7 @@ Because the project is research-oriented, it is useful to separate conceptually:
 ## Reproducibility recommendations
 
 - Use Python `3.10.x`.
-- Reinstall dependencies from `requirements.txt` before reproducing old experiments.
+- Install dependencies from `requirements.txt` before reproducing old experiments.
 - Record the exact CUDA, driver and PyTorch build used on each machine.
 - Keep track of the exact `LLaMA-Factory` subdirectory used for each run.
 - Version control configs carefully, but keep credentials out of the repository.
@@ -310,9 +305,7 @@ Because the project is research-oriented, it is useful to separate conceptually:
 
 - Split dependencies into `base`, `gpu` and `dev` requirement files.
 - Move API secrets fully to environment variables.
-- Add small run scripts or `Makefile` targets for the most common experiments.
 - Add smoke tests for each phase.
-- Standardize config locations and naming across phases.
 
 ## License and provenance
 
