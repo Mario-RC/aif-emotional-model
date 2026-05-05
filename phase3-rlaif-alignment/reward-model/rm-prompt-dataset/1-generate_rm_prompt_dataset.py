@@ -22,9 +22,11 @@ from tqdm import tqdm
 from _lib import build_topics_emotions
 
 logging.basicConfig(level=logging.INFO)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 warnings.simplefilter("ignore")
 
-DEFAULT_GPT_KEY = "GPT4US"
+DEFAULT_GPT_KEY = "GPT-4"
 
 CHECKPOINT_INTERVAL = 30
 
@@ -165,14 +167,14 @@ def build_client(cfg: dict) -> AzureOpenAI:
 
 def generate_rm_prompt_dataset(
     gpt_key: str = DEFAULT_GPT_KEY,
-    config_file: str = "config_gpt.json",
+    config_file: str = "config.json",
     out_csv: str = "data/rm_prompt_dataset_completions.csv",
     sleep_s: float = 1.0,
     dry_run: bool = False,
 ) -> None:
     with open(config_file) as f:
         cfg = json.load(f)[gpt_key]
-    print(cfg)
+    print({"MODEL": cfg.get("MODEL"), "OPENAI_API_VERSION": cfg.get("OPENAI_API_VERSION")})
 
     client = build_client(cfg)
     topics_emotions = build_topics_emotions()
@@ -214,7 +216,7 @@ def generate_rm_prompt_dataset(
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--gpt", default=DEFAULT_GPT_KEY)
-    parser.add_argument("--config", default="config_gpt.json")
+    parser.add_argument("--config", default="config.json")
     parser.add_argument("--out", default="data/rm_prompt_dataset_completions.csv")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()

@@ -33,6 +33,8 @@ from _lib import (
 )
 
 logging.basicConfig(level=logging.INFO)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 warnings.simplefilter("ignore")
 
 CHECKPOINT_INTERVAL = 10
@@ -72,7 +74,7 @@ def generate_rating_data(
     start_offset: int = 0,
 ) -> None:
     cfg = load_llm_config(llm_name, config_file)
-    print(cfg)
+    print({"MODEL": cfg.get("MODEL"), "OPENAI_API_VERSION": cfg.get("OPENAI_API_VERSION")})
     client = RatingClient(llm_name, cfg)
 
     input_file = f"data/{with_suffix('rm_preference_dataset', 'json', is_test)}"
@@ -102,7 +104,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--llm",
         default=os.environ.get("LLM", "GPT-4O"),
-        help="LLM key in config_llm.json (e.g. GPT-4O, CLAUDE-3.5-SONNET, GEMINI-1.5-PRO, LLAMA-3.1-405B).",
+        help="LLM key in config.json (e.g. GPT-4O, CLAUDE-3.5-SONNET, GEMINI-1.5-PRO, LLAMA-3.1-405B).",
     )
     parser.add_argument("--test", action="store_true", help="Process the test split.")
     parser.add_argument("--start", type=int, default=0, help="Skip the first N entries.")
