@@ -61,7 +61,7 @@ psutil==7.0.0
 # Media and parsing helpers used by the repository
 av==14.2.0
 librosa==0.10.2.post1
-pillow==11.1.0
+pillow==10.4.0
 beautifulsoup4==4.13.4
 soupsieve==2.7
 fonttools==4.56.0
