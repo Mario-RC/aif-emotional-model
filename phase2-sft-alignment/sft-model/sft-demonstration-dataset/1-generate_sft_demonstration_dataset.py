@@ -15,6 +15,8 @@ import pandas as pd
 from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 warnings.simplefilter("ignore")
 
 
@@ -22,8 +24,8 @@ warnings.simplefilter("ignore")
 # Constants
 # ---------------------------------------------------------------------------
 
-CONFIG_PATH = Path("config_gpt.json")
-DEFAULT_GPT_KEY = "ChatGPT"
+CONFIG_PATH = Path("config.json")
+DEFAULT_GPT_KEY = "CHATGPT"
 OUTPUT_DIR = Path("data")
 CHECKPOINT_EVERY = 30
 DIALOGUES_PER_REQUEST = 3
@@ -242,7 +244,7 @@ class OpenAIConfig:
             raise ValueError(
                 "Missing Azure OpenAI configuration: "
                 + ", ".join(missing)
-                + ". Set them in config_gpt.json or as environment variables."
+                + ". Set them in config.json or as environment variables."
             )
 
     def create_client(self):
