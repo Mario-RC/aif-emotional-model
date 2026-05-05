@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import time
 from dataclasses import dataclass
 from itertools import combinations
@@ -58,7 +59,16 @@ RATE_FACTORS = [
     {"alpha": 1, "ref": 9},  # ++
 ]
 
-DEFAULT_LLM_CONFIG_FILE = "config_llm.json"
+DEFAULT_LLM_CONFIG_FILE = "config.json"
+
+SECRET_ENV_VARS = {
+    "AZURE_OPENAI_ENDPOINT": ("AZURE_OPENAI_ENDPOINT",),
+    "AZURE_OPENAI_API_KEY": ("AZURE_OPENAI_API_KEY",),
+    "ANTHROPIC_API_KEY": ("ANTHROPIC_API_KEY",),
+    "GEMINI_API_KEY": ("GEMINI_API_KEY",),
+    "ENDPOINT": ("AZURE_INFERENCE_ENDPOINT", "ENDPOINT"),
+    "AZURE_INFERENCE_CREDENTIAL": ("AZURE_INFERENCE_CREDENTIAL",),
+}
 
 
 # ---------------------------------------------------------------------------
@@ -212,6 +222,27 @@ GEMINI_LLMS = {"GEMINI-1.0-PRO", "GEMINI-1.5-FLASH", "GEMINI-1.5-PRO"}
 LLAMA_LLMS = {"LLAMA-3.1-405B"}
 
 
+def _is_placeholder(value: Any) -> bool:
+    return not isinstance(value, str) or not value or (value.startswith("<") and value.endswith(">"))
+
+
+def _resolve_secret_value(cfg: dict, key: str) -> None:
+    if key not in cfg or not _is_placeholder(cfg[key]):
+        return
+    for env_var in SECRET_ENV_VARS[key]:
+        value = os.getenv(env_var, "")
+        if not _is_placeholder(value):
+            cfg[key] = value
+            return
+
+
+def resolve_config_secrets(cfg: dict) -> dict:
+    resolved = dict(cfg)
+    for key in SECRET_ENV_VARS:
+        _resolve_secret_value(resolved, key)
+    return resolved
+
+
 @dataclass
 class RatingClient:
     """Unified client for rating-prompt completions across providers."""
@@ -304,7 +335,7 @@ class RatingClient:
 def load_llm_config(llm_name: str, config_file: str = DEFAULT_LLM_CONFIG_FILE) -> dict:
     with open(config_file) as f:
         cfg_all = json.load(f)
-    return cfg_all[llm_name]
+    return resolve_config_secrets(cfg_all[llm_name])
 
 
 # ---------------------------------------------------------------------------
