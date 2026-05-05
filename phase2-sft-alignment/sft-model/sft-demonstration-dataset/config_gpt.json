@@ -1,0 +1,8 @@
+{
+    "ChatGPT" : {
+        "MODEL" : "ChatGPT",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2023-03-15-preview",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    }
+}
