@@ -101,14 +101,14 @@ Contains the supervised fine-tuning pipeline: demonstration-data generation and 
 Produces the preference dataset used to train the reward model, trains it, and evaluates it.
 
 - [rm-prompt-dataset/](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset) — builds the prompt pool that will later be fed to candidate models. The four numbered scripts run in order, with the original notebooks preserved under `bck/`:
-  - [1-generate_rm_prompt_dataset.py](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/1-generate_rm_prompt_dataset.py): generates emotion-controlled user prompts via Azure OpenAI (GPT-4-Turbo / GPT-4US), configured through [config_gpt.json](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/config_gpt.json).
+  - [1-generate_rm_prompt_dataset.py](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/1-generate_rm_prompt_dataset.py): generates emotion-controlled user prompts via Azure OpenAI (GPT-4 / GPT-4-Turbo), configured through [config.json](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/config.json).
   - [2-formatted_rm_prompt_dataset.py](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/2-formatted_rm_prompt_dataset.py) and [3-train_test_rm_prompt_dataset_json.py](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/3-train_test_rm_prompt_dataset_json.py): normalize and split the prompt pool into train/test JSON.
   - [4-merge_demonstration_prompt_datasets.py](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/4-merge_demonstration_prompt_datasets.py): merges these new prompts with the Phase 2 demonstration data so the same pool can be reused by the candidate-prediction step.
   - Shared utilities live in [_lib.py](./phase3-rlaif-alignment/reward-model/rm-prompt-dataset/_lib.py) (topics, emotion catalogue, dialogue template, JSON helpers).
 - [rm-comparison-dataset/](./phase3-rlaif-alignment/reward-model/rm-comparison-dataset) — runs multiple candidate models on the prompt pool to produce the responses that will be compared. It wraps a LLaMA-Factory workspace plus a numbered five-step candidate-curation pipeline:
   - [llama-factory-predict/](./phase3-rlaif-alignment/reward-model/rm-comparison-dataset/llama-factory-predict): inference workspace used to generate candidate responses for each prompt; results are aggregated by [emotional_results.py](./phase3-rlaif-alignment/reward-model/rm-comparison-dataset/llama-factory-predict/emotional_results.py).
   - [candidate-curation/](./phase3-rlaif-alignment/reward-model/rm-comparison-dataset/candidate-curation): five numbered scripts (with `_test` variants for the evaluation split): `1-format_chosen_samples_*` and `2-generate_chosen_samples_*` prepare the LLaMA-Factory inference inputs, `3-embeddings_semantic_similarity_*` computes embeddings + Distinct-N + scoring, `4-delete_respones_*` joins the per-model chosen predictions and drops the worst per row, `5-add_negative_samples_*` injects negative-quality samples. Common code lives in [_lib.py](./phase3-rlaif-alignment/reward-model/rm-comparison-dataset/candidate-curation/_lib.py).
-- [rm-preference-dataset/](./phase3-rlaif-alignment/reward-model/rm-preference-dataset) — turns candidate responses into preference pairs by asking LLM judges to rate them. The judges (GPT-4, GPT-4-Turbo, GPT-4O, Claude-3-Opus, Claude-3.5-Sonnet, Gemini-1.0-Pro, Gemini-1.5-Pro, Gemini-1.5-Flash and Llama-3.1-405B) are configured via [config_llm.json](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/config_llm.json) and their outputs are stored under [data/](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/data). All steps are now `.py` (with `_test` counterparts) backed by a shared [_lib.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/_lib.py) holding the emotion catalogue, expression-level table, prompt builder and unified `RatingClient`:
+- [rm-preference-dataset/](./phase3-rlaif-alignment/reward-model/rm-preference-dataset) — turns candidate responses into preference pairs by asking LLM judges to rate them. The judges (GPT-4, GPT-4-Turbo, GPT-4O, Claude-3-Opus, Claude-3.5-Sonnet, Gemini-1.0-Pro, Gemini-1.5-Pro, Gemini-1.5-Flash and Llama-3.1-405B) are configured via [config.json](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/config.json) and their outputs are stored under [data/](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/data). All steps are now `.py` (with `_test` counterparts) backed by a shared [_lib.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/_lib.py) holding the emotion catalogue, expression-level table, prompt builder and unified `RatingClient`:
   - [1-preprocess_rm_preference_dataset.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/1-preprocess_rm_preference_dataset.py): prepares the response pairs for judging.
   - [2-generate_rating_data.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/2-generate_rating_data.py): calls the LLM judges (OpenAI, Anthropic, Gemini, Llama) to rate each response.
   - [3-rates_to_ranks.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/3-rates_to_ranks.py): converts numeric ratings into pairwise rankings (chosen / rejected).
@@ -177,21 +177,15 @@ For that reason, the base installation favors a reproducible default environment
 Several scripts expect local JSON configuration files. Naming follows a single convention across phases:
 
 - `config.json` — non-secret model registry / template settings (e.g. [phase1-foundation-eval/config.json](./phase1-foundation-eval/config.json)).
-- `config_gpt.json` — Azure OpenAI deployments. Used by the Phase 2 demonstration generator and the Phase 3 prompt / PPO-prompt scripts.
-- `config_llm.json` — multi-provider LLM judges (Azure OpenAI + Anthropic + Gemini + Llama). Used by the Phase 3 preference-rating scripts.
+- `config.json` — local per-stage configuration. In generation stages it stores Azure OpenAI deployments keyed with normalized uppercase names such as `CHATGPT`, `GPT-4`, `GPT-4-TURBO` and `GPT-4O`; in preference-rating stages it stores the multi-provider LLM judges (Azure OpenAI + Anthropic + Gemini + Llama).
 
-All `config_gpt.json` and `config_llm.json` files share the same nested-by-deployment schema (`{"<DEPLOYMENT>": {"MODEL": ..., "AZURE_OPENAI_ENDPOINT": ..., ...}}`) so the same loader code works in every phase.
-
-Recommended practice:
-
-- Keep secrets outside versioned source files whenever possible.
-- Use environment variables or ignored local config files for real credentials.
-- Avoid committing API keys, endpoints or other sensitive data into notebooks and scripts.
+The per-stage `config.json` files share the same nested-by-deployment schema (`{"<DEPLOYMENT>": {"MODEL": ..., "AZURE_OPENAI_ENDPOINT": ..., ...}}`) and uppercase top-level keys so the same naming convention works in every phase.
 
 Recommended practice:
 
 - Keep secrets outside versioned source files whenever possible.
-- Use environment variables or ignored local config files for real credentials.
+- Use environment variables for real credentials; leave placeholders in `config.json`.
+- Supported secret environment variables are `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, `AZURE_INFERENCE_ENDPOINT` / `ENDPOINT` and `AZURE_INFERENCE_CREDENTIAL`.
 - Avoid committing API keys, endpoints or other sensitive data into notebooks and scripts.
 
 ## Typical workflows
@@ -268,12 +262,6 @@ Because the project is research-oriented, it is useful to separate conceptually:
 - Different parts of the repository embed different `LLaMA-Factory` variants.
 - Some historical scripts assume local credentials, private checkpoints or machine-specific paths.
 - Large parts of the project are experiment-driven, so not every folder has the same level of cleanup or standardization.
-
-## Suggested next improvements
-
-- Split dependencies into `base`, `gpu` and `dev` requirement files.
-- Move API secrets fully to environment variables.
-- Add smoke tests for each phase.
 
 ## License and provenance
 
