@@ -7,6 +7,10 @@
 *.key
 secret*
 *config*.json
+!phase3-rlaif-alignment/reward-model/rm-preference-dataset/config.json
+!phase3-rlaif-alignment/reward-model/rm-prompt-dataset/config.json
+!phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/config.json
+!phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/config.json
 README_aux*
 config.yaml
 init_venv.sh
