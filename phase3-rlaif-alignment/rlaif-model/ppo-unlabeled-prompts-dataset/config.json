@@ -1,0 +1,26 @@
+{
+    "CHATGPT" : {
+        "MODEL" : "ChatGPT",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2023-03-15-preview",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    },
+    "GPT-4" : {
+        "MODEL" : "GPT4US",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2024-06-01",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    },
+    "GPT-4-TURBO" : {
+        "MODEL" : "gpt-4-turbo-2024-04-09",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2024-06-01",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    },
+    "GPT-4O" : {
+        "MODEL" : "gpt-4o-2024-08-06",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2024-02-15-preview",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    }
+}
