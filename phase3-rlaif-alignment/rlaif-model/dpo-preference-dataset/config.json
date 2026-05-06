@@ -1,0 +1,56 @@
+{
+    "CHATGPT" : {
+        "MODEL" : "ChatGPT",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2023-03-15-preview",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    },
+    "GPT-4" : {
+        "MODEL" : "GPT4US",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2024-06-01",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    },
+    "GPT-4-TURBO" : {
+        "MODEL" : "gpt-4-turbo",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2024-06-01",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    },
+    "GPT-4O" : {
+        "MODEL" : "gpt-4o-2024-08-06",
+        "AZURE_OPENAI_ENDPOINT" : "<YOUR_AZURE_ENDPOINT_HERE>",
+        "OPENAI_API_VERSION" : "2024-02-15-preview",
+        "AZURE_OPENAI_API_KEY" : "<YOUR_AZURE_OPENAI_API_KEY_HERE>"
+    },
+    "CLAUDE-3-OPUS" : {
+        "MODEL" : "claude-3-opus-latest",
+        "ANTHROPIC_API_KEY" : "<YOUR_ANTHROPIC_API_KEY_HERE>"
+    },
+    "CLAUDE-3.5-SONNET" : {
+        "MODEL" : "claude-3-5-sonnet-latest",
+        "ANTHROPIC_API_KEY" : "<YOUR_ANTHROPIC_API_KEY_HERE>"
+    },
+    "GEMINI-1.0-PRO" : {
+        "MODEL" : "gemini-1.0-pro",
+        "GEMINI_API_KEY" : "<YOUR_GEMINI_API_KEY_HERE>"
+    },
+    "GEMINI-1.5-FLASH" : {
+        "MODEL" : "gemini-1.5-flash",
+        "GEMINI_API_KEY" : "<YOUR_GEMINI_API_KEY_HERE>"
+    },
+    "GEMINI-1.5-PRO" : {
+        "MODEL" : "gemini-1.5-pro",
+        "GEMINI_API_KEY" : "<YOUR_GEMINI_API_KEY_HERE>"
+    },
+    "LLAMA-3.1-70B" : {
+        "MODEL" : "Meta-Llama-3.1-70B-Instruct",
+        "ENDPOINT" : "<YOUR_AZURE_INFERENCE_ENDPOINT_HERE>",
+        "AZURE_INFERENCE_CREDENTIAL" : "<YOUR_AZURE_INFERENCE_CREDENTIAL_HERE>"
+    },
+    "LLAMA-3.1-405B" : {
+        "MODEL" : "Meta-Llama-3.1-405B-Instruct",
+        "ENDPOINT" : "<YOUR_AZURE_INFERENCE_ENDPOINT_HERE>",
+        "AZURE_INFERENCE_CREDENTIAL" : "<YOUR_AZURE_INFERENCE_CREDENTIAL_HERE>"
+    }
+}
