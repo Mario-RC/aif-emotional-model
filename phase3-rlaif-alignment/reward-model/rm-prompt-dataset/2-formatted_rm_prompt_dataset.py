@@ -13,7 +13,7 @@ import argparse
 
 import pandas as pd
 
-DEFAULT_INPUT = "data/rm_prompt_dataset_gpt-4_2024-06-01_dial-2.csv"
+DEFAULT_INPUT = "data/rm_prompt_dataset_completions.csv"
 DEFAULT_FORMATTED = "data/rm_prompt_dataset_formatted.csv"
 DEFAULT_TURNS = "data/rm_prompt_dataset_turns.csv"
 
