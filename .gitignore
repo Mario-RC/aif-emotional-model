@@ -67,6 +67,7 @@ wandb/
 **/data/*.csv
 **/data/**/*.json
 **/data/**/*.csv
+!phase3-rlaif-alignment/reward-model/rm-prompt-dataset/data/rm_prompt_dataset_completions.csv
 **/data/*.xlsx
 **/data/**/*.xlsx
 **/data/*.arrow

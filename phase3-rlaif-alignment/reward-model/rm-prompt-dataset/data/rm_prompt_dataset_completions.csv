@@ -1,0 +1,60 @@
+DID,PROMPT,COMPLETION,TOPIC,EMOTIONS
+GPT4-0000,"[{'role': 'system', 'content': 'You are an expert at creating emotional dialogues.'}, {'role': 'user', 'content': 'Dialogue and emotional structure:\nTurn 1 Human 1: (prompt_emotion_1) PROMPT.\nTurn 1 Human 2: (prompt_emotion_1) RESPONSE_1.\n(response_emotion_1) Let\'s think step by step. Step 1: The response must contain an emotional tone of response_emotion_1.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 2 Human 1: (prompt_emotion_2) PROMPT.\nTurn 2 Human 2: (prompt_emotion_2) RESPONSE_1.\n(response_emotion_2) Let\'s think step by step. Step 1: The response must contain an emotional tone of response_emotion_2.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 3 Human 1: (prompt_emotion_3) PROMPT.\nTurn 3 Human 2: (prompt_emotion_3) RESPONSE_1.\n(response_emotion_3) Let\'s think step by step. Step 1: The response must contain an emotional tone of response_emotion_3.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 4 Human 1: (prompt_emotion_4) PROMPT.\nTurn 4 Human 2: (prompt_emotion_4) RESPONSE_1.\n(response_emotion_4) Let\'s think step by step. Step 1: The response must contain an emotional tone of response_emotion_4.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\n\nDialogue rules:\nCreate an open-domain curated dialogue between two humans. The dialogue should be coherent, engaging and proactive.\nBetween RESPONSE_1, RESPONSE_2 and RESPONSE_3 must be a max length of 20-25 words.\nRESPONSE_3 must be open-ended to follow-up the conversation, so the Human 1 is encouraged to answer with a full long sentence. Avoid yes/no questions.\n\nEmotional rules:\nRemember these different key_emotions emotions: ANGER, DISGUST(DISPLEASURE/DISLIKE), FEAR, HAPPINESS, SADNESS, SURPRISE and NEUTRAL.\nFor prompt_emotion and response_emotion randomly select different emotions among the key_emotions at each turn.\nPROMPT and RESPONSE_1 must contain the same prompt_emotion tone and be empathetic.\nRESPONSE_2 in each turn of Human 2 must show a lot of emotion and not be at all empathetic to Human 1.\nRESPONSE_3 must contain the NEUTRAL tone.\n\nEmotional definitions:\nANGER: a strong feeling of annoyance, displeasure, or hostility. Example: ""she could barely restrain her anger at this comment"".\nDISGUST: a feeling of revulsion, aversion or strong disapproval aroused by something unpleasant or offensive. Example: ""the sight filled her with disgust"".\nFEAR: an unpleasant emotion caused by the belief that someone or something is dangerous, likely to cause pain, or a threat. Example: ""farmers fear that they will lose business"".\nHAPPINESS: the state of being happy. Example: ""she struggled to find happiness in her life"".\nSADNESS: the condition or quality of being sad. Example: ""a source of great sadness"".\nSURPRISE: an unexpected or astonishing event, fact, or thing. Example: ""the announcement was a complete surprise"".\nNEUTRAL: having no strongly marked or positive characteristics or features. Example: ""the tone was neutral, devoid of sentiment"".'}, {'role': 'assistant', 'content': ""Dialogue example:\nTurn 1 Human 1: (HAPPINESS) Guess what, I just got engaged!\nTurn 1 Human 2: (HAPPINESS) Congratulations! That's wonderful news!\n(FEAR) Let's think step by step. Step 1: The response must contain an emotional tone of FEAR.\nStep 2: Human 2 must express terror of commitment.\nStep 3: I'm so happy for you, but I must admit, wedding planning sounds terrifying.\n(NEUTRAL) Have you set a date yet?\nTurn 2 Human 1: (HAPPINESS) We're thinking about next summer, and it's so exciting, even though we haven't set a date yet.\nTurn 2 Human 2: (HAPPINESS) Summer weddings are beautiful!\n(NEUTRAL) Let's think step by step. Step 1: The response must contain an emotional tone of NEUTRAL.\nStep 2: Human 2 must express neutrality regarding the wedding organization, without expressing any emotional tone.\nStep 3: Although, wedding planning can be challenging, try to maintain a calm approach.\n(NEUTRAL) Have you picked a venue yet?\nTurn 3 Human 1: (SADNESS) It's a bit overwhelming. We've started browsing, but there are so many options, we have thought about a wedding planner.\nTurn 3 Human 2: (SADNESS) I completely understand the overwhelm.\n(SURPRISE) Let's think step by step. Step 1: The response must contain an emotional tone of SURPRISE.\nStep 2: Human 2 should express surprise about the wedding planner.\nStep 3: That's a fantastic idea! I hadn't even thought about hiring a wedding planner.\n(NEUTRAL) Do you have any ideas for the theme or venue?\nTurn 4 Human 1: (DISGUST) We're leaning towards a beach wedding, but they're too expensive.\nTurn 4 Human 2: (DISGUST) It's true, beach weddings can get pricey.\n(DISGUST) Let's think step by step. Step 1: The response must contain an emotional tone of DISGUST.\nStep 2: Human 2 should express displeasure at the cost of the wedding.\nStep 3: It's normal for the cost to put you off.\n(NEUTRAL) Have you considered other scenic outdoor options that might be more budget-friendly?""}, {'role': 'user', 'content': ""Follow exactly all dialogues and emotional rules, emotional definitions, emotional structure and the dialogue example.\nIMPORTANT: Pay special attention to show steps 1, 2 and 3 in each of the turns.\nProvide 2 different new dialogues following the templates below where the topic of the conversations is crypto mining.\n\nDialogue 1 emotions:\nTurn 1 Human 1: (DISGUST) PROMPT.\nTurn 1 Human 2: (DISGUST) RESPONSE_1.\n(SURPRISE) Let's think step by step. Step 1: The response must contain an emotional tone of SURPRISE.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 2 Human 1: (SURPRISE) PROMPT.\nTurn 2 Human 2: (SURPRISE) RESPONSE_1.\n(SURPRISE) Let's think step by step. Step 1: The response must contain an emotional tone of SURPRISE.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 3 Human 1: (HAPPINESS) PROMPT.\nTurn 3 Human 2: (HAPPINESS) RESPONSE_1.\n(HAPPINESS) Let's think step by step. Step 1: The response must contain an emotional tone of HAPPINESS.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 4 Human 1: (NEUTRAL) PROMPT.\nTurn 4 Human 2: (NEUTRAL) RESPONSE_1.\n(NEUTRAL) Let's think step by step. Step 1: The response must contain an emotional tone of NEUTRAL.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\n\nDialogue 2 emotions:\nTurn 1 Human 1: (HAPPINESS) PROMPT.\nTurn 1 Human 2: (HAPPINESS) RESPONSE_1.\n(FEAR) Let's think step by step. Step 1: The response must contain an emotional tone of FEAR.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 2 Human 1: (FEAR) PROMPT.\nTurn 2 Human 2: (FEAR) RESPONSE_1.\n(NEUTRAL) Let's think step by step. Step 1: The response must contain an emotional tone of NEUTRAL.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 3 Human 1: (SADNESS) PROMPT.\nTurn 3 Human 2: (SADNESS) RESPONSE_1.\n(FEAR) Let's think step by step. Step 1: The response must contain an emotional tone of FEAR.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.\nTurn 4 Human 1: (NEUTRAL) PROMPT.\nTurn 4 Human 2: (NEUTRAL) RESPONSE_1.\n(FEAR) Let's think step by step. Step 1: The response must contain an emotional tone of FEAR.\nStep 2: Human 2 should express \nStep 3: RESPONSE_2.\n(NEUTRAL) RESPONSE_3.""}]","Dialogue 1:
+
+Turn 1 Human 1: (DISGUST) I can't believe how much electricity crypto mining uses. It's so environmentally damaging.
+Turn 1 Human 2: (DISGUST) I agree, it's incredibly wasteful.
+(SURPRISE) Let's think step by step. Step 1: The response must contain an emotional tone of SURPRISE.
+Step 2: Human 2 should express astonishment at the alternative prospects.
+Step 3: But, surprisingly, some cryptocurrencies are aiming to use renewable energy.
+(NEUTRAL) Does that change your perspective on the matter?
+
+Turn 2 Human 1: (SURPRISE) Really? I didn't know that. It sounds interesting but is it feasible?
+Turn 2 Human 2: (SURPRISE) Isn't it fascinating? 
+(SURPRISE) Let's think step by step. Step 1: The response must contain an emotional tone of SURPRISE.
+Step 2: Human 2 should express surprise at the skepticism.
+Step 3: They say it's feasible, but I guess only time will tell!
+(NEUTRAL) Have you read any recent developments in this area?
+
+Turn 3 Human 1: (HAPPINESS) Well, I did read that Ethereum is planning a switch to Proof-of-Stake, which should reduce their energy consumption.
+Turn 3 Human 2: (HAPPINESS) I read that as well! 
+(HAPPINESS) Let's think step by step. Step 1: The response must contain an emotional tone of HAPPINESS.
+Step 2: Human 2 should express excitement about the innovation.
+Step 3: It's amazing how these technologies are evolving for better sustainability!
+(NEUTRAL) Do you think other cryptos should follow suit?
+
+Turn 4 Human 1: (NEUTRAL) It certainly seems like a step in the right direction.
+Turn 4 Human 2: (NEUTRAL) That's a common sentiment.
+(NEUTRAL) Let's think step by step. Step 1: The response must contain an emotional tone of NEUTRAL.
+Step 2: Human 2 should maintain a neutral perspective.
+Step 3: While it's promising, it's crucial to continue the dialogues and actions around energy consumption.
+(NEUTRAL) What other improvements would you like to see in this area?
+
+Dialogue 2:
+
+Turn 1 Human 1: (HAPPINESS) I've been mining Bitcoin from my own home and just made my first significant profit!
+Turn 1 Human 2: (HAPPINESS) That's fantastic news! Congratulations.
+(FEAR) Let's think step by step. Step 1: The response must contain an emotional tone of FEAR.
+Step 2: Human 2 should express concern for risks involved.
+Step 3: It's exciting, but also be aware that the crypto market can be wildly unpredictable!
+(NEUTRAL) Though, how are you finding the process?
+
+Turn 2 Human 1: (FEAR) The market swings do scare me. I panic when the value of Bitcoin dips drastically.
+Turn 2 Human 2: (FEAR) It's quite nerve-racking, isn't it?
+(NEUTRAL) Let's think step by step. Step 1: The response must contain an emotional tone of NEUTRAL.
+Step 2: Human 2 should offer calming advice.
+Step 3: It's best not to make emotional decisions though. Stick to your strategy.
+(NEUTRAL) Have you considered diversifying your portfolio?
+
+Turn 3 Human 1: (SADNESS) I was thinking about it, but I lost some money on a risky altcoin investment.
+Turn 3 Human 2: (SADNESS) That's a tough break, I'm sorry.
+(FEAR) Let's think step by step. Step 1: The response must contain an emotional tone of FEAR.
+Step 2: Human 2 should express worry about repeating the loss.
+Step 3: It's risky. You don't want to repeat that loss with other unstable investments.
+(NEUTRAL) Have you picked up any lessons from that experience?
+
+Turn 4 Human 1: (NEUTRAL) Yeah, I've learned to do more research before I make an investment.
+Turn 4 Human 2: (NEUTRAL) That's a good strategy.
+(FEAR) Let's think step by step. Step 1: The response must contain an emotional tone of FEAR.
+Step 2: Human 2 should express concern about potential risks.
+Step 3: Even so, remember, no amount of research can completely remove risk.
+(NEUTRAL) What kind of resources do you use for your research?",sunny,"[('SADNESS', 'FEAR'), ('HAPPINESS', 'DISGUST'), ('HAPPINESS', 'NEUTRAL'), ('ANGER', 'FEAR'), ('HAPPINESS', 'HAPPINESS'), ('NEUTRAL', 'DISGUST'), ('FEAR', 'FEAR'), ('DISGUST', 'DISGUST')]"
