@@ -128,7 +128,7 @@ Uses the same prompt → candidate → rating → preference flow as `reward-mod
 
 ## Main technologies
 
-- Python 3.10
+- Python 3.12
 - PyTorch
 - Hugging Face `transformers`, `datasets`, `accelerate`, `peft` and `trl`
 - `LLaMA-Factory`
@@ -137,7 +137,7 @@ Uses the same prompt → candidate → rating → preference flow as `reward-mod
 
 ## Environment
 
-The repository already contains a local virtual environment at `./.vrlaif`. The inspected interpreter there is Python `3.10.12`, which matches the project target well.
+The repository already contains a local virtual environment at `./.vrlaif`. The inspected interpreter there is Python `3.12.x`, which matches the project target well.
 
 The dependency manifest in [requirements.txt](./requirements.txt) was prepared to cover:
 
@@ -249,7 +249,7 @@ Because the project is research-oriented, it is useful to separate conceptually:
 
 ## Reproducibility recommendations
 
-- Use Python `3.10.x`.
+- Use Python `3.12.x`.
 - Install dependencies from `requirements.txt` before reproducing old experiments.
 - Record the exact CUDA, driver and PyTorch build used on each machine.
 - Keep track of the exact `LLaMA-Factory` subdirectory used for each run.
