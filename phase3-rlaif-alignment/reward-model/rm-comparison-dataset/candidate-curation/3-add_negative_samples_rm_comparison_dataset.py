@@ -21,6 +21,7 @@ import random
 from dataclasses import dataclass
 
 from _lib import read_json, with_suffix, write_json
+from tqdm.auto import tqdm
 
 EMOTION_TAGS = ["(ANGER)", "(DISGUST)", "(FEAR)", "(HAPPINESS)", "(NEUTRAL)", "(SADNESS)", "(SURPRISE)"]
 DEFAULT_LLAMA_MODEL = "meta-llama/Llama-3.2-3B-Instruct"
@@ -59,7 +60,12 @@ def drop_worst_for_random_subset(
     sampled_idxs = [rm_comparison_dataset_filtered.index(entry) for entry in sampled]
 
     random.seed(42)
-    for offset, idx in enumerate(sampled_idxs):
+    for offset, idx in tqdm(
+        enumerate(sampled_idxs),
+        total=len(sampled_idxs),
+        desc="1/6 Drop worst sampled rows",
+        unit="row",
+    ):
         entry = rm_comparison_dataset_filtered[idx]
         scores = entry["scores"]
         bottom_indices = sorted(range(len(scores)), key=lambda i: scores[i])[:3]
@@ -72,7 +78,7 @@ def drop_worst_for_random_subset(
 
     # Mark non-sampled rows as untouched.
     non_sampled = list(set(range(len(rm_comparison_dataset_filtered))) - set(sampled_idxs))
-    for idx in non_sampled:
+    for idx in tqdm(non_sampled, desc="1/6 Mark untouched rows", unit="row"):
         rm_comparison_dataset_filtered[idx].pop("predict_sft_modified", None)
         rm_comparison_dataset_filtered[idx]["predict_sft_modified_label"] = "None"
     return sampled_idxs
@@ -114,12 +120,12 @@ def sample_modify_entries(
 ) -> list[list[str]]:
     pool = list(candidates)
     buckets: list[list[str]] = []
-    for _ in range(3):
+    for _ in tqdm(range(3), desc="2/6 Sample emotion buckets", unit="bucket"):
         bucket = random.sample(pool, cfg.n_emo_per_position)
         pool = [d for d in pool if d not in bucket]
         buckets.append(bucket)
 
-    for size in (cfg.n_empathy, cfg.n_emotion, cfg.n_question):
+    for size in tqdm((cfg.n_empathy, cfg.n_emotion, cfg.n_question), desc="2/6 Sample LLM buckets", unit="bucket"):
         bucket = random.sample(pool, size)
         pool = [d for d in pool if d not in bucket]
         buckets.append(bucket)
@@ -133,7 +139,7 @@ def sample_modify_entries(
 def apply_emotion_mutation(
     data: list[dict], dids: list[str], position_idx: int, label: str
 ) -> None:
-    for did in dids:
+    for did in tqdm(dids, desc=f"3/6 Apply {label} mutations", unit="row"):
         idx = next(i for i, entry in enumerate(data) if entry["did"] == did)
         target = data[idx]["target"]
         target_split = split_emo_utt(target)
@@ -176,7 +182,7 @@ def apply_llm_mutation(
     system_template: str,
     user_message: str,
 ) -> None:
-    for did in dids:
+    for did in tqdm(dids, desc=f"5/6 Apply {label} LLM mutations", unit="row"):
         idx = next(i for i, entry in enumerate(data) if entry["did"] == did)
         target_split = split_emo_utt(data[idx]["target"])
         system = system_template.format(text=target_split[target_position])
@@ -206,7 +212,11 @@ def add_negative_samples(
     write_json(data, out_path)
 
     data = read_json(out_path)
-    candidates = [entry["did"] for entry in data if "predict_sft_modified" in entry]
+    candidates = [
+        entry["did"]
+        for entry in tqdm(data, desc="2/6 Collect mutation candidates", unit="row")
+        if "predict_sft_modified" in entry
+    ]
     buckets = sample_modify_entries(candidates, cfg)
 
     apply_emotion_mutation(data, buckets[0], position_idx=0, label="emo1")
@@ -214,6 +224,7 @@ def add_negative_samples(
     apply_emotion_mutation(data, buckets[2], position_idx=4, label="emo3")
 
     if not skip_llm:
+        print("4/6 Loading LLM rewrite pipeline...")
         pipe = _build_pipeline(llama_model, device=device)
         apply_llm_mutation(
             data, buckets[3], target_position=1, label="empathy", pipe=pipe,
@@ -234,6 +245,7 @@ def add_negative_samples(
             ),
         )
 
+    print("6/6 Writing final dataset...")
     write_json(data, out_path)
 
 
