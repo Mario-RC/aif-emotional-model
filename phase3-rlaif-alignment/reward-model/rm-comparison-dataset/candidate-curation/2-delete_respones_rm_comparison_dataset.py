@@ -20,6 +20,7 @@ import re
 import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer
+from tqdm.auto import tqdm
 
 from _lib import (
     MODELS,
@@ -60,7 +61,7 @@ def _per_model_path(model: str, suffix: str, is_test: bool, ext: str = "csv") ->
 # ---------------------------------------------------------------------------
 
 def per_model_csv_to_json(is_test: bool) -> None:
-    for model in MODELS:
+    for model in tqdm(MODELS, desc="1/4 Per-model CSV to JSON", unit="model"):
         in_path = _per_model_path(model, "_predict_sft_chosen", is_test)
         df = pd.read_csv(in_path, encoding="utf-8")
         subset = df[CHOSEN_COLUMNS].copy()
@@ -78,7 +79,7 @@ def combine_models(is_test: bool) -> None:
     per_model = {model: read_json(_per_model_path(model, "", is_test, ext="json")) for model in MODELS}
     base_model = MODELS[0]
     combined: list[dict] = []
-    for idx in range(len(per_model[base_model])):
+    for idx in tqdm(range(len(per_model[base_model])), desc="2/4 Combine model rows", unit="row"):
         entry = {
             "instruction": per_model[base_model][idx]["instruction"],
             "history": per_model[base_model][idx]["history"],
@@ -117,9 +118,9 @@ def report_emotion_agreement(is_test: bool, raise_on_mismatch: bool = False) -> 
     combined = read_json(f"data/{with_suffix('rm_comparison_dataset_joined', 'json', is_test)}")
     keys = [k for k in PREDICT_SFT_KEYS if k.endswith(("_0", "_x"))]
 
-    for key in keys:
+    for key in tqdm(keys, desc="Report emotion agreement", unit="column"):
         user, chat, neutral = 0, 0, 0
-        for entry in combined:
+        for entry in tqdm(combined, desc=key, unit="row", leave=False):
             t_user, t_chat, _ = _safe_three_emotions(entry["target"])
             p_user, p_chat, p_neutral = _safe_three_emotions(entry[key])
             user += p_user == t_user
@@ -144,28 +145,35 @@ def add_scores(is_test: bool, model_name: str = "jinaai/jina-embeddings-v3") -> 
     combined = read_json(in_json)
     df = pd.DataFrame(combined)
 
-    splits = split_emotions_for_columns(df, PREDICT_SFT_COLUMNS)
+    splits = split_emotions_for_columns(df, PREDICT_SFT_COLUMNS, desc="3/4 Split scoring columns")
     for offset, split_col in enumerate(SPLIT_COLUMNS):
         df.insert(4 + offset * 2, split_col, splits[offset][0])
 
     encoder = SentenceTransformer(model_name, trust_remote_code=True)
-    embs = get_embeddings(df, SPLIT_COLUMNS, encoder)
+    embs = get_embeddings(df, SPLIT_COLUMNS, encoder, desc="3/4 Embed scoring columns")
     for offset, emb_col in enumerate(EMB_COLUMNS):
         df.insert(5 + offset * 3, emb_col, embs[offset].tolist())
 
-    sim_per_col, _ = per_row_semantic_similarity(df, EMB_COLUMNS)
+    sim_per_col, _ = per_row_semantic_similarity(df, EMB_COLUMNS, desc="3/4 Semantic rows")
     for offset, col in enumerate(PREDICT_SFT_COLUMNS):
         df.insert(6 + offset * 4, f"{col}_semantic_similarity", sim_per_col[offset])
 
-    distinct_2 = get_distinct_n_for_columns(df, PREDICT_SFT_KEYS, n=2)
+    distinct_2 = get_distinct_n_for_columns(df, PREDICT_SFT_KEYS, n=2, desc="3/4 Distinct-2")
     for offset, key in enumerate(PREDICT_SFT_KEYS):
         df[f"{key}_distinct_2"] = distinct_2[offset]
 
-    df["predict_sft_score"] = [_score_row(df, idx) for idx in range(len(df))]
+    df["predict_sft_score"] = [
+        _score_row(df, idx) for idx in tqdm(range(len(df)), desc="3/4 Score rows", unit="row")
+    ]
     df.to_csv(f"data/{with_suffix('df_combined_data', 'csv', is_test)}", index=False)
 
     # Persist the per-row scores back into the JSON.
-    for idx, score in enumerate(df["predict_sft_score"]):
+    for idx, score in tqdm(
+        enumerate(df["predict_sft_score"]),
+        total=len(df),
+        desc="3/4 Persist scores",
+        unit="row",
+    ):
         combined[idx]["scores"] = score
     write_json(combined, in_json)
 
@@ -190,7 +198,7 @@ def filter_worst_response(is_test: bool, n_drop: int = 3) -> None:
     combined = read_json(in_json)
     random.seed(42)
 
-    for idx, entry in enumerate(combined):
+    for idx, entry in tqdm(enumerate(combined), total=len(combined), desc="4/4 Filter worst rows", unit="row"):
         scores = entry["scores"]
         bottom_indices = sorted(range(len(scores)), key=lambda i: scores[i])[:n_drop]
         random.seed(idx)
@@ -217,9 +225,10 @@ def validate_alpha_beta_gamma(is_test: bool) -> dict:
         "gamma": [0.1, 0.2, 0.10, 0.20, 0.2],
     }
     results = []
-    for alpha, beta, gamma in zip(grid["alpha"], grid["beta"], grid["gamma"]):
+    params = list(zip(grid["alpha"], grid["beta"], grid["gamma"]))
+    for alpha, beta, gamma in tqdm(params, desc="Validate alpha/beta/gamma", unit="combo"):
         scores: list[float] = []
-        for idx in range(len(df)):
+        for idx in tqdm(range(len(df)), desc=f"a={alpha} b={beta} g={gamma}", unit="row", leave=False):
             target_sim = df["target_semantic_similarity"].iloc[idx][1:]
             candidate_distinct = [rescale_distinct(df[f"{k}_distinct_2"].iloc[idx]) for k in PREDICT_SFT_KEYS]
             lengths = [
