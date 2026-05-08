@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: microsoft/Phi-3-small-8k-instruct
-adapter_name_or_path: saves/Phi-3-small-8k-instruct/lora/sft
+adapter_name_or_path: ../../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/Phi-3-small-8k-instruct/lora/sft_3ep
 
 ### method
 stage: sft
@@ -17,7 +17,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Phi-3-small-8k-instruct/lora/test/predict_2
+output_dir: saves/Phi-3-small-8k-instruct/predict/test/predict_2
 overwrite_output_dir: true
 
 ### train
