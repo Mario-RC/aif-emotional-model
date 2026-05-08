@@ -21,8 +21,9 @@ krippendorff==0.8.1
 # Hugging Face and training stack
 torch==2.5.1
 torchdata==0.10.1
-transformers==4.42.3
-tokenizers==0.19.1
+transformers==4.45.2
+sentence-transformers==3.1.0
+tokenizers==0.20.3
 datasets==2.16.0
 accelerate==0.34.0
 peft==0.11.1
