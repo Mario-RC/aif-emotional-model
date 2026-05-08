@@ -146,15 +146,19 @@ def apply_emotion_mutation(
 # Step 5: apply the LLM-driven mutations (empathy, emotion, question).
 # ---------------------------------------------------------------------------
 
-def _build_pipeline(model_id: str, device: int = 1):
+def _build_pipeline(model_id: str, device: int | None = None):
     import torch
     from transformers import pipeline
+
+    resolved_device = device
+    if resolved_device is None:
+        resolved_device = 0 if torch.cuda.is_available() else -1
 
     return pipeline(
         "text-generation",
         model=model_id,
-        torch_dtype=torch.bfloat16,
-        device=device,
+        torch_dtype=torch.bfloat16 if resolved_device >= 0 else torch.float32,
+        device=resolved_device,
     )
 
 
@@ -189,6 +193,7 @@ def add_negative_samples(
     is_test: bool = False,
     cfg: NegativeSampleConfig | None = None,
     llama_model: str = DEFAULT_LLAMA_MODEL,
+    device: int | None = None,
     skip_llm: bool = False,
 ) -> None:
     cfg = cfg or (NegativeSampleConfig.for_test() if is_test else NegativeSampleConfig())
@@ -209,7 +214,7 @@ def add_negative_samples(
     apply_emotion_mutation(data, buckets[2], position_idx=4, label="emo3")
 
     if not skip_llm:
-        pipe = _build_pipeline(llama_model)
+        pipe = _build_pipeline(llama_model, device=device)
         apply_llm_mutation(
             data, buckets[3], target_position=1, label="empathy", pipe=pipe,
             system_template="This phrase is empathetic: {text}",
@@ -236,7 +241,17 @@ def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--test", action="store_true")
     parser.add_argument("--llama-model", default=DEFAULT_LLAMA_MODEL)
-    parser.add_argument("--skip-llm", action="store_true", help="Skip the GPU LLM rewrites.")
+    parser.add_argument(
+        "--device",
+        type=int,
+        default=None,
+        help="CUDA device index for LLM rewrites. Defaults to first visible GPU, or CPU (-1) if CUDA is unavailable.",
+    )
+    parser.add_argument(
+        "--skip-llm",
+        action="store_true",
+        help="Skip the LLM rewrites for debugging; this does not create the full mutated dataset.",
+    )
     return parser.parse_args()
 
 
@@ -245,5 +260,6 @@ if __name__ == "__main__":
     add_negative_samples(
         is_test=args.test,
         llama_model=args.llama_model,
+        device=args.device,
         skip_llm=args.skip_llm,
     )
