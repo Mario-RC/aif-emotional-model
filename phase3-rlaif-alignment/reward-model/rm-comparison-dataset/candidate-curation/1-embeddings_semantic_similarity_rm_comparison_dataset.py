@@ -1,7 +1,8 @@
 """Compute embeddings, semantic similarity, distinct-n and pick the chosen SFT prediction.
 
 For each of the five SFT-trained models, this script:
-1. Reads ``../llama-factory-predict/saves/<model>/emotional_balanced/rm_comparison_dataset_results[_test].json``
+1. Reads ``../llama-factory-predict/saves/<model>/emotional_balanced/rm_comparison_dataset_results.json``
+   or ``rm_comparison_dataset_test_results.json``
    and writes the per-model CSV under ``data/<model>/`` (and per-step intermediate
    files: ``*_splits.csv``, ``*_embs.csv``, ``*_distinct_n.csv``, ``*_predict_sft_chosen.csv``).
 2. Splits each prediction into utterances and emotion tags.
@@ -42,7 +43,7 @@ SIM_MEAN_COLUMNS = [f"{c}_semantic_similarity_mean" for c in ALL_RESPONSE_COLUMN
 
 
 def _llama_factory_path(model: str, is_test: bool) -> str:
-    fname = with_suffix("rm_comparison_dataset_results", "json", is_test)
+    fname = "rm_comparison_dataset_test_results.json" if is_test else "rm_comparison_dataset_results.json"
     return f"../llama-factory-predict/saves/{model}/emotional_balanced/{fname}"
 
 
