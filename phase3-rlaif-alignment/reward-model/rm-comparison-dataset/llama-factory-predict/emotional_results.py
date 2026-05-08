@@ -1,10 +1,10 @@
 """Aggregate per-model SFT prediction files and report emotion-tag agreement.
 
 For each (split, model) combination this script:
-1. Loads ``./saves/<model>/lora/predict/<split>/predict_<n>/generated_predictions.jsonl``
-   for n in 0..7 plus the matching ``./data/comparative_data[_test].json`` source.
+1. Loads ``./saves/<model>/predict/<split>/predict_<n>/generated_predictions.jsonl``
+   for n in 0..7 plus the matching ``./data/rm_prompt_dataset[_test].json`` source.
 2. Merges the predictions into a single record per dialogue and saves it under
-   ``./saves/<model>/emotional_balanced/comparative_data[_test]_results.json``.
+   ``./saves/<model>/emotional_balanced/rm_comparison_dataset[_test]_results.json``.
 3. Prints the per-model accuracy of the user/chatbot/neutral emotion tags
    against the target.
 """
@@ -34,17 +34,20 @@ def _read_jsonl(path: str) -> list[dict]:
         return [json.loads(line) for line in f]
 
 
+def _split_suffix(split: str) -> str:
+    return "_test" if split == "test" else ""
+
+
 def load_predictions(model: str, split: str) -> list[list[dict]]:
     """Return ``[predict_n_records]`` for ``n`` in ``0..N_PREDICTIONS-1``."""
     return [
-        _read_jsonl(f"./saves/{model}/lora/predict/{split}/predict_{n}/generated_predictions.jsonl")
+        _read_jsonl(f"./saves/{model}/predict/{split}/predict_{n}/generated_predictions.jsonl")
         for n in range(N_PREDICTIONS)
     ]
 
 
 def load_source_data(split: str) -> list[dict]:
-    suffix = "_test" if split == "test" else ""
-    with open(f"./data/comparative_data{suffix}.json", "r", encoding="utf-8") as f:
+    with open(f"./data/rm_prompt_dataset{_split_suffix(split)}.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -65,8 +68,7 @@ def merge_predictions(prompt_data: list[dict], predictions: list[list[dict]], mo
 def write_merged(model: str, split: str, merged: list[dict]) -> None:
     out_dir = f"./saves/{model}/emotional_balanced"
     os.makedirs(out_dir, exist_ok=True)
-    suffix = "_test" if split == "test" else ""
-    with open(f"{out_dir}/comparative_data{suffix}_results.json", "w", encoding="utf-8") as f:
+    with open(f"{out_dir}/rm_comparison_dataset{_split_suffix(split)}_results.json", "w", encoding="utf-8") as f:
         json.dump(merged, f, ensure_ascii=False, indent=2)
 
 

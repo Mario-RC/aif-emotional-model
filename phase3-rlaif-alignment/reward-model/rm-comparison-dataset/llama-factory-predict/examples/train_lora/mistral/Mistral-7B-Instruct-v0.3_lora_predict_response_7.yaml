@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
-adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/sft
+adapter_name_or_path: ../../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/Mistral-7B-Instruct-v0.3/lora/sft_3ep
 
 ### method
 stage: sft
@@ -17,7 +17,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Mistral-7B-Instruct-v0.3/lora/train/predict_7
+output_dir: saves/Mistral-7B-Instruct-v0.3/predict/train/predict_7
 overwrite_output_dir: true
 
 ### train
