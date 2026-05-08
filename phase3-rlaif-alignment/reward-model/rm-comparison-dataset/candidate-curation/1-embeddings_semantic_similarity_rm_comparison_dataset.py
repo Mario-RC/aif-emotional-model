@@ -19,6 +19,7 @@ import os
 
 import pandas as pd
 from sentence_transformers import SentenceTransformer
+from tqdm.auto import tqdm
 
 from _lib import (
     MODELS,
@@ -59,7 +60,7 @@ def _model_data_path(model: str, suffix: str, is_test: bool) -> str:
 
 def json_to_csv(is_test: bool) -> dict[str, pd.DataFrame]:
     dfs: dict[str, pd.DataFrame] = {}
-    for model in MODELS:
+    for model in tqdm(MODELS, desc="1/5 JSON to CSV", unit="model"):
         df = pd.DataFrame(read_json(_llama_factory_path(model, is_test)))
         out_path = _model_data_path(model, "", is_test)
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -74,9 +75,11 @@ def json_to_csv(is_test: bool) -> dict[str, pd.DataFrame]:
 
 def add_split_columns(is_test: bool) -> dict[str, pd.DataFrame]:
     dfs: dict[str, pd.DataFrame] = {}
-    for model in MODELS:
+    for model in tqdm(MODELS, desc="2/5 Split responses", unit="model"):
         df = pd.read_csv(_model_data_path(model, "", is_test), encoding="utf-8")
-        splits = split_emotions_for_columns(df, ALL_RESPONSE_COLUMNS)
+        splits = split_emotions_for_columns(
+            df, ALL_RESPONSE_COLUMNS, desc=f"{MODEL_TO_NAME[model]} split columns"
+        )
         for offset, (col, split_col) in enumerate(zip(ALL_RESPONSE_COLUMNS, SPLIT_COLUMNS)):
             df.insert(4 + offset * 2, split_col, splits[offset][0])
         df.to_csv(_model_data_path(model, "_splits", is_test), index=False)
@@ -91,9 +94,9 @@ def add_split_columns(is_test: bool) -> dict[str, pd.DataFrame]:
 def add_embedding_columns(is_test: bool, model_name: str = "jinaai/jina-embeddings-v3") -> dict[str, pd.DataFrame]:
     encoder = SentenceTransformer(model_name, trust_remote_code=True)
     dfs: dict[str, pd.DataFrame] = {}
-    for model in MODELS:
+    for model in tqdm(MODELS, desc="3/5 Embeddings", unit="model"):
         df = pd.read_csv(_model_data_path(model, "_splits", is_test), encoding="utf-8")
-        embs = get_embeddings(df, SPLIT_COLUMNS, encoder)
+        embs = get_embeddings(df, SPLIT_COLUMNS, encoder, desc=f"{MODEL_TO_NAME[model]} embedding columns")
         for offset, (col, emb_col) in enumerate(zip(ALL_RESPONSE_COLUMNS, EMB_COLUMNS)):
             df.insert(5 + offset * 3, emb_col, embs[offset].tolist())
         df.to_csv(_model_data_path(model, "_embs", is_test), index=False)
@@ -107,21 +110,23 @@ def add_embedding_columns(is_test: bool, model_name: str = "jinaai/jina-embeddin
 
 def add_similarity_and_distinct(is_test: bool) -> dict[str, pd.DataFrame]:
     dfs: dict[str, pd.DataFrame] = {}
-    for model in MODELS:
+    for model in tqdm(MODELS, desc="4/5 Similarity + distinct", unit="model"):
         df = pd.read_csv(_model_data_path(model, "_embs", is_test), encoding="utf-8")
         # The embeddings are stored as JSON-encoded lists; decode them back to lists.
-        for col in EMB_COLUMNS:
+        for col in tqdm(EMB_COLUMNS, desc=f"{MODEL_TO_NAME[model]} decode embeddings", unit="col", leave=False):
             df[col] = df[col].apply(eval)
 
-        sim_per_col, sim_mean_per_col = per_row_semantic_similarity(df, EMB_COLUMNS)
+        sim_per_col, sim_mean_per_col = per_row_semantic_similarity(
+            df, EMB_COLUMNS, desc=f"{MODEL_TO_NAME[model]} semantic rows"
+        )
         for offset, (col, sim_col, mean_col) in enumerate(zip(ALL_RESPONSE_COLUMNS, SIM_COLUMNS, SIM_MEAN_COLUMNS)):
             df.insert(6 + offset * 4, sim_col, sim_per_col[offset])
             df.insert(7 + offset * 4, mean_col, sim_mean_per_col[offset])
 
         # Distinct-2 and Distinct-3 for the predict_sft_1..7 columns (the candidate set).
         candidate_cols = [f"predict_sft_{i}" for i in range(1, 8)]
-        d2 = get_distinct_n_for_columns(df, candidate_cols, n=2)
-        d3 = get_distinct_n_for_columns(df, candidate_cols, n=3)
+        d2 = get_distinct_n_for_columns(df, candidate_cols, n=2, desc=f"{MODEL_TO_NAME[model]} distinct-2")
+        d3 = get_distinct_n_for_columns(df, candidate_cols, n=3, desc=f"{MODEL_TO_NAME[model]} distinct-3")
         for offset, col in enumerate(candidate_cols):
             df[f"{col}_distinct_2"] = d2[offset]
             df[f"{col}_distinct_3"] = d3[offset]
@@ -160,15 +165,15 @@ def _candidate_score_for_row(df: pd.DataFrame, idx: int) -> tuple[list[float], i
 
 
 def add_chosen_predictions(is_test: bool) -> None:
-    for model in MODELS:
+    for model in tqdm(MODELS, desc="5/5 Chosen predictions", unit="model"):
         df = pd.read_csv(_model_data_path(model, "_distinct_n", is_test), encoding="utf-8")
         # Decode list-typed columns back to Python lists.
         import ast
-        for col in SIM_COLUMNS:
+        for col in tqdm(SIM_COLUMNS, desc=f"{MODEL_TO_NAME[model]} decode similarities", unit="col", leave=False):
             df[col] = df[col].apply(ast.literal_eval)
 
         scores, indices, chosen = [], [], []
-        for idx in range(len(df)):
+        for idx in tqdm(range(len(df)), desc=f"{MODEL_TO_NAME[model]} score rows", unit="row", leave=False):
             s, i, c = _candidate_score_for_row(df, idx)
             scores.append(s)
             indices.append(i)

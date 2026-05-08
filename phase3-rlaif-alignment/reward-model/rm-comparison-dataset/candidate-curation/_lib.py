@@ -14,6 +14,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+from tqdm.auto import tqdm
 
 # ---------------------------------------------------------------------------
 # Model registry
@@ -57,14 +58,16 @@ def split_emotions_in_response(predict_sft: str) -> tuple[list[str], list[str]]:
     return [utt1, utt2, utt3], [emo1, emo2, emo3]
 
 
-def split_emotions_for_columns(df: pd.DataFrame, columns: list[str]) -> list[list[list]]:
+def split_emotions_for_columns(
+    df: pd.DataFrame, columns: list[str], desc: str | None = None
+) -> list[list[list]]:
     """Apply :func:`split_emotions_in_response` to each value of each given column.
 
     Returns a list of ``[r_utts, r_emos]`` per column where each item is a list
     of three-segment splits aligned with the original dataframe rows.
     """
     out: list[list[list]] = []
-    for col in columns:
+    for col in tqdm(columns, desc=desc or "Split responses", unit="col"):
         r_utts, r_emos = [], []
         for value in df[col]:
             utts, emos = split_emotions_in_response(value)
@@ -78,17 +81,19 @@ def split_emotions_for_columns(df: pd.DataFrame, columns: list[str]) -> list[lis
 # Embeddings + semantic similarity
 # ---------------------------------------------------------------------------
 
-def get_embeddings(df: pd.DataFrame, split_columns: list[str], model) -> list[np.ndarray]:
+def get_embeddings(
+    df: pd.DataFrame, split_columns: list[str], model, desc: str | None = None
+) -> list[np.ndarray]:
     """Encode the joined utterances of each ``*_split`` column with the given model."""
     out: list[np.ndarray] = []
-    for col in split_columns:
+    for col in tqdm(split_columns, desc=desc or "Embedding columns", unit="col"):
         utts = df[col]
         if isinstance(utts.iloc[0], str):
             import ast
 
             utts = utts.apply(ast.literal_eval)
         joined = utts.apply(lambda x: " ".join(x))
-        out.append(model.encode(joined, task="text-matching"))
+        out.append(model.encode(joined.tolist(), task="text-matching", show_progress_bar=True))
     return out
 
 
@@ -107,11 +112,11 @@ def pairwise_cosine_matrix(embeddings: list[np.ndarray]) -> tuple[list[list[floa
 
 
 def per_row_semantic_similarity(
-    df: pd.DataFrame, emb_columns: list[str]
+    df: pd.DataFrame, emb_columns: list[str], desc: str | None = None
 ) -> tuple[list[list[list[float]]], list[list[float]]]:
     """Return per-row similarity matrices and per-row mean vectors across the embedding columns."""
     matrices, means = [], []
-    for idx in range(len(df)):
+    for idx in tqdm(range(len(df)), desc=desc or "Semantic similarity", unit="row"):
         embeddings = [np.array(df[col].iloc[idx]) for col in emb_columns]
         matrix, mean_vec = pairwise_cosine_matrix(embeddings)
         matrices.append(matrix)
@@ -138,14 +143,19 @@ def distinct_n(sentences: list[str], n: int) -> float:
     return len(set(all_ngrams)) / total if total > 0 else 0.0
 
 
-def get_distinct_n_for_columns(df: pd.DataFrame, columns: list[str], n: int) -> list[list[float]]:
+def get_distinct_n_for_columns(
+    df: pd.DataFrame, columns: list[str], n: int, desc: str | None = None
+) -> list[list[float]]:
     """For each column compare it against ``target`` to compute Distinct-n per row."""
     out = []
-    for col in columns:
-        scores = []
-        for idx in range(len(df)):
-            scores.append(distinct_n([df["target"][idx], df[col][idx]], n))
-        out.append(scores)
+    total = len(columns) * len(df)
+    with tqdm(total=total, desc=desc or f"Distinct-{n}", unit="row") as pbar:
+        for col in columns:
+            scores = []
+            for idx in range(len(df)):
+                scores.append(distinct_n([df["target"][idx], df[col][idx]], n))
+                pbar.update(1)
+            out.append(scores)
     return out
 
 
