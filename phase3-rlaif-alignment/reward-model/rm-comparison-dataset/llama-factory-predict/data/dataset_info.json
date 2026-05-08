@@ -1,0 +1,22 @@
+{
+  "rm_prompt_dataset": {
+    "file_name": "rm_prompt_dataset.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history",
+      "system": "system"
+    }
+  },
+  "rm_prompt_dataset_test": {
+    "file_name": "rm_prompt_dataset_test.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history",
+      "system": "system"
+    }
+  }
+}
