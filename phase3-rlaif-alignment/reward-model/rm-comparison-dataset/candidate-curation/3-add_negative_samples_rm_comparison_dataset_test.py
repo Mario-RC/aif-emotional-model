@@ -14,4 +14,6 @@ if __name__ == "__main__":
         llama_model=args.llama_model,
         device=args.device,
         skip_llm=args.skip_llm,
+        llm_batch_size=args.llm_batch_size,
+        checkpoint_every=args.checkpoint_every,
     )

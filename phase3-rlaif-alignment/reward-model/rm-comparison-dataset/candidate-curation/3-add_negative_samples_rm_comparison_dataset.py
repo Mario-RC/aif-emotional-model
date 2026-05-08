@@ -17,6 +17,7 @@ Outputs are written to ``data/rm_comparison_dataset[_test].json``.
 from __future__ import annotations
 
 import argparse
+import math
 import random
 from dataclasses import dataclass
 
@@ -168,9 +169,55 @@ def _build_pipeline(model_id: str, device: int | None = None):
     )
 
 
-def _llm_rewrite(pipe, system: str, user: str, max_new_tokens: int = 512) -> str:
-    messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
-    return pipe(messages, max_new_tokens=max_new_tokens)[0]["generated_text"][-1]["content"].strip()
+def _generated_content(output) -> str:
+    """Extract assistant text from HF pipeline output for single or batched chat generations."""
+    if isinstance(output, list) and len(output) == 1 and isinstance(output[0], dict):
+        output = output[0]
+
+    if isinstance(output, dict):
+        generated = output.get("generated_text", "")
+        if isinstance(generated, list) and generated:
+            last_message = generated[-1]
+            if isinstance(last_message, dict):
+                return str(last_message.get("content", "")).strip()
+            return str(last_message).strip()
+        return str(generated).strip()
+
+    if isinstance(output, list):
+        return _generated_content(output[0]) if output else ""
+    return str(output).strip()
+
+
+def _llm_rewrite_messages(pipe, messages: list[dict], max_new_tokens: int = 512) -> str:
+    return _generated_content(pipe(messages, max_new_tokens=max_new_tokens))
+
+
+def _llm_rewrite_batch(
+    pipe,
+    messages_batch: list[list[dict]],
+    batch_size: int,
+    max_new_tokens: int = 512,
+) -> list[str]:
+    if len(messages_batch) == 1:
+        return [_llm_rewrite_messages(pipe, messages_batch[0], max_new_tokens=max_new_tokens)]
+
+    try:
+        outputs = pipe(messages_batch, max_new_tokens=max_new_tokens, batch_size=batch_size)
+    except Exception as exc:
+        tqdm.write(f"Batch generation failed; falling back to row-by-row generation: {exc}")
+        return [
+            _llm_rewrite_messages(pipe, messages, max_new_tokens=max_new_tokens)
+            for messages in tqdm(messages_batch, desc="Fallback single generations", unit="row", leave=False)
+        ]
+
+    if not isinstance(outputs, list) or len(outputs) != len(messages_batch):
+        tqdm.write("Unexpected batch output shape; falling back to row-by-row generation.")
+        return [
+            _llm_rewrite_messages(pipe, messages, max_new_tokens=max_new_tokens)
+            for messages in tqdm(messages_batch, desc="Fallback single generations", unit="row", leave=False)
+        ]
+
+    return [_generated_content(output) for output in outputs]
 
 
 def apply_llm_mutation(
@@ -181,14 +228,49 @@ def apply_llm_mutation(
     pipe,
     system_template: str,
     user_message: str,
+    batch_size: int = 4,
+    checkpoint_path: str | None = None,
+    checkpoint_every: int = 25,
 ) -> None:
-    for did in tqdm(dids, desc=f"5/6 Apply {label} LLM mutations", unit="row"):
-        idx = next(i for i, entry in enumerate(data) if entry["did"] == did)
+    did_to_idx = {entry["did"]: idx for idx, entry in enumerate(data)}
+    batch_size = max(1, batch_size)
+    checkpoint_every = max(0, checkpoint_every)
+    pending = []
+
+    for did in dids:
+        idx = did_to_idx[did]
         target_split = split_emo_utt(data[idx]["target"])
         system = system_template.format(text=target_split[target_position])
-        target_split[target_position] = _llm_rewrite(pipe, system, user_message)
-        data[idx]["predict_sft_modified"] = " ".join(target_split)
-        data[idx]["predict_sft_modified_label"] = label
+        messages = [{"role": "system", "content": system}, {"role": "user", "content": user_message}]
+        pending.append((idx, target_split, messages))
+
+    batches = range(0, len(pending), batch_size)
+    rows_since_checkpoint = 0
+    for start in tqdm(
+        batches,
+        total=math.ceil(len(pending) / batch_size),
+        desc=f"5/6 Apply {label} LLM batches",
+        unit="batch",
+    ):
+        batch = pending[start : start + batch_size]
+        rewrites = _llm_rewrite_batch(
+            pipe,
+            [messages for _, _, messages in batch],
+            batch_size=batch_size,
+        )
+
+        for (idx, target_split, _), rewrite in zip(batch, rewrites):
+            target_split[target_position] = rewrite
+            data[idx]["predict_sft_modified"] = " ".join(target_split)
+            data[idx]["predict_sft_modified_label"] = label
+
+        rows_since_checkpoint += len(batch)
+        if checkpoint_path and checkpoint_every and rows_since_checkpoint >= checkpoint_every:
+            write_json(data, checkpoint_path)
+            rows_since_checkpoint = 0
+
+    if checkpoint_path and rows_since_checkpoint:
+        write_json(data, checkpoint_path)
 
 
 # ---------------------------------------------------------------------------
@@ -201,6 +283,8 @@ def add_negative_samples(
     llama_model: str = DEFAULT_LLAMA_MODEL,
     device: int | None = None,
     skip_llm: bool = False,
+    llm_batch_size: int = 4,
+    checkpoint_every: int = 25,
 ) -> None:
     cfg = cfg or (NegativeSampleConfig.for_test() if is_test else NegativeSampleConfig())
 
@@ -230,11 +314,17 @@ def add_negative_samples(
             data, buckets[3], target_position=1, label="empathy", pipe=pipe,
             system_template="This phrase is empathetic: {text}",
             user_message="Create a sentence that is the opposite, non-empathetic at all.",
+            batch_size=llm_batch_size,
+            checkpoint_path=out_path,
+            checkpoint_every=checkpoint_every,
         )
         apply_llm_mutation(
             data, buckets[4], target_position=3, label="emotion", pipe=pipe,
             system_template="This phrase has an emotion: {text}",
             user_message="Create a sentence that is the opposite emotion.",
+            batch_size=llm_batch_size,
+            checkpoint_path=out_path,
+            checkpoint_every=checkpoint_every,
         )
         apply_llm_mutation(
             data, buckets[5], target_position=5, label="question", pipe=pipe,
@@ -243,6 +333,9 @@ def add_negative_samples(
                 "Create sentences that do the opposite, less interesting non-engaging, shorter "
                 "questions for each of the examples. Try to use statements instead of questions."
             ),
+            batch_size=llm_batch_size,
+            checkpoint_path=out_path,
+            checkpoint_every=checkpoint_every,
         )
 
     print("6/6 Writing final dataset...")
@@ -264,6 +357,18 @@ def _parse_args() -> argparse.Namespace:
         action="store_true",
         help="Skip the LLM rewrites for debugging; this does not create the full mutated dataset.",
     )
+    parser.add_argument(
+        "--llm-batch-size",
+        type=int,
+        default=4,
+        help="Number of LLM rewrite prompts to generate per pipeline call.",
+    )
+    parser.add_argument(
+        "--checkpoint-every",
+        type=int,
+        default=25,
+        help="Write the output JSON after this many LLM rewrites. Use 0 to disable incremental checkpoints.",
+    )
     return parser.parse_args()
 
 
@@ -274,4 +379,6 @@ if __name__ == "__main__":
         llama_model=args.llama_model,
         device=args.device,
         skip_llm=args.skip_llm,
+        llm_batch_size=args.llm_batch_size,
+        checkpoint_every=args.checkpoint_every,
     )
