@@ -1,6 +1,6 @@
 ### model
-model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
-adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/sft
+model_name_or_path: THUDM/glm-4-9b-chat-1m
+adapter_name_or_path: ../../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/glm-4-9b-chat-1m/lora/sft_3ep
 
 ### method
 stage: sft
@@ -8,17 +8,22 @@ do_predict: true
 finetuning_type: lora
 
 ### dataset
-dataset: chosen_response_mistral
+dataset: rm_prompt_dataset
 # eval_dataset: prompt_dataset_handmade
-template: mistral
+template: glm4
 cutoff_len: 1024
 max_samples: 10000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Mistral-7B-Instruct-v0.3/lora/train/chosen_response
+output_dir: saves/glm-4-9b-chat-1m/predict/train/predict_1
 overwrite_output_dir: true
+
+### train
+temperature: 0.5
+top_k: 80
+top_p: 0.3
 
 ### eval
 per_device_eval_batch_size: 1
