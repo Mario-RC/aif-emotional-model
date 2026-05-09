@@ -157,16 +157,49 @@ def _build_pipeline(model_id: str, device: int | None = None):
     import torch
     from transformers import pipeline
 
+    def first_token_id(token_id):
+        if isinstance(token_id, (list, tuple)):
+            return token_id[0] if token_id else None
+        return token_id
+
     resolved_device = device
     if resolved_device is None:
         resolved_device = 0 if torch.cuda.is_available() else -1
 
-    return pipeline(
+    text_generator = pipeline(
         "text-generation",
         model=model_id,
         torch_dtype=torch.bfloat16 if resolved_device >= 0 else torch.float32,
         device=resolved_device,
     )
+
+    tokenizer = text_generator.tokenizer
+    if tokenizer.pad_token is None:
+        if tokenizer.eos_token is not None:
+            tokenizer.pad_token = tokenizer.eos_token
+        else:
+            eos_token_id = first_token_id(tokenizer.eos_token_id)
+            if eos_token_id is None:
+                eos_token_id = first_token_id(text_generator.model.config.eos_token_id)
+            if eos_token_id is None:
+                raise ValueError(f"{model_id} has no pad_token or eos_token to use for batched generation.")
+            tokenizer.pad_token_id = eos_token_id
+
+    pad_token_id = tokenizer.pad_token_id
+    if pad_token_id is None:
+        pad_token_id = first_token_id(tokenizer.eos_token_id)
+        if pad_token_id is None:
+            pad_token_id = first_token_id(text_generator.model.config.eos_token_id)
+        if pad_token_id is None:
+            raise ValueError(f"{model_id} has no pad_token_id to use for batched generation.")
+        tokenizer.pad_token_id = pad_token_id
+
+    tokenizer.padding_side = "left"
+    text_generator.model.config.pad_token_id = pad_token_id
+    if getattr(text_generator.model, "generation_config", None) is not None:
+        text_generator.model.generation_config.pad_token_id = pad_token_id
+
+    return text_generator
 
 
 def _generated_content(output) -> str:
@@ -189,7 +222,9 @@ def _generated_content(output) -> str:
 
 
 def _llm_rewrite_messages(pipe, messages: list[dict], max_new_tokens: int = 512) -> str:
-    return _generated_content(pipe(messages, max_new_tokens=max_new_tokens))
+    return _generated_content(
+        pipe(messages, max_new_tokens=max_new_tokens, pad_token_id=pipe.tokenizer.pad_token_id)
+    )
 
 
 def _llm_rewrite_batch(
@@ -202,7 +237,12 @@ def _llm_rewrite_batch(
         return [_llm_rewrite_messages(pipe, messages_batch[0], max_new_tokens=max_new_tokens)]
 
     try:
-        outputs = pipe(messages_batch, max_new_tokens=max_new_tokens, batch_size=batch_size)
+        outputs = pipe(
+            messages_batch,
+            max_new_tokens=max_new_tokens,
+            batch_size=batch_size,
+            pad_token_id=pipe.tokenizer.pad_token_id,
+        )
     except Exception as exc:
         tqdm.write(f"Batch generation failed; falling back to row-by-row generation: {exc}")
         return [
