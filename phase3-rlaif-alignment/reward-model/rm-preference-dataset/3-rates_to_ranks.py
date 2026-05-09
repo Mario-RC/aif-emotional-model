@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+from pathlib import Path
 from statistics import mean, stdev
 
 import matplotlib.pyplot as plt
@@ -30,9 +31,26 @@ LLM_NAMES = ["GPT-4O", "CLAUDE-3.5-SONNET", "GEMINI-1.5-PRO", "LLAMA-3.1-405B"]
 # Stage 1: parse the per-LLM rating CSV into RATE / TRANSFORMED_RATE columns.
 # ---------------------------------------------------------------------------
 
+def _rating_csv_path(llm_name: str, is_test: bool) -> Path:
+    current = Path("data") / llm_name / with_suffix(
+        f"rm_preference_dataset_rate_{llm_name}", "csv", is_test
+    )
+    legacy = Path("data") / llm_name / with_suffix(
+        f"comparison_data_rate_{llm_name}", "csv", is_test
+    )
+    for path in (current, legacy):
+        if path.exists():
+            return path
+
+    expected = "\n  - ".join(str(path) for path in (current, legacy))
+    raise FileNotFoundError(
+        f"Missing rating CSV for {llm_name}. Expected one of:\n  - {expected}"
+    )
+
+
 def parse_llm_rates(llm_name: str, is_test: bool) -> pd.DataFrame:
-    """Read ``data/<LLM>/rm_preference_dataset_rate_<LLM>[_test].csv`` and add RATE columns."""
-    csv_path = f"data/{llm_name}/{with_suffix('rm_preference_dataset_rate_' + llm_name, 'csv', is_test)}"
+    """Read a per-LLM rating CSV and add RATE / TRANSFORMED_RATE columns."""
+    csv_path = _rating_csv_path(llm_name, is_test)
     df = pd.read_csv(csv_path)
     df.rename(columns={"RANK": "COMPLETION"}, inplace=True)
 
@@ -142,8 +160,18 @@ def compute_overall_rank(df: pd.DataFrame) -> pd.DataFrame:
         df.insert(9 + offset * 5, f"RATE_{llm}_OVERALL", overall_per_llm[llm])
 
     rank_means, rank_stds, ranked = [], [], []
-    n_responses = len(df.iloc[0][f"RATE_{LLM_NAMES[0]}_OVERALL"])
     for _, row in df.iterrows():
+        n_responses_per_llm = {
+            len(row[f"RATE_{llm}_OVERALL"])
+            for llm in LLM_NAMES
+        }
+        if len(n_responses_per_llm) != 1:
+            raise ValueError(
+                f"Different number of scored responses for DID {row['DID']}: "
+                f"{sorted(n_responses_per_llm)}"
+            )
+
+        n_responses = n_responses_per_llm.pop()
         per_response = []
         for idx in range(n_responses):
             per_response.append([row[f"RATE_{llm}_OVERALL"][idx] for llm in LLM_NAMES])

@@ -1,9 +1,10 @@
 """Preprocess raw candidate-curation output into the canonical RM Preference Dataset format.
 
 Steps:
-1. Copy the upstream ``rm_comparison_dataset[*test].json`` into ``data/``.
+1. Read the upstream ``rm_comparison_dataset[*test].json``.
 2. Rename keys to ``history`` / ``prompt`` / ``target`` / ``predict_1..9`` / etc.
-3. Reformat each response by replacing literal emotion tags with ``(EMPATHY)`` /
+3. Save the canonical original responses as ``rm_preference_dataset_original[*test].json``.
+4. Reformat each response by replacing literal emotion tags with ``(EMPATHY)`` /
    ``(QUESTION)`` placeholders via :func:`empathy_question_modify`.
 
 Run ``python 1-preprocess_rm_preference_dataset.py`` for the train split or import
@@ -11,6 +12,8 @@ Run ``python 1-preprocess_rm_preference_dataset.py`` for the train split or impo
 """
 
 from __future__ import annotations
+
+from copy import deepcopy
 
 from _lib import empathy_question_modify, read_json, with_suffix, write_json
 
@@ -61,14 +64,13 @@ def _reformat_responses(rm_preference_dataset: list[dict]) -> list[dict]:
 def preprocess(is_test: bool = False) -> None:
     upstream_file = f"{UPSTREAM_DIR}/{with_suffix('rm_comparison_dataset', 'json', is_test)}"
     out_file = f"data/{with_suffix('rm_preference_dataset', 'json', is_test)}"
+    original_file = f"data/{with_suffix('rm_preference_dataset_original', 'json', is_test)}"
 
-    data = read_json(upstream_file)
-    write_json(data, out_file)
+    data = _rename_keys(read_json(upstream_file))
+    write_json(data, original_file)
 
-    data = read_json(out_file)
-    data = _rename_keys(data)
-    data = _reformat_responses(data)
-    write_json(data, out_file)
+    rating_input = _reformat_responses(deepcopy(data))
+    write_json(rating_input, out_file)
 
 
 if __name__ == "__main__":

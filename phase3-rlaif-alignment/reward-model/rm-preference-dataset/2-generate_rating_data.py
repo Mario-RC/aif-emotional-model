@@ -39,6 +39,28 @@ warnings.simplefilter("ignore")
 
 CHECKPOINT_INTERVAL = 10
 DATA_COLUMNS = ["DID", "PROMPT", "COMPLETION", "EMOTIONS", "EXPRESSION_LEVEL", "MODIFIED"]
+REQUIRED_INPUT_KEYS = {
+    "history",
+    "prompt",
+    "target",
+    "predict_sft_modified_label",
+    "did",
+    *(f"predict_{i}" for i in range(1, 10)),
+}
+
+
+def _validate_rating_input(records: list[dict], input_file: str) -> None:
+    if not records:
+        raise ValueError(f"{input_file} is empty.")
+
+    missing = sorted(REQUIRED_INPUT_KEYS - set(records[0]))
+    if missing:
+        raise ValueError(
+            f"{input_file} is not the rating-input dataset; missing keys: {missing}. "
+            "Run 1-preprocess_rm_preference_dataset.py first. "
+            "Note that 5-format_rm_preference_dataset.py overwrites "
+            "rm_preference_dataset*.json with the final reward-model format."
+        )
 
 
 def _iter_records(
@@ -73,12 +95,14 @@ def generate_rating_data(
     config_file: str = DEFAULT_LLM_CONFIG_FILE,
     start_offset: int = 0,
 ) -> None:
+    input_file = f"data/{with_suffix('rm_preference_dataset', 'json', is_test)}"
+    rm_preference_dataset = read_json(input_file)
+    _validate_rating_input(rm_preference_dataset, input_file)
+    rm_preference_dataset = rm_preference_dataset[start_offset:]
+
     cfg = load_llm_config(llm_name, config_file)
     print({"MODEL": cfg.get("MODEL"), "OPENAI_API_VERSION": cfg.get("OPENAI_API_VERSION")})
     client = RatingClient(llm_name, cfg)
-
-    input_file = f"data/{with_suffix('rm_preference_dataset', 'json', is_test)}"
-    rm_preference_dataset = read_json(input_file)[start_offset:]
 
     out_dir = f"data/{llm_name}"
     records_dir = f"{out_dir}/records"
