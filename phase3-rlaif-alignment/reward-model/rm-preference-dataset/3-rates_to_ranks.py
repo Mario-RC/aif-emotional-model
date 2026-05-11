@@ -35,14 +35,14 @@ def _rating_csv_path(llm_name: str, is_test: bool) -> Path:
     current = Path("data") / llm_name / with_suffix(
         f"rm_preference_dataset_rate_{llm_name}", "csv", is_test
     )
-    legacy = Path("data") / llm_name / with_suffix(
+    alternate = Path("data") / llm_name / with_suffix(
         f"comparison_data_rate_{llm_name}", "csv", is_test
     )
-    for path in (current, legacy):
+    for path in (current, alternate):
         if path.exists():
             return path
 
-    expected = "\n  - ".join(str(path) for path in (current, legacy))
+    expected = "\n  - ".join(str(path) for path in (current, alternate))
     raise FileNotFoundError(
         f"Missing rating CSV for {llm_name}. Expected one of:\n  - {expected}"
     )

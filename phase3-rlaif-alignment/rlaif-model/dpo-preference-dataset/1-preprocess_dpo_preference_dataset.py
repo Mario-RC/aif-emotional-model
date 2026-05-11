@@ -19,7 +19,7 @@ UPSTREAM_DIR = "../dpo-comparison-dataset/candidate-curation/data"
 
 
 def _rename_keys(dpo_preference_dataset: list[dict]) -> list[dict]:
-    """Rename the legacy key names to the canonical ``history``/``predict_*`` schema."""
+    """Rename the old key names to the canonical ``history``/``predict_*`` schema."""
     for entry in dpo_preference_dataset:
         keys = list(entry.keys())
 
