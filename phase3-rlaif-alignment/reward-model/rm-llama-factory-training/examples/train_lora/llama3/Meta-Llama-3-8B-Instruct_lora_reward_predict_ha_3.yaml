@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
-adapter_name_or_path: saves/Meta-Llama-3-8B-Instruct/lora/train/rm_3
+adapter_name_or_path: saves/Meta-Llama-3-8B-Instruct/lora/rm_3
 
 ### method
 stage: rm
@@ -16,7 +16,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Meta-Llama-3-8B-Instruct/lora/predict/ha_3
+output_dir: saves/Meta-Llama-3-8B-Instruct/predict/ha_3
 overwrite_output_dir: true
 
 ### eval
