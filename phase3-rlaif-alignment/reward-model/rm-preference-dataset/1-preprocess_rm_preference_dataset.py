@@ -21,7 +21,7 @@ UPSTREAM_DIR = "../rm-comparison-dataset/candidate-curation/data"
 
 
 def _rename_keys(rm_preference_dataset: list[dict]) -> list[dict]:
-    """Rename the legacy key names to the canonical ``history``/``predict_*`` schema."""
+    """Rename the old key names to the canonical ``history``/``predict_*`` schema."""
     for entry in rm_preference_dataset:
         keys = list(entry.keys())
 
