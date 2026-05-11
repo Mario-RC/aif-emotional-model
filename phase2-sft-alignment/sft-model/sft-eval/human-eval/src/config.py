@@ -31,7 +31,7 @@ HIST_DIR = HUMAN_EVAL_DIR / "hist"
 SFT_SAVES_DIR = HUMAN_EVAL_DIR.parent.parent / "sft-llama-factory-training" / "saves"
 SFT_RESULTS_FILENAME = "emotional_balanced/demonstration_data_emotional_balanced_test_results.json"
 
-WIDE_CSV_PATH = DATA_DIR / "demonstration_data_emotional_balanced_test_results_dial.csv"
+WIDE_CSV_PATH = DATA_DIR / "sft_demonstration_dataset_test_predictions.csv"
 
 # Active long-format Task 2 reference-label table. Backup folders are
 # intentionally ignored by the pipeline.
@@ -99,14 +99,16 @@ class Annotator:
     index: int          # anonymous output slot; 0 is the skipped non-submitter
     name: str           # folder name under results/
     included: bool      # whether the annotator's results are used in aggregation
+    task_nums: Tuple[int, ...] = (1, 2, 3, 4)
 
 
 ANNOTATORS: Tuple[Annotator, ...] = (
     Annotator(0, "unused", included=False),
-    Annotator(1, "anno1", included=True),
+    Annotator(1, "anno1", included=True, task_nums=(1, 3, 4)),
     Annotator(2, "anno2", included=True),
     Annotator(3, "anno3", included=True),
     Annotator(4, "anno4", included=True),
+    Annotator(5, "anno5", included=True),
 )
 
 

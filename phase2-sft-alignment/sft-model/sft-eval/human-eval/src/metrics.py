@@ -181,13 +181,12 @@ def compute_overall_quality(
     models: Sequence[Model] = MODELS,
     published_rows: (
         Dict[str, tuple[float, float, float, float, float, float]] | None
-    ) = PUBLISHED_OVERALL_QUALITY,
+    ) = None,
 ) -> OverallQualityTable:
     """Aggregate Rank@K and Task-4 quality across all annotators.
 
-    By default this renders the aggregate-only values reported in the
-    original manuscript table. Passing ``published_rows=None`` recomputes
-    the table directly from the anonymized annotator spreadsheets.
+    Passing ``published_rows`` renders a fixed aggregate table instead of
+    recomputing it directly from the anonymized annotator spreadsheets.
     """
     if not results:
         raise ValueError("Need at least one annotator's results to aggregate")
@@ -261,6 +260,9 @@ def _count_matches(df: pd.DataFrame, truth_col: str, pred_col: str) -> tuple[int
 def compute_emotion_hits(
     result: AnnotatorResults, models: Sequence[Model] = MODELS,
 ) -> EmotionHits:
+    if 2 not in result.tasks:
+        raise ValueError(f"ANNO {result.annotator.index} has no Task 2 annotations")
+
     df = result.tasks[2]
     user_hits, user_tags = _count_matches(df, "HUMAN_EMO", "USER_EMOTION")
     out = EmotionHits(annotator_name=f"ANNO {result.annotator.index}",
@@ -353,16 +355,21 @@ def compute_iaa_alpha(
     shared IAA rows."""
     out: Dict[int, float] = {}
     for task_num, (_, level) in _IAA_SPEC.items():
+        task_annos = [a for a in annos if task_num in a.tasks]
+        if len(task_annos) < 2:
+            out[task_num] = float("nan")
+            continue
+
         per_annotator = []
         uids = list(iaa_uids_by_task[task_num])
         common_uids = set(uids)
-        for a in annos:
+        for a in task_annos:
             common_uids &= set(a.tasks[task_num]["UID"])
         ordered_uids = [uid for uid in uids if uid in common_uids]
         if not ordered_uids:
             raise ValueError(f"No shared IAA UIDs found for task {task_num}")
 
-        for a in annos:
+        for a in task_annos:
             df = a.tasks[task_num].set_index("UID")
             iaa_df = df.loc[ordered_uids].reset_index()
             per_annotator.append(_iaa_flat_values(iaa_df, task_num, models))

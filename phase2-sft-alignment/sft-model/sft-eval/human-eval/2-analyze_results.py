@@ -69,31 +69,37 @@ def main(argv: list[str] | None = None) -> None:
     print()
 
     # --- Task 2 emotion hits ---------------------------------------------
-    all_hits = [compute_emotion_hits(res) for res in results]
+    task2_results = [res for res in results if 2 in res.tasks]
+    all_hits = [compute_emotion_hits(res) for res in task2_results]
     overall = aggregate_emotion_hits(all_hits)
 
-    per = max((len(r.tasks[2]) for r in results), default=45)
-    for hits in all_hits:
+    task2_lengths = [
+        len(res.tasks[2]) for res in task2_results
+    ]
+    for hits, per in zip(all_hits, task2_lengths):
         print(f"{hits.annotator_name}  - Task 2")
         for label, n in zip(PRINT_LABELS, hits.total_hit_counts()):
             print(f"{label:<8} - {n} / {per}")
         print()
 
     print("OVERALL Task 2 - mean model hits")
+    overall_denominator = (
+        sum(task2_lengths) / len(task2_lengths) if task2_lengths else 0
+    )
     for label, n in zip(PRINT_LABELS, overall.means):
-        print(f"{label:<8} - {n:g} / {per}")
+        print(f"{label:<8} - {n:g} / {overall_denominator:g}")
     print(overall.per_emotion)
 
     if not args.no_plots:
         log.info("Rendering bar charts")
         plot_hits_by_model(
             overall.means, stds=overall.stds,
-            ylim=per or 45, save_path=save_path_models(),
+            ylim=max(task2_lengths, default=45), save_path=save_path_models(),
         )
         plot_hits_by_emotion(
             overall.per_emotion_mean,
             stds_by_emotion=overall.per_emotion_std,
-            ylim=per or 45, save_path=save_path_emotions(),
+            ylim=max(task2_lengths, default=45), save_path=save_path_emotions(),
         )
 
     # --- Inter-annotator agreement ---------------------------------------

@@ -116,9 +116,7 @@ def save_task2_reference_labels(
 
 @dataclass
 class AnnotatorSlice:
-    """Per-annotator subsets of all four tasks, aligned by UID so that
-    the same dialogue shows up in this annotator's t1, t2, t3 and t4
-    files."""
+    """Per-annotator subsets of the tasks assigned to this annotator."""
 
     annotator: Annotator
     tasks: Dict[int, pd.DataFrame]
@@ -155,6 +153,7 @@ def split_across_annotators(
        annotator.
     4. Each per-annotator DataFrame is shuffled with a fixed seed.
     """
+    active_annotators = [annotator for annotator in annotators if annotator.included]
     pools = {num: df.copy() for num, df in task_dfs.items()}
 
     # --- IAA (shared rows) -------------------------------------------------
@@ -170,7 +169,7 @@ def split_across_annotators(
 
     # --- 2-per-emotion (disjoint across annotators, aligned across tasks) --
     slices: List[AnnotatorSlice] = []
-    for annotator in annotators:
+    for annotator in active_annotators:
         # Sample on task 1 only; the picked indices are used for every task
         # so the same dialogues appear in this annotator's t1/t2/t3/t4.
         _, picked_idx = _sample_per_emotion(
@@ -179,6 +178,9 @@ def split_across_annotators(
         picked_idx_list = list(picked_idx)
         per_task: Dict[int, pd.DataFrame] = {}
         for num, df in pools.items():
+            if num not in annotator.task_nums:
+                continue
+
             extra = df.iloc[picked_idx_list].reset_index(drop=True)
             per_task[num] = pd.concat(
                 [iaa_slices[num], extra], axis=0, ignore_index=True,
@@ -187,7 +189,8 @@ def split_across_annotators(
         slices.append(AnnotatorSlice(annotator=annotator, tasks=per_task))
 
     # --- Task-2 extra rows -------------------------------------------------
-    for slice_ in slices:
+    task2_slices = [slice_ for slice_ in slices if 2 in slice_.tasks]
+    for slice_ in task2_slices:
         extra, picked_idx = _sample_per_emotion(
             pools[2], SAMPLING.per_emotion_task2_extra, SAMPLING.sampling_random_state,
         )
@@ -199,15 +202,16 @@ def split_across_annotators(
     # --- Task-2 leftover: first n-1 annotators get ceil(L/n), last takes
     #     whatever remains (matches the original notebook's distribution).
     leftover = pools[2]
-    n = len(slices)
-    chunk = -(-len(leftover) // n)  # ceil division
-    for i, slice_ in enumerate(slices):
-        start = min(i * chunk, len(leftover))
-        stop = len(leftover) if i == n - 1 else min(start + chunk, len(leftover))
-        slice_.tasks[2] = pd.concat(
-            [slice_.tasks[2], leftover.iloc[start:stop]],
-            axis=0, ignore_index=True,
-        )
+    n = len(task2_slices)
+    if n:
+        chunk = -(-len(leftover) // n)  # ceil division
+        for i, slice_ in enumerate(task2_slices):
+            start = min(i * chunk, len(leftover))
+            stop = len(leftover) if i == n - 1 else min(start + chunk, len(leftover))
+            slice_.tasks[2] = pd.concat(
+                [slice_.tasks[2], leftover.iloc[start:stop]],
+                axis=0, ignore_index=True,
+            )
 
     # --- Shuffle -----------------------------------------------------------
     for slice_ in slices:
@@ -216,7 +220,7 @@ def split_across_annotators(
                 frac=1, random_state=SAMPLING.shuffle_random_state,
             ).reset_index(drop=True)
 
-    return [slice_ for slice_ in slices if slice_.annotator.included]
+    return slices
 
 
 def save_aux_slices(slices: Sequence[AnnotatorSlice],
@@ -293,4 +297,3 @@ def save_final_slices(slices: Sequence[AnnotatorSlice],
             formatted.to_excel(
                 final_dir / f"anno{i}_{task.slug}.xlsx", index=False,
             )
-

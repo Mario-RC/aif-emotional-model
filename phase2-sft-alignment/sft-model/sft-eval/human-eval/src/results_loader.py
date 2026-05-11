@@ -155,6 +155,9 @@ def load_annotator(
     """Load one annotator's filled-in files."""
     out = AnnotatorResults(annotator=annotator)
     for task in tasks:
+        if task.num not in annotator.task_nums:
+            continue
+
         filled_path = (results_dir / annotator.name
                        / f"anno{annotator.index}_{task.slug}.xlsx")
         filled_df = pd.read_excel(filled_path)
@@ -180,7 +183,5 @@ def load_all_annotators(
     annotators: Sequence[Annotator] = ANNOTATORS,
     **kwargs,
 ) -> list[AnnotatorResults]:
-    """Load every *included* annotator. Excluded annotators (see
-    ``Annotator.included``) are silently skipped so downstream metric
-    code only operates on the participating subset."""
+    """Load every included annotator and only the tasks assigned to them."""
     return [load_annotator(a, **kwargs) for a in annotators if a.included]

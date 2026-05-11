@@ -6,7 +6,7 @@ Replaces ``human_annotations_generation.ipynb``. Run from this folder:
 
 Outputs:
 
-* ``data/demonstration_data_emotional_balanced_test_results_dial.csv`` —
+* ``data/sft_demonstration_dataset_test_predictions.csv`` —
   wide DataFrame with every model's prediction side by side.
 * ``data/task2_reference_labels.xlsx`` — long Task-2 reference-label
   table, with one row per prompt/model response.
@@ -60,6 +60,9 @@ def _has_human_filled_results(results_dir=RESULTS_DIR) -> bool:
         if not annotator.included:
             continue
         for task in TASKS:
+            if task.num not in annotator.task_nums:
+                continue
+
             path = (results_dir / annotator.name
                     / f"anno{annotator.index}_{task.slug}.xlsx")
             if not path.exists():
