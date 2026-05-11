@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
-adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/train/rm_3
+adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/rm_3
 
 ### method
 stage: rm
@@ -16,7 +16,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Mistral-7B-Instruct-v0.3/lora/predict/rm_3
+output_dir: saves/Mistral-7B-Instruct-v0.3/predict/rm_3
 overwrite_output_dir: true
 
 ### eval
