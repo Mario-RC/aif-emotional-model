@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: THUDM/glm-4-9b-chat-1m
-adapter_name_or_path: saves/glm-4-9b-chat-1m/lora/train/rm_2
+adapter_name_or_path: saves/glm-4-9b-chat-1m/lora/rm_2
 trust_remote_code: True
 
 ### method
@@ -17,7 +17,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/glm-4-9b-chat-1m/lora/predict/rm_2
+output_dir: saves/glm-4-9b-chat-1m/predict/rm_2
 overwrite_output_dir: true
 
 ### eval
