@@ -1,7 +1,6 @@
 ### model
-model_name_or_path: microsoft/Phi-3-small-8k-instruct
-adapter_name_or_path: saves/Phi-3-small-8k-instruct/lora/rm_2
-trust_remote_code: True
+model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
+adapter_name_or_path: saves/Meta-Llama-3-8B-Instruct/lora/rm_1ep
 
 ### method
 stage: rm
@@ -10,14 +9,14 @@ finetuning_type: lora
 
 ### dataset
 eval_dataset: rm_preference_dataset_test
-template: phi
+template: llama3
 cutoff_len: 2048
 max_samples: 20000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Phi-3-small-8k-instruct/predict/rm_2
+output_dir: saves/Meta-Llama-3-8B-Instruct/predict/rm_1ep
 overwrite_output_dir: true
 
 ### eval

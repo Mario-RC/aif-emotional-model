@@ -17,7 +17,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Mistral-7B-Instruct-v0.3/lora/rm_1
+output_dir: saves/Mistral-7B-Instruct-v0.3/lora/rm_1ep
 logging_steps: 10
 save_steps: 500
 plot_loss: true

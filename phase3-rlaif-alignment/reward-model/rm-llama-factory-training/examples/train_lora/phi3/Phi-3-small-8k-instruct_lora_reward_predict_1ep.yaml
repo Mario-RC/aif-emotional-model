@@ -1,6 +1,7 @@
 ### model
-model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
-adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/rm_1
+model_name_or_path: microsoft/Phi-3-small-8k-instruct
+adapter_name_or_path: saves/Phi-3-small-8k-instruct/lora/rm_1ep
+trust_remote_code: True
 
 ### method
 stage: rm
@@ -9,14 +10,14 @@ finetuning_type: lora
 
 ### dataset
 eval_dataset: rm_preference_dataset_test
-template: mistral
+template: phi
 cutoff_len: 2048
 max_samples: 20000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Mistral-7B-Instruct-v0.3/predict/rm_1
+output_dir: saves/Phi-3-small-8k-instruct/predict/rm_1ep
 overwrite_output_dir: true
 
 ### eval
