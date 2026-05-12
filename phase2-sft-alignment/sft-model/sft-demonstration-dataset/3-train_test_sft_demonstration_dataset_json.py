@@ -20,6 +20,7 @@ import pandas as pd
 TURNS_CSV = Path("data/sft_demonstration_dataset_turns.csv")
 TRAIN_JSON = Path("data/sft_demonstration_dataset.json")
 TEST_JSON = Path("data/sft_demonstration_dataset_test.json")
+TEST_DIDS_JSON = Path("data/sft_demonstration_dataset_test_dids.json")
 
 TURNS_PER_DIALOGUE = 4
 SAMPLES_PER_PAIR = 4
@@ -69,12 +70,19 @@ class StratifiedEmotionSplitter:
         turns_per_dialogue: int = TURNS_PER_DIALOGUE,
         samples_per_pair: int = SAMPLES_PER_PAIR,
         last_turn_suffix: str = LAST_TURN_UID_SUFFIX,
+        test_dids_path: Path | None = TEST_DIDS_JSON,
+        random_state: int | None = None,
     ) -> None:
         self.turns_per_dialogue = turns_per_dialogue
         self.samples_per_pair = samples_per_pair
         self.last_turn_suffix = last_turn_suffix
+        self.test_dids_path = test_dids_path
+        self.random_state = random_state
 
     def split(self, df_turns: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        if self.test_dids_path and self.test_dids_path.exists():
+            return self._split_from_dids(df_turns, self.test_dids_path)
+
         last_turns = df_turns[df_turns["UID"].str.endswith(self.last_turn_suffix)]
         emotions = list(df_turns["EMOTION_RESPONSE_2"].unique())
 
@@ -87,7 +95,7 @@ class StratifiedEmotionSplitter:
                 ]
                 if len(matching) < self.samples_per_pair:
                     continue
-                sampled_indices.extend(matching.sample(n=self.samples_per_pair).index)
+                sampled_indices.extend(matching.sample(n=self.samples_per_pair, random_state=self.random_state).index)
 
         self._assert_unique(sampled_indices)
 
@@ -101,6 +109,24 @@ class StratifiedEmotionSplitter:
 
         df_train = df_turns.loc[train_indices].reset_index(drop=True)
         df_test = df_turns.loc[test_indices].reset_index(drop=True)
+        return df_train, df_test
+
+    def _split_from_dids(self, df_turns: pd.DataFrame, test_dids_path: Path) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        with test_dids_path.open(encoding="utf-8") as fh:
+            test_dids = json.load(fh)
+
+        missing = sorted(set(test_dids).difference(df_turns["DID"].unique()))
+        if missing:
+            raise ValueError(f"Test DID list contains missing DID values: {missing[:5]}")
+
+        test_indices = df_turns.index[df_turns["DID"].isin(test_dids)].tolist()
+        expected_rows = len(test_dids) * self.turns_per_dialogue
+        if len(test_indices) != expected_rows:
+            raise ValueError(f"Expected {expected_rows} test rows for {len(test_dids)} DID values, found {len(test_indices)}.")
+
+        train_indices = df_turns.index.difference(test_indices).sort_values()
+        df_train = df_turns.loc[train_indices].reset_index(drop=True)
+        df_test = df_turns.loc[sorted(test_indices)].reset_index(drop=True)
         return df_train, df_test
 
     @staticmethod
