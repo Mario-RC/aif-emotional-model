@@ -1,0 +1,40 @@
+### model
+model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
+adapter_name_or_path: ../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/Mistral-7B-Instruct-v0.3/lora/sft_3ep
+
+### method
+stage: rm
+do_train: true
+finetuning_type: lora
+lora_target: all
+
+### dataset
+dataset: rm_preference_dataset
+template: mistral
+cutoff_len: 2048
+max_samples: 1000000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/Mistral-7B-Instruct-v0.3/lora/rm_3ep
+logging_steps: 10
+save_steps: 500
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+
+### eval
+val_size: 0.07
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 5100
