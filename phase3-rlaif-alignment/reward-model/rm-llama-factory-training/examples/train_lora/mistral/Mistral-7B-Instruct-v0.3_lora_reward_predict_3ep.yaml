@@ -1,6 +1,6 @@
 ### model
-model_name_or_path: google/gemma-2-9b-it
-adapter_name_or_path: saves/gemma-2-9b-it/lora/rm_2
+model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
+adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/rm_3ep
 
 ### method
 stage: rm
@@ -9,14 +9,14 @@ finetuning_type: lora
 
 ### dataset
 eval_dataset: rm_preference_dataset_test
-template: gemma
+template: mistral
 cutoff_len: 2048
 max_samples: 20000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/gemma-2-9b-it/predict/rm_2
+output_dir: saves/Mistral-7B-Instruct-v0.3/predict/rm_3ep
 overwrite_output_dir: true
 
 ### eval

@@ -1,6 +1,7 @@
 ### model
-model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
-adapter_name_or_path: ../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/Meta-Llama-3-8B-Instruct/lora/sft_3ep
+model_name_or_path: THUDM/glm-4-9b-chat-1m
+adapter_name_or_path: ../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/glm-4-9b-chat-1m/lora/sft_3ep
+trust_remote_code: True
 
 ### method
 stage: rm
@@ -10,14 +11,14 @@ lora_target: all
 
 ### dataset
 dataset: rm_preference_dataset
-template: llama3
+template: glm4
 cutoff_len: 2048
 max_samples: 1000000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Meta-Llama-3-8B-Instruct/lora/rm_3
+output_dir: saves/glm-4-9b-chat-1m/lora/rm_1ep
 logging_steps: 10
 save_steps: 500
 plot_loss: true
@@ -27,7 +28,7 @@ overwrite_output_dir: true
 per_device_train_batch_size: 1
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 3.0
+num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
