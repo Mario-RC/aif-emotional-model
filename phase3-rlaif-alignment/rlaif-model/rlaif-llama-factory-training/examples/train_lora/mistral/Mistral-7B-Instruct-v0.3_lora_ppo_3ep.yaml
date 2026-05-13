@@ -1,7 +1,7 @@
 ### model
 model_name_or_path: mistralai/Mistral-7B-Instruct-v0.3
-adapter_name_or_path: saves/Mistral-7B-Instruct-v0.3/lora/sft_d_3ep
-reward_model: saves/Mistral-7B-Instruct-v0.3/lora/rm_1ep
+adapter_name_or_path: ../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/Mistral-7B-Instruct-v0.3/lora/sft_3ep
+reward_model: ../../reward-model/rm-llama-factory-training/saves/Mistral-7B-Instruct-v0.3/lora/rm_1ep
 trust_remote_code: true
 
 ### method
