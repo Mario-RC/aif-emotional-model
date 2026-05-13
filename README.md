@@ -75,6 +75,25 @@ bash <launcher>.sh   # internally: llamafactory-cli train examples/.../*.yaml
 
 This keeps every experiment self-contained on the data/config side while the framework code lives in exactly one place.
 
+## Current dataset and artifact naming
+
+The project now uses dataset names that describe the stage that produces or consumes each file. Older informal names have been migrated out of the active code paths. The current canonical names are:
+
+- `sft_demonstration_dataset` — Phase 2 supervised demonstration dialogues.
+- `rm_prompt_dataset` — prompts used to build the reward-model comparison dataset.
+- `rm_comparison_dataset` — candidate responses compared for reward-model data.
+- `rm_preference_dataset` — preference pairs used to train the reward model.
+- `ppo_unlabeled_prompts_dataset` — additional prompts used in the RLAIF round.
+- `dpo_comparison_dataset` — candidate responses compared for DPO/RLAIF data.
+- `dpo_preference_dataset` — preference pairs used by DPO/RLAIF training.
+
+The naming convention also applies to generated artifacts:
+
+- LLM-judge rating files in the DPO preference stage are named `data/<LLM>/dpo_preference_dataset_rate_<LLM>.csv` and `data/<LLM>/dpo_preference_dataset_rate_<LLM>_test.csv`; their checkpoints use `data/<LLM>/records/dpo_preference_dataset_rate_<LLM>_checkpoint_*.csv`.
+- Aggregated DPO preference scores are named `dpo_preference_dataset_models_results*.csv`, with the combined ranking plot at `data/hist/dpo_preference_dataset_models_results_rank.pdf`.
+- PPO prompt-generation checkpoints use `data/records/ppo_unlabeled_prompts_dataset_checkpoint_<n>.csv`.
+- RLAIF LLaMA-Factory emotional-result files use `ppo_unlabeled_prompts_dataset_test_results.json` for the canonical held-out prompt set and `rm_prompt_ppo_unlabeled_prompts_dataset_test_results.json` for the auxiliary prompt+PPO set.
+
 ## Pipeline overview
 
 ### Phase 1: Foundation model evaluation
@@ -101,7 +120,7 @@ Contains the full human-eval protocol used to rate SFT model outputs on the emot
 - **Task 3 — Follow-up question quality:** is the chatbot's follow-up question adequate given the previous user turn (binary Yes/No).
 - **Task 4 — Overall quality:** 1–5 rating of the whole chatbot response given the user turn.
 
-The split between inter-annotator-agreement items (about 30%, shared across annotators) and variability items (about 70%, disjoint per annotator) is described in [human_annotations.txt](./phase2-sft-alignment/sft-model/sft-eval/human-eval/human_annotations.txt). Generated annotation spreadsheets live under `data/`; the anonymized filled-in annotator responses live under [results/](./phase2-sft-alignment/sft-model/sft-eval/human-eval/results). The current analysis supports five annotators (`anno1`...`anno5`); `anno5` only contributes non-empty annotations for Task 1, Task 3 and Task 4, so empty Task 2 answers are ignored by the metrics.
+The split between inter-annotator-agreement items (about 30%, shared across annotators) and variability items (about 70%, disjoint per annotator) is documented in the local [human-eval README](./phase2-sft-alignment/sft-model/sft-eval/human-eval/README.md). Generated annotation spreadsheets live under `data/`; the anonymized filled-in annotator responses live under [results/](./phase2-sft-alignment/sft-model/sft-eval/human-eval/results). The current analysis supports five annotators (`anno1`...`anno5`); `anno5` only contributes non-empty annotations for Task 1, Task 3 and Task 4, so empty Task 2 answers are ignored by the metrics.
 
 The pipeline has been refactored into a reusable package under [src/](./phase2-sft-alignment/sft-model/sft-eval/human-eval/src) (modules for configuration, dialogue parsing, task building, annotator sampling, metrics and plots) with two numbered entrypoints that reflect the execution order:
 
@@ -149,12 +168,12 @@ Produces the preference dataset used to train the reward model, trains it, and e
 
 Uses the same prompt → candidate → rating → preference flow as `reward-model/`, but targeted at producing DPO training data and the final RL-aligned dialogue model.
 
-- [ppo-unlabeled-prompts-dataset/](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset) — generates an additional pool of emotional prompts dedicated to the RLAIF round (separate from the reward-model prompt pool) and merges it with the Phase 2 demonstration data. Four numbered scripts plus a shared [_lib.py](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/_lib.py) (1000 topics + emotion catalogue + dialogue template) mirror the `rm-prompt-dataset/` pipeline:
+- [ppo-unlabeled-prompts-dataset/](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset) — generates an additional pool of emotional prompts dedicated to the RLAIF round (separate from the reward-model prompt pool), preserves the canonical human-eval test split through `data/ppo_unlabeled_prompts_dataset_test_dids.json`, and merges the result with the reward-model prompt pool. Four numbered scripts plus a shared [_lib.py](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/_lib.py) (1000 topics + emotion catalogue + dialogue template) mirror the `rm-prompt-dataset/` pipeline:
   - [1-generate_ppo_unlabeled_prompts_dataset.py](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/1-generate_ppo_unlabeled_prompts_dataset.py), [2-formatted_ppo_unlabeled_prompts_dataset.py](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/2-formatted_ppo_unlabeled_prompts_dataset.py), [3-train_test_ppo_unlabeled_prompts_dataset_json.py](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/3-train_test_ppo_unlabeled_prompts_dataset_json.py), [4-merge_demonstration_prompt_ppo_unlabeled_prompts_datasets.py](./phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/4-merge_demonstration_prompt_ppo_unlabeled_prompts_datasets.py).
-- [dpo-comparison-dataset/](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset) — inference + curation of candidate responses for the DPO round. Contains its own [llama-factory-predict/](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/llama-factory-predict) workspace plus a [candidate-curation/](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/candidate-curation) pipeline of three numbered scripts (`1-embeddings_*`, `2-delete_respones_*`, `3-add_negative_samples_*` with `_test` variants) backed by [_lib.py](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/candidate-curation/_lib.py).
-- [dpo-preference-dataset/](./phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset) — same 5-step rating pipeline as `rm-preference-dataset/` but consumes the curated DPO candidates and outputs DPO pairs (`1-preprocess_*` → `5-format_*`, all with `_test` variants and shared [_lib.py](./phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/_lib.py)). The cross-cutting plot step [6-rates_to_ranks_dpr.py](./phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/6-rates_to_ranks_dpr.py) renders combined train+test plots over reward-model + RLAIF rates.
-- [rlaif-llama-factory-training/](./phase3-rlaif-alignment/rlaif-model/rlaif-llama-factory-training) — current LLaMA-Factory workspace used for the DPO / RLAIF training runs on top of the SFT checkpoint.
-- [rlaif-eval/](./phase3-rlaif-alignment/rlaif-model/rlaif-eval) — evaluation of the RL-aligned model: [1-analyze_rl_test_results.py](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/1-analyze_rl_test_results.py) aggregates automatic metrics across DPO/PPO/SFT-DPR run families, and [human-eval/](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval) mirrors the Phase 2 human-eval protocol applied to the final RLAIF outputs ([1-human_annotations_generation.py](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval/1-human_annotations_generation.py) builds the annotator XLSX files; [2-human_annotations_results.py](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval/2-human_annotations_results.py) aggregates the filled responses; the annotator-facing guide is in [README.md](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval/README.md)).
+- [dpo-comparison-dataset/](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset) — inference + curation of candidate responses for the DPO round. Contains its own [llama-factory-predict/](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/llama-factory-predict) workspace plus a [candidate-curation/](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/candidate-curation) pipeline of three numbered scripts (`1-embeddings_*`, `2-delete_respones_*`, `3-add_negative_samples_*` with `_test` variants) backed by [_lib.py](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/candidate-curation/_lib.py). The prediction workspace uses [sft_predict.sh](./phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/llama-factory-predict/sft_predict.sh) as the single launcher for train and test prompt predictions, and its YAML files point to the corresponding Phase 2 `sft_3ep` adapters rather than copying SFT checkpoints into this stage.
+- [dpo-preference-dataset/](./phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset) — same rating pipeline as `rm-preference-dataset/` but consumes the curated DPO candidates and outputs DPO pairs (`1-preprocess_*` → `5-format_*`, all with `_test` variants and shared [_lib.py](./phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/_lib.py)). The API-generated judge files kept for reproducibility are `data/<LLM>/dpo_preference_dataset_rate_<LLM>.csv` and `_test.csv`; [3-rates_to_ranks.py](./phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/3-rates_to_ranks.py) regenerates `dpo_preference_dataset_models_results*.csv`, and [6-rates_to_ranks_dpr.py](./phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/6-rates_to_ranks_dpr.py) renders combined train+test plots over reward-model + RLAIF rates.
+- [rlaif-llama-factory-training/](./phase3-rlaif-alignment/rlaif-model/rlaif-llama-factory-training) — current LLaMA-Factory workspace used for DPO / PPO / SFT-DPR training runs on top of the Phase 2 `sft_3ep` adapters and the reward models trained under `reward-model/rm-llama-factory-training`. Training checkpoints live under `saves/<model>/lora/`, prediction outputs under `saves/<model>/predict/`, and emotional-control aggregates under `saves/<model>/emotional_balanced/`.
+- [rlaif-eval/](./phase3-rlaif-alignment/rlaif-model/rlaif-eval) — evaluation of the RL-aligned model: [human-eval/](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval) mirrors the Phase 2 human-eval protocol applied to the final RLAIF outputs ([1-human_annotations_generation.py](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval/1-human_annotations_generation.py) builds the annotator XLSX files; [2-human_annotations_results.ipynb](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval/2-human_annotations_results.ipynb) aggregates the filled responses with inline plots; [3-analyze_rlaif_test_results.py](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval/3-analyze_rlaif_test_results.py) aggregates automatic metrics across DPO/PPO/SFT-DPR run families; the annotator-facing guide is in [README.md](./phase3-rlaif-alignment/rlaif-model/rlaif-eval/human-eval/README.md)).
 
 ## Main technologies
 
@@ -169,7 +188,7 @@ Uses the same prompt → candidate → rating → preference flow as `reward-mod
 
 Use Python `3.12.x` for the project environment. The development machine may already have a local `./.vrlaif` virtual environment, but it is treated as a local execution artifact rather than a source file.
 
-The dependency manifest in [requirements.txt](./requirements.txt) was prepared to cover:
+The dependency manifest in `requirements.txt` was prepared to cover:
 
 - The custom scripts under `phase1-foundation-eval` and `phase3-rlaif-alignment`.
 - The analysis notebooks and annotation tooling.
@@ -237,15 +256,39 @@ python 1-generate_rm_prompt_dataset.py
 
 ```bash
 cd phase3-rlaif-alignment/reward-model/rm-preference-dataset
+python 1-preprocess_rm_preference_dataset.py
 python 2-generate_rating_data.py
+python 3-rates_to_ranks.py
+python 4-postprocess_rm_preference_dataset.py
+python 5-format_rm_preference_dataset.py
 ```
+
+If the API-generated rating CSVs are already present under `data/<LLM>/`, steps `3` to `5` can be rerun without judge API keys.
 
 ### Generate PPO Unlabeled Prompts Dataset
 
 ```bash
 cd phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset
 python 1-generate_ppo_unlabeled_prompts_dataset.py
+python 2-formatted_ppo_unlabeled_prompts_dataset.py
+python 3-train_test_ppo_unlabeled_prompts_dataset_json.py
+python 4-merge_demonstration_prompt_ppo_unlabeled_prompts_datasets.py
 ```
+
+`3-train_test_ppo_unlabeled_prompts_dataset_json.py` uses `data/ppo_unlabeled_prompts_dataset_test_dids.json` when present, so the held-out split remains stable across regenerations. `4-merge_demonstration_prompt_ppo_unlabeled_prompts_datasets.py` writes the final full train/test files plus the `1k` PPO-only subset used by the DPO comparison prediction step.
+
+### Generate DPO Preference Dataset
+
+```bash
+cd phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset
+python 1-preprocess_dpo_preference_dataset.py
+python 2-generate_rating_data.py
+python 3-rates_to_ranks.py
+python 4-postprocess_dpo_preference_dataset.py
+python 5-format_dpo_preference_dataset.py
+```
+
+If the API-generated rating CSVs are already present under `data/<LLM>/`, steps `3` to `5` can be rerun without judge API keys.
 
 ### Run LLaMA-Factory workspace jobs
 
@@ -275,15 +318,22 @@ This repository stores source code plus a small number of experiment artifacts t
 - Keep reusable source code, non-secret configs and small canonical inputs.
 - Keep anonymized human annotation spreadsheets because they cannot be regenerated.
 - Keep API-generated judge rating CSVs that are needed to run later preference steps without API keys.
+- Keep the canonical test-DID lists (`*_test_dids.json`) used to reproduce human-annotation splits exactly.
 - Keep `phase3-rlaif-alignment/reward-model/rm-eval/human-eval/data/rm_human_eval_sft_predictions_test.csv`, because it is required by `2-human_annotations_reward_model.py` and cannot be regenerated exactly unless the five raw SFT prediction files are also available.
 - Do not version generated `results/`, `logs/`, `__pycache__/`, temporary notebooks, model checkpoints or large `saves/` outputs unless a specific artifact is deliberately needed for reproducibility.
 
 Important generated paths:
 
 - `phase2-sft-alignment/sft-model/sft-eval/human-eval/data/` is generated by `1-generate_annotations.py`.
+- `phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/data/ppo_unlabeled_prompts_dataset_1k*.json` is generated by `4-merge_demonstration_prompt_ppo_unlabeled_prompts_datasets.py` from the full PPO prompt files.
+- `phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/data/<LLM>/dpo_preference_dataset_rate_<LLM>*.csv` is generated by `2-generate_rating_data*.py`; the final CSVs are kept so later steps can run without judge API keys.
+- `phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/data/dpo_preference_dataset_models_results*.csv` is generated by `3-rates_to_ranks.py` and its `--test` mode.
+- `phase3-rlaif-alignment/rlaif-model/dpo-preference-dataset/data/hist/dpo_preference_dataset_models_results_rank.pdf` is generated from the DPO preference scoring/ranking stage.
 - `phase3-rlaif-alignment/reward-model/rm-eval/human-eval/results/` is generated by `2-human_annotations_reward_model.py`.
 - `phase3-rlaif-alignment/reward-model/rm-comparison-dataset/candidate-curation/data/` is generated by the candidate-curation scripts.
 - `phase3-rlaif-alignment/reward-model/rm-llama-factory-training/saves/` is generated by LLaMA-Factory training and prediction runs.
+- `phase3-rlaif-alignment/rlaif-model/rlaif-llama-factory-training/saves/<model>/emotional_balanced/ppo_unlabeled_prompts_dataset_test_results.json` is generated or reused by `emotional_results.py` and is the canonical RLAIF human-eval prediction aggregate.
+- `phase3-rlaif-alignment/rlaif-model/rlaif-llama-factory-training/saves/<model>/emotional_balanced/rm_prompt_ppo_unlabeled_prompts_dataset_test_results.json` is an auxiliary aggregate for the prompt+PPO split.
 
 ## Reproducibility recommendations
 
