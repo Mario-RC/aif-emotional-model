@@ -1,8 +1,8 @@
 """Aggregate per-model SFT prediction files and report emotion-tag agreement.
 
 For each (split, model) combination this script:
-1. Loads ``./saves/<model>/lora/predict/<split>/predict_<n>/generated_predictions.jsonl``
-   for n in 0..7 plus the matching ``./data/dpo_comparison_dataset[_test].json`` source.
+1. Loads ``./saves/<model>/predict/<split>/predict_<n>/generated_predictions.jsonl``
+   for n in 0..7 plus the matching ``./data/ppo_unlabeled_prompts_dataset_1k[_test].json`` source.
 2. Merges the predictions into a single record per dialogue and saves it under
    ``./saves/<model>/emotional_balanced/dpo_comparison_dataset[_test]_results.json``.
 3. Prints the per-model accuracy of the user/chatbot/neutral emotion tags
@@ -36,14 +36,14 @@ def _read_jsonl(path: str) -> list[dict]:
 
 def load_predictions(model: str, split: str) -> list[list[dict]]:
     return [
-        _read_jsonl(f"./saves/{model}/lora/predict/{split}/predict_{n}/generated_predictions.jsonl")
+        _read_jsonl(f"./saves/{model}/predict/{split}/predict_{n}/generated_predictions.jsonl")
         for n in range(N_PREDICTIONS)
     ]
 
 
 def load_source_data(split: str) -> list[dict]:
     suffix = "_test" if split == "test" else ""
-    with open(f"./data/dpo_comparison_dataset{suffix}.json", "r", encoding="utf-8") as f:
+    with open(f"./data/ppo_unlabeled_prompts_dataset_1k{suffix}.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
 
