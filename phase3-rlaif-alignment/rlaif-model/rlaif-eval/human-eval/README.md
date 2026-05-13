@@ -180,25 +180,3 @@ Comments section: If you find any ambiguities or if a response could be interpre
 Open-ended questions: For HIGH engagement, prioritize responses that ask open-ended questions over those that could lead to a yes/no answer.
 
 Expression Level Matching: Double-check that the emotional intensity expressed in each sentence matches the expected level indicated by the EXPRESSION_LEVEL array.
-
-
-# DEADLINE
-
-27/3/2025
-
-
-# DEVELOPER NOTES
-
-For the team building / aggregating these annotations:
-
-- **Generation**: [`1-human_annotations_generation.py`](1-human_annotations_generation.py) reads
-  `demonstration_prompt_rlaif_data_test_results.json` for the three best models
-  (one per RL technique) and writes the empty annotation files to
-  `data/task1.xlsx` and `data/task2.xlsx`.
-- **Distribution**: Annotators receive a copy of `task1.xlsx` / `task2.xlsx`,
-  fill in the rank / adequacy columns and the optional COMMENTS column, and
-  return them to `results/<annotator>/task1.xlsx` / `results/<annotator>/task2.xlsx`.
-- **Aggregation**: [`2-human_annotations_results.py`](2-human_annotations_results.py)
-  loads every annotator's filled-in XLSX, computes per-system @1 / @2 hit rates
-  for Task 1 and per-dimension adequacy counts for Task 2, and renders the
-  bar plots saved under `hist/dimensions/`.

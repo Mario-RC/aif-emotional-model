@@ -1,7 +1,7 @@
 """Build the XLSX files annotators fill in to evaluate SFT / PPO / DPO responses.
 
 Pipeline:
-1. Load ``demonstration_prompt_rlaif_data_test_results.json`` for the three best
+1. Load ``ppo_unlabeled_prompts_dataset_test_results.json`` for the three best
    models (one per RL technique) and assemble a wide dataframe with one row per
    dialogue holding raw + parsed user turns and per-model responses.
 2. Split each turn / response into utterance + emotion-tag columns.
@@ -30,6 +30,7 @@ DEFAULT_TASK1_AUX = "data/task1_aux.csv"
 DEFAULT_TASK2_AUX = "data/task2_aux.csv"
 DEFAULT_TASK1_XLSX = "data/task1.xlsx"
 DEFAULT_TASK2_XLSX = "data/task2.xlsx"
+DPO_PREFERENCE_DATA_DIR = "../../dpo-preference-dataset/data"
 
 LEVEL_TO_LABEL = {5: "Very High", 4: "High", 3: "Medium", 2: "Low", 1: "Very Low"}
 
@@ -41,7 +42,7 @@ LEVEL_TO_LABEL = {5: "Very High", 4: "High", 3: "Medium", 2: "Low", 1: "Very Low
 def _load_best_model_predictions(best_models: list[tuple[str, str]]) -> tuple[list[dict], list[dict], list[dict]]:
     """Read the SFT / PPO / DPO JSONs for the three best (model, predict_field) pairs."""
     paths = [
-        f"../../rlaif-llama-factory-training/saves/{model}/emotional_balanced/demonstration_prompt_rlaif_data_test_results.json"
+        f"../../rlaif-llama-factory-training/saves/{model}/emotional_balanced/ppo_unlabeled_prompts_dataset_test_results.json"
         for model, _ in best_models
     ]
     out: list[list[dict]] = []
@@ -101,7 +102,7 @@ def _join_chatbot_response(split: ChatbotSplit) -> list[str]:
 def _add_user_turn_columns(df: pd.DataFrame, prefix: str, source_column: str, insert_at: int) -> int:
     utt, emo = _split_emo_user(df[source_column])
     df.insert(insert_at, f"{prefix}_R", utt)
-    df.insert(insert_at + 1, f"USER_{prefix.split('_')[-1]}", emo)
+    df.insert(insert_at + 1, f"USER_EMO{prefix.split('_')[-1].lstrip('T')}", emo)
     return insert_at + 2
 
 
@@ -161,7 +162,35 @@ def add_split_columns(df: pd.DataFrame) -> pd.DataFrame:
     insert_at += 1
     for prefix in ("TARGET", "SFT", "PPO", "DPO"):
         insert_at = _add_chatbot_turn_columns(df, prefix=prefix, source_column=prefix, insert_at=insert_at)
-    return df
+
+    chatbot_cols = lambda prefix: [
+        prefix,
+        f"{prefix}_TEST", f"{prefix}_R",
+        f"{prefix}_EMO1", f"{prefix}_R1",
+        f"{prefix}_EMO2", f"{prefix}_R2",
+        f"{prefix}_EMO3", f"{prefix}_R3",
+    ]
+    response_cols = lambda prefix: [
+        f"{prefix}_TEST", f"{prefix}_R",
+        f"{prefix}_EMO1", f"{prefix}_R1",
+        f"{prefix}_EMO2", f"{prefix}_R2",
+        f"{prefix}_EMO3", f"{prefix}_R3",
+        prefix,
+    ]
+    columns = (
+        ["DID", "USER_T1", "USER_T1_R", "USER_EMO1"]
+        + chatbot_cols("CHATBOT_T1")
+        + ["USER_T2", "USER_EMO2", "USER_T2_R"]
+        + chatbot_cols("CHATBOT_T2")
+        + ["USER_T3", "USER_EMO3", "USER_T3_R"]
+        + chatbot_cols("CHATBOT_T3")
+        + ["USER_T4", "USER_EMO4", "USER_T4_R"]
+        + chatbot_cols("TARGET")
+        + response_cols("SFT")
+        + response_cols("PPO")
+        + response_cols("DPO")
+    )
+    return df[columns]
 
 
 # ---------------------------------------------------------------------------
@@ -200,23 +229,19 @@ def write_task1_xlsx(task1: pd.DataFrame, out_path: str = DEFAULT_TASK1_XLSX) ->
 
 
 def _load_did_expression_level() -> pd.DataFrame:
-    rlaif = pd.read_csv("data/rlaif_data_models_results_test.csv", usecols=["DID", "EXPRESSION_LEVEL"])
-    comparison = pd.read_csv("data/comparison_data_models_results_test.csv", usecols=["DID", "EXPRESSION_LEVEL"])
-    df = pd.concat([rlaif, comparison])
+    dpo_preference = pd.read_csv(
+        f"{DPO_PREFERENCE_DATA_DIR}/dpo_preference_dataset_models_results_test.csv",
+        usecols=["DID", "EXPRESSION_LEVEL"],
+    )
+    comparison = pd.read_csv(
+        f"{DPO_PREFERENCE_DATA_DIR}/comparison_data_models_results_rank_test.csv",
+        usecols=["DID", "EXPRESSION_LEVEL"],
+    )
+    df = pd.concat([dpo_preference, comparison])
     df["EXPRESSION_LEVEL"] = df["EXPRESSION_LEVEL"].apply(
         lambda x: ast.literal_eval(x) if isinstance(x, str) else x
     )
     return df
-
-
-def _balance_by_expression_level(emotion_rows: pd.DataFrame, rows_per_group: int) -> pd.DataFrame:
-    out = pd.DataFrame()
-    for level in (5, 4, 3, 2, 1):
-        out = pd.concat([
-            out,
-            emotion_rows[emotion_rows["EXPRESSION_LEVEL"].apply(lambda x: x[1] == level)].head(rows_per_group // 5),
-        ])
-    return out
 
 
 def _build_task2_grouped(task2: pd.DataFrame, did_expression_level: pd.DataFrame) -> pd.DataFrame:
@@ -231,11 +256,11 @@ def _build_task2_grouped(task2: pd.DataFrame, did_expression_level: pd.DataFrame
     grouped: list[pd.DataFrame] = []
     for emotion in emotions:
         emotion_rows = task2[task2["TARGET_EMO2"] == emotion].sample(frac=1, random_state=42)
-        sft_rows = _balance_by_expression_level(emotion_rows, rows_per_group)
+        sft_rows = emotion_rows.head(rows_per_group).copy()
         emotion_rows = emotion_rows.drop(sft_rows.index)
-        ppo_rows = _balance_by_expression_level(emotion_rows, rows_per_group)
+        ppo_rows = emotion_rows.head(rows_per_group).copy()
         emotion_rows = emotion_rows.drop(ppo_rows.index)
-        dpo_rows = _balance_by_expression_level(emotion_rows, rows_per_group)
+        dpo_rows = emotion_rows.head(rows_per_group).copy()
 
         sft_rows["RESPONSE_TYPE"] = "SFT_TEST"
         ppo_rows["RESPONSE_TYPE"] = "PPO_TEST"
@@ -300,6 +325,9 @@ def write_task2_xlsx(task2: pd.DataFrame, out_path: str = DEFAULT_TASK2_XLSX) ->
         axis=1,
     )
     df = df.drop(columns=["RESPONSE_EMOTION"])
+    df = df[["DID", "USER_T1", "CHATBOT_T1", "USER_T2", "CHATBOT_T2", "USER_T3",
+             "EXPRESSION_LEVEL", "RESPONSE", "EMPATHY_ADEQUACY", "EMOTION_ADEQUACY",
+             "ENGAGEMENT_ADEQUACY", "COMMENTS"]]
     df.to_excel(out_path, index=False)
 
 
