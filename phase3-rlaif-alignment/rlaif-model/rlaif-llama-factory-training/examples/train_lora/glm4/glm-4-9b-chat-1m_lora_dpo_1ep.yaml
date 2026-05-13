@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: THUDM/glm-4-9b-chat-1m
-adapter_name_or_path: saves/glm-4-9b-chat-1m/lora/sft_d_3ep
+adapter_name_or_path: ../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/glm-4-9b-chat-1m/lora/sft_3ep
 trust_remote_code: true
 
 ### method

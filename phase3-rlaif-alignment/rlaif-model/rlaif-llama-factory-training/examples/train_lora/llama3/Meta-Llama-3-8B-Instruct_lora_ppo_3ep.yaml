@@ -1,7 +1,7 @@
 ### model
 model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
-adapter_name_or_path: saves/Meta-Llama-3-8B-Instruct/lora/sft_d_3ep
-reward_model: saves/Meta-Llama-3-8B-Instruct/lora/rm_1ep
+adapter_name_or_path: ../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/Meta-Llama-3-8B-Instruct/lora/sft_3ep
+reward_model: ../../reward-model/rm-llama-factory-training/saves/Meta-Llama-3-8B-Instruct/lora/rm_1ep
 trust_remote_code: true
 
 ### method
