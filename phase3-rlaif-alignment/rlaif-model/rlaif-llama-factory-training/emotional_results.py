@@ -1,10 +1,9 @@
 """Aggregate per-model RLAIF prediction files.
 
-By default the script migrates the historical
-``demonstration_prompt_rlaif_data_test_results.json`` files to the current
-``ppo_unlabeled_prompts_dataset_test_results.json`` name without changing their
-contents. Use ``--regenerate-from-predictions`` only when intentionally
-rebuilding the files from the current ``saves/<model>/predict/*`` outputs.
+By default the script reuses existing
+``ppo_unlabeled_prompts_dataset_test_results.json`` files when present. Use
+``--regenerate-from-predictions`` to rebuild them from the current
+``saves/<model>/predict/*`` outputs.
 
 Reports per-run chatbot emotion-tag accuracy (user / neutral lines exist in the
 original code but are commented out).
@@ -40,7 +39,6 @@ class PredictionGroup:
     run_names: list[str]
     source_file: str
     output_file: str
-    legacy_output_file: str | None = None
 
 
 def _build_rlaif_run_names() -> list[str]:
@@ -56,7 +54,6 @@ GROUP_PPO_UNLABELED_PROMPTS = PredictionGroup(
     run_names=_build_rlaif_run_names(),
     source_file="./data/ppo_unlabeled_prompts_dataset_test.json",
     output_file="ppo_unlabeled_prompts_dataset_test_results.json",
-    legacy_output_file="demonstration_prompt_rlaif_data_test_results.json",
 )
 ALL_GROUPS = [GROUP_PPO_UNLABELED_PROMPTS]
 
@@ -112,7 +109,7 @@ def _prediction_run_names_in_data(merged: list[dict]) -> list[str]:
     return sorted(key.removeprefix("predict_") for key in merged[0] if key.startswith("predict_"))
 
 
-def _source_matches_legacy_output(source_data: list[dict], legacy_data: list[dict]) -> bool:
+def _source_matches_output(source_data: list[dict], merged_data: list[dict]) -> bool:
     transformed = []
     for entry in source_data:
         item = dict(entry)
@@ -123,36 +120,26 @@ def _source_matches_legacy_output(source_data: list[dict], legacy_data: list[dic
         transformed.append(item)
 
     base_keys = ("instruction", "history", "prompt", "target", "did")
-    return len(transformed) == len(legacy_data) and all(
+    return len(transformed) == len(merged_data) and all(
         all(new_entry.get(key) == old_entry.get(key) for key in base_keys)
-        for new_entry, old_entry in zip(transformed, legacy_data)
+        for new_entry, old_entry in zip(transformed, merged_data)
     )
 
 
-def _load_existing_or_migrate_legacy_output(
-    model: str, group: PredictionGroup, source_data: list[dict]
-) -> list[dict] | None:
+def _load_existing_output(model: str, group: PredictionGroup, source_data: list[dict]) -> list[dict] | None:
     output_path = Path(f"./saves/{model}/emotional_balanced/{group.output_file}")
-    legacy_path = (
-        Path(f"./saves/{model}/emotional_balanced/{group.legacy_output_file}")
-        if group.legacy_output_file
-        else None
-    )
-    input_path = output_path if output_path.exists() else legacy_path
-    if input_path is None or not input_path.exists():
+    if not output_path.exists():
         return None
 
-    with input_path.open("r", encoding="utf-8") as f:
-        legacy_data = json.load(f)
+    with output_path.open("r", encoding="utf-8") as f:
+        merged_data = json.load(f)
 
-    if not _source_matches_legacy_output(source_data, legacy_data):
+    if not _source_matches_output(source_data, merged_data):
         raise ValueError(
-            f"{input_path} does not match {group.source_file}; refusing to migrate with changed data."
+            f"{output_path} does not match {group.source_file}; refusing to reuse changed data."
         )
 
-    if input_path != output_path:
-        _write_merged(model, group.output_file, legacy_data)
-    return legacy_data
+    return merged_data
 
 
 def _report_agreement(merged: list[dict], run_names: list[str], only_values: bool = False) -> None:
@@ -188,9 +175,7 @@ def _process_group(model: str, group: PredictionGroup, only_values: bool, regene
     with open(group.source_file, "r", encoding="utf-8") as f:
         source_data = json.loads(f.read())
 
-    merged = None if regenerate_from_predictions else _load_existing_or_migrate_legacy_output(
-        model, group, source_data
-    )
+    merged = None if regenerate_from_predictions else _load_existing_output(model, group, source_data)
     if merged is None:
         predictions = _load_predictions_for_runs(model, group.run_names)
         merged = _merge_predictions(source_data, predictions, model)
