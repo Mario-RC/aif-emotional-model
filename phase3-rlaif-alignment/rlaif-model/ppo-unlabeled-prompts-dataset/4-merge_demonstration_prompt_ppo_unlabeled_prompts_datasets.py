@@ -9,6 +9,10 @@ It also writes the prompt + RLAIF auxiliary files:
     data/ppo_unlabeled_prompts_dataset_prompt.json
     data/ppo_unlabeled_prompts_dataset_prompt_test.json
 
+And the 1k RLAIF-only subset used by the DPO comparison prediction step:
+    data/ppo_unlabeled_prompts_dataset_1k.json
+    data/ppo_unlabeled_prompts_dataset_1k_test.json
+
 RM prompt inputs are read from their canonical location in
 ``phase3-rlaif-alignment/reward-model/rm-prompt-dataset/data``.
 """
@@ -51,6 +55,9 @@ def merge(write_demonstration_prompt_rlaif: bool = False) -> None:
         print(f"Repeated 'did' keys found: {repeated}")
     else:
         print("No repeated 'did' keys found.")
+
+    write_json(rlaif_train, LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_1k.json")
+    write_json(rlaif_test, LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_1k_test.json")
 
     prompt_rlaif_train = prompt_train + rlaif_train
     prompt_rlaif_test = prompt_test + rlaif_test
