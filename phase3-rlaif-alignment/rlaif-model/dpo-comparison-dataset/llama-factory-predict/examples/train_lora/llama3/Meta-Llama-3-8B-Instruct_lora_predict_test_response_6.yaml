@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
-adapter_name_or_path: saves/Meta-Llama-3-8B-Instruct/lora/sft
+adapter_name_or_path: ../../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/Meta-Llama-3-8B-Instruct/lora/sft_3ep
 
 ### method
 stage: sft
@@ -16,7 +16,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Meta-Llama-3-8B-Instruct/lora/test/predict_6
+output_dir: saves/Meta-Llama-3-8B-Instruct/predict/test/predict_6
 overwrite_output_dir: true
 
 ### train

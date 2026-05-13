@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: google/gemma-2-9b-it
-adapter_name_or_path: saves/gemma-2-9b-it/lora/sft
+adapter_name_or_path: ../../../../phase2-sft-alignment/sft-model/sft-llama-factory-training/saves/gemma-2-9b-it/lora/sft_3ep
 
 ### method
 stage: sft
@@ -16,7 +16,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/gemma-2-9b-it/lora/train/predict_6
+output_dir: saves/gemma-2-9b-it/predict/train/predict_6
 overwrite_output_dir: true
 
 ### train
