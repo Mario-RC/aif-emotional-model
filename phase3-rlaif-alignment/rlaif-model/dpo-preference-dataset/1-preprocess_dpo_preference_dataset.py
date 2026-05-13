@@ -1,7 +1,7 @@
 """Preprocess raw DPO candidate-curation JSON into the canonical DPO Preference Dataset format.
 
 Steps:
-1. Copy the upstream ``dpo_preference_dataset_modified[*test].json`` into ``data/``.
+1. Copy the upstream ``dpo_comparison_dataset[*test].json`` into ``data/``.
 2. Rename keys to ``history`` / ``prompt`` / ``target`` / ``predict_1..9`` / etc.
 3. Persist a copy as ``dpo_preference_dataset_original[*test].json`` (used later by 4-postprocess).
 4. Reformat each response by replacing literal emotion tags with ``(EMPATHY)`` /
@@ -57,7 +57,7 @@ def _reformat_responses(dpo_preference_dataset: list[dict]) -> list[dict]:
 
 
 def preprocess(is_test: bool = False) -> None:
-    upstream_file = f"{UPSTREAM_DIR}/{with_suffix('dpo_preference_dataset_modified', 'json', is_test)}"
+    upstream_file = f"{UPSTREAM_DIR}/{with_suffix('dpo_comparison_dataset', 'json', is_test)}"
     out_file = f"data/{with_suffix('dpo_preference_dataset', 'json', is_test)}"
     original_file = f"data/{with_suffix('dpo_preference_dataset_original', 'json', is_test)}"
 
