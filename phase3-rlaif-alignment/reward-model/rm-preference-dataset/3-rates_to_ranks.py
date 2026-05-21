@@ -27,6 +27,10 @@ from _lib import expression_table, parse_completion_rates, with_suffix
 LLM_NAMES = ["GPT-4O", "CLAUDE-3.5-SONNET", "GEMINI-1.5-PRO", "LLAMA-3.1-405B"]
 
 
+def _row_identity(row: pd.Series) -> str:
+    return str(row.get("DIALOGUE_ID", "<unknown>"))
+
+
 # ---------------------------------------------------------------------------
 # Stage 1: parse the per-LLM rating CSV into RATE / TRANSFORMED_RATE columns.
 # ---------------------------------------------------------------------------
@@ -167,7 +171,7 @@ def compute_overall_rank(df: pd.DataFrame) -> pd.DataFrame:
         }
         if len(n_responses_per_llm) != 1:
             raise ValueError(
-                f"Different number of scored responses for DID {row['DID']}: "
+                f"Different number of scored responses for dialogue {_row_identity(row)}: "
                 f"{sorted(n_responses_per_llm)}"
             )
 

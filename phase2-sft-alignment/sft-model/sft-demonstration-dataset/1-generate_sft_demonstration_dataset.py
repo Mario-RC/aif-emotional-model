@@ -413,7 +413,7 @@ class DialogueGenerator:
 # IO helpers
 # ---------------------------------------------------------------------------
 
-COLUMNS = ["DID", "PROMPT", "COMPLETION", "TOPIC", "EMOTIONS"]
+COLUMNS = ["GENERATION_ID", "PROMPT", "COMPLETION", "TOPIC", "EMOTIONS"]
 
 
 def save_dataframe(rows: List[tuple], output_path: Path) -> None:

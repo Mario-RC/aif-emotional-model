@@ -28,6 +28,13 @@ EMOTION_TAGS = ["(ANGER)", "(DISGUST)", "(FEAR)", "(HAPPINESS)", "(NEUTRAL)", "(
 DEFAULT_LLAMA_MODEL = "meta-llama/Llama-3.2-3B-Instruct"
 
 
+def _dialogue_key(entry: dict) -> str:
+    dialogue_id = entry.get("dialogue_id")
+    if not dialogue_id:
+        raise KeyError("Comparison row is missing dialogue_id.")
+    return dialogue_id
+
+
 @dataclass
 class NegativeSampleConfig:
     """Number of rows to mutate per category. Train split values are the defaults."""
@@ -138,10 +145,10 @@ def sample_modify_entries(
 # ---------------------------------------------------------------------------
 
 def apply_emotion_mutation(
-    data: list[dict], dids: list[str], position_idx: int, label: str
+    data: list[dict], dialogue_ids: list[str], position_idx: int, label: str
 ) -> None:
-    for did in tqdm(dids, desc=f"3/6 Apply {label} mutations", unit="row"):
-        idx = next(i for i, entry in enumerate(data) if entry["did"] == did)
+    for dialogue_id in tqdm(dialogue_ids, desc=f"3/6 Apply {label} mutations", unit="row"):
+        idx = next(i for i, entry in enumerate(data) if _dialogue_key(entry) == dialogue_id)
         target = data[idx]["target"]
         target_split = split_emo_utt(target)
         target_split[position_idx] = change_emotion(target_split[position_idx])
@@ -262,7 +269,7 @@ def _llm_rewrite_batch(
 
 def apply_llm_mutation(
     data: list[dict],
-    dids: list[str],
+    dialogue_ids: list[str],
     target_position: int,
     label: str,
     pipe,
@@ -272,13 +279,13 @@ def apply_llm_mutation(
     checkpoint_path: str | None = None,
     checkpoint_every: int = 25,
 ) -> None:
-    did_to_idx = {entry["did"]: idx for idx, entry in enumerate(data)}
+    dialogue_id_to_idx = {_dialogue_key(entry): idx for idx, entry in enumerate(data)}
     batch_size = max(1, batch_size)
     checkpoint_every = max(0, checkpoint_every)
     pending = []
 
-    for did in dids:
-        idx = did_to_idx[did]
+    for dialogue_id in dialogue_ids:
+        idx = dialogue_id_to_idx[dialogue_id]
         target_split = split_emo_utt(data[idx]["target"])
         system = system_template.format(text=target_split[target_position])
         messages = [{"role": "system", "content": system}, {"role": "user", "content": user_message}]
@@ -337,7 +344,7 @@ def add_negative_samples(
 
     data = read_json(out_path)
     candidates = [
-        entry["did"]
+        _dialogue_key(entry)
         for entry in tqdm(data, desc="2/6 Collect mutation candidates", unit="row")
         if "predict_sft_modified" in entry
     ]

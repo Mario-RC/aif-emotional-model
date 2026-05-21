@@ -22,7 +22,7 @@ MISSING = "None"
 NEUTRAL = "NEUTRAL"
 
 LONG_COLUMNS = [
-    "UID", "DID", "SID", "SEG", "EMOTION", "TOPIC", "EXPLANTATION",
+    "UID", "DIALOGUE_ID", "SID", "SEG", "EMOTION", "TOPIC", "EXPLANTATION",
     "RESPONSE_1", "RESPONSE_2", "RESPONSE_3",
     "EMOTION_RESPONSE_1", "EMOTION_RESPONSE_2", "EMOTION_RESPONSE_3",
 ]
@@ -195,7 +195,7 @@ class LongFormatBuilder:
     def _row(self, uid: str, sid: str, seg: str, emotion, turn: Turn) -> dict:
         return {
             "UID": uid,
-            "DID": uid[:-5],
+            "DIALOGUE_ID": f"RLAIFE-{self._dialogue_counter:06d}",
             "SID": sid,
             "SEG": seg,
             "EMOTION": emotion,

@@ -38,7 +38,14 @@ logging.getLogger("httpcore").setLevel(logging.WARNING)
 warnings.simplefilter("ignore")
 
 CHECKPOINT_INTERVAL = 10
-DATA_COLUMNS = ["DID", "PROMPT", "COMPLETION", "EMOTIONS", "EXPRESSION_LEVEL", "MODIFIED"]
+DATA_COLUMNS = ["DIALOGUE_ID", "PROMPT", "COMPLETION", "EMOTIONS", "EXPRESSION_LEVEL", "MODIFIED"]
+
+
+def _dialogue_id(entry: dict) -> str:
+    dialogue_id = entry.get("dialogue_id")
+    if not dialogue_id:
+        raise KeyError("Record is missing dialogue_id.")
+    return dialogue_id
 
 
 def _iter_records(
@@ -58,7 +65,7 @@ def _iter_records(
         completion = client.complete(prompt)
 
         yield (
-            entry["did"],
+            _dialogue_id(entry),
             prompt_message,
             completion,
             [human_emo, chatbot_emo],

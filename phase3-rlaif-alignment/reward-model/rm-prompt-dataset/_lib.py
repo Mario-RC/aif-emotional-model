@@ -202,26 +202,29 @@ RESPONSE_3 must contain a NEUTRAL tone.
 Answer in a single turn to Human. Follow exactly the emotional structure and the emotional and dialogue rules."""
 
 
-def build_dialogue_record(df_did, did: str) -> dict:
+
+def build_dialogue_record(df_dialogue, dialogue_id: str) -> dict:
     """Convert four turns of a dialogue DataFrame into a single training-record dict."""
-    p = df_did["PROMPT"].tolist()
-    c = df_did["COMPLETION"].tolist()
-    he = df_did["EMOTION_PROMPT"].tolist()
-    ce = df_did["EMOTION_RESPONSE_2"].tolist()
+    p = df_dialogue["PROMPT"].tolist()
+    c = df_dialogue["COMPLETION"].tolist()
+    he = df_dialogue["EMOTION_PROMPT"].tolist()
+    ce = df_dialogue["EMOTION_RESPONSE_2"].tolist()
 
     system = DIALOGUE_SYSTEM_TEMPLATE.format(
         he1=he[0], ce1=ce[0], he2=he[1], ce2=ce[1],
         he3=he[2], ce3=ce[2], he4=he[3], ce4=ce[3],
     )
+    history = [
+        [f"({he[0]}) {p[0]}", c[0]],
+        [f"({he[1]}) {p[1]}", c[1]],
+        [f"({he[2]}) {p[2]}", c[2]],
+    ]
+    instruction = f"({he[3]}) {p[3]}"
     return {
         "system": system,
-        "history": [
-            [f"({he[0]}) {p[0]}", c[0]],
-            [f"({he[1]}) {p[1]}", c[1]],
-            [f"({he[2]}) {p[2]}", c[2]],
-        ],
-        "instruction": f"({he[3]}) {p[3]}",
+        "history": history,
+        "instruction": instruction,
         "input": "",
         "output": c[3],
-        "did": did,
+        "dialogue_id": dialogue_id,
     }

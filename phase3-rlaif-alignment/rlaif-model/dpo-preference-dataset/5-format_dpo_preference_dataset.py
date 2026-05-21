@@ -1,12 +1,4 @@
-"""Format the pairwise comparison data into the LLaMA-Factory reward-model JSON schema.
-
-Output schema (one entry per UID) is the same as in
-``phase3-rlaif-alignment/reward-model/rm-preference-dataset/5-format_rm_preference_dataset.py``.
-
-Additionally, when ``--demo-concat`` is used for the train split, the 1k DPO
-preference data is concatenated with the upstream RM preference data to build
-``dpo_preference_dataset.json``.
-"""
+"""Format pairwise comparison data into the LLaMA-Factory preference JSON schema."""
 
 from __future__ import annotations
 
@@ -14,10 +6,27 @@ import argparse
 
 import pandas as pd
 
-from _lib import read_json, with_suffix, write_json
+from _lib import with_suffix, write_json, read_json
 
 
-def _build_entry(uid: str, system: str, history: list, prompt: str, winner: str, loser: str) -> dict:
+def _value(df_uid: pd.DataFrame, key: str, default: str = "") -> str:
+    if key not in df_uid:
+        return default
+    value = df_uid[key].values[0]
+    if pd.isna(value):
+        return default
+    return value
+
+
+def _build_entry(
+    uid: str,
+    system: str,
+    history: list,
+    prompt: str,
+    winner: str,
+    loser: str,
+    dialogue_id: str,
+) -> dict:
     conversations = [
         {"from": "system", "value": system},
         {"from": "human", "value": history[0][0]},
@@ -33,6 +42,7 @@ def _build_entry(uid: str, system: str, history: list, prompt: str, winner: str,
         "chosen": {"from": "gpt", "value": winner},
         "rejected": {"from": "gpt", "value": loser},
         "uid": uid,
+        "dialogue_id": dialogue_id,
     }
 
 
@@ -53,14 +63,17 @@ def format_dpo_preference_dataset(is_test: bool = False, with_demonstration_conc
                 prompt=df_uid["PROMPT"].values[0],
                 winner=df_uid["WINNER_RESPONSE"].values[0],
                 loser=df_uid["LOSER_RESPONSE"].values[0],
+                dialogue_id=_value(df_uid, "dialogue_id", _value(df_uid, "DIALOGUE_ID")),
             )
         )
+
     write_json(entries, out)
 
     if with_demonstration_concat and not is_test:
         comparison = read_json("data/rm_preference_dataset.json")
         rlaif = read_json(out)
         write_json(comparison + rlaif, "data/dpo_preference_dataset.json")
+
 
 
 def _parse_args() -> argparse.Namespace:

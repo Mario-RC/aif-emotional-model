@@ -36,10 +36,11 @@ from _lib import (
     write_json,
 )
 
-CHOSEN_COLUMNS = [
+BASE_CHOSEN_COLUMNS = [
     "instruction", "history", "prompt", "target",
-    "predict_sft_0", "predict_sft_chosen", "model", "did",
+    "predict_sft_0", "predict_sft_chosen", "model",
 ]
+IDENTITY_COLUMNS = ("dialogue_id",)
 PREDICT_SFT_KEYS = [f"predict_sft_{m}_{stage}" for m in ["gemma2", "glm4", "llama3", "mistral", "phi3"] for stage in ("0", "x")]
 PREDICT_SFT_COLUMNS = ["target"] + PREDICT_SFT_KEYS
 SPLIT_COLUMNS = [f"{c}_split" for c in PREDICT_SFT_COLUMNS]
@@ -55,11 +56,25 @@ def _per_model_path(model: str, suffix: str, is_test: bool, ext: str = "csv") ->
     return with_suffix(base, ext, is_test)
 
 
+def _chosen_columns(df: pd.DataFrame) -> list[str]:
+    columns = [*BASE_CHOSEN_COLUMNS, *[col for col in IDENTITY_COLUMNS if col in df.columns]]
+    if "dialogue_id" not in columns:
+        raise KeyError("Prediction CSV is missing dialogue_id.")
+    return columns
+
+
+def _dialogue_id(entry: dict) -> str:
+    dialogue_id = entry.get("dialogue_id")
+    if not dialogue_id:
+        raise KeyError("Prediction row is missing dialogue_id.")
+    return dialogue_id
+
+
 def per_model_csv_to_json(is_test: bool) -> None:
     for model in MODELS:
         in_path = _per_model_path(model, "_predict_sft_chosen", is_test)
         df = pd.read_csv(in_path, encoding="utf-8")
-        subset = df[CHOSEN_COLUMNS].copy()
+        subset = df[_chosen_columns(df)].copy()
         subset["history"] = subset["history"].apply(ast.literal_eval)
         out_path = _per_model_path(model, "", is_test, ext="json")
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -81,11 +96,12 @@ def combine_models(is_test: bool) -> None:
             short = _short(model)
             entry[f"predict_sft_{short}_0"] = per_model[model][idx]["predict_sft_0"]
             entry[f"predict_sft_{short}_x"] = per_model[model][idx]["predict_sft_chosen"]
+        base_entry = per_model[base_model][idx]
         entry.update({
             "predict_sft_modified": "",
             "predict_sft_modified_label": "",
             "scores": [],
-            "did": per_model[base_model][idx]["did"],
+            "dialogue_id": _dialogue_id(base_entry),
         })
         combined.append(entry)
 

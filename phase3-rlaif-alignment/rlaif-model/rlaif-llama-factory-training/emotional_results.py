@@ -119,7 +119,7 @@ def _source_matches_output(source_data: list[dict], merged_data: list[dict]) -> 
         item["target"] = item.pop("output")
         transformed.append(item)
 
-    base_keys = ("instruction", "history", "prompt", "target", "did")
+    base_keys = ("instruction", "history", "prompt", "target", "dialogue_id")
     return len(transformed) == len(merged_data) and all(
         all(new_entry.get(key) == old_entry.get(key) for key in base_keys)
         for new_entry, old_entry in zip(transformed, merged_data)

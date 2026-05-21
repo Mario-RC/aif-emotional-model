@@ -57,7 +57,7 @@ def merge_predictions(prompt_data: list[dict], predictions: list[list[dict]], mo
         entry.pop("input", None)
         entry["prompt"] = entry.pop("instruction")
         entry["instruction"] = entry.pop("system")
-        # ``history`` and ``did`` are left untouched.
+        # ``history`` is left untouched.
         entry["target"] = entry.pop("output")
         for n in range(N_PREDICTIONS):
             entry[f"predict_sft_{n}"] = predictions[n][idx]["predict"].replace("\n", "").strip()

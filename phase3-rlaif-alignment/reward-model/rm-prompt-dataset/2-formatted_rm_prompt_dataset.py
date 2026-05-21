@@ -16,6 +16,7 @@ import pandas as pd
 DEFAULT_INPUT = "data/rm_prompt_dataset_completions.csv"
 DEFAULT_FORMATTED = "data/rm_prompt_dataset_formatted.csv"
 DEFAULT_TURNS = "data/rm_prompt_dataset_turns.csv"
+RM_DIALOGUE_OFFSET = 978
 
 
 def _split_dialogues(completion: str) -> tuple[list[str], list[str]]:
@@ -122,7 +123,7 @@ def _build_segment_dataframe(
     rows = {
         key: []
         for key in [
-            "uid", "did", "sid", "seg", "emotion_list", "explanation_list",
+            "uid", "dialogue_id", "sid", "seg", "emotion_list", "explanation_list",
             "r1", "r2", "r3", "r1_emotion", "r2_emotion", "r3_emotion", "topic_list",
         ]
     }
@@ -133,9 +134,10 @@ def _build_segment_dataframe(
         for dialogue, explanation, emotion in zip(dialogues, explanations, emotions):
             for turn_count, (dial, expl, emo) in enumerate(zip(dialogue, explanation, emotion)):
                 base_uid = f"GPT4-{dial_count:06d}"
+                dialogue_id = f"RLAIFE-{dial_count + RM_DIALOGUE_OFFSET:06d}"
                 # USER segment
                 rows["uid"].append(f"{base_uid}-{turn_count * 2:04d}")
-                rows["did"].append(base_uid)
+                rows["dialogue_id"].append(dialogue_id)
                 rows["sid"].append("USER")
                 rows["seg"].append(dial[0])
                 rows["r1"].append(dial[1])
@@ -150,7 +152,7 @@ def _build_segment_dataframe(
 
                 # CHATBOT segment
                 rows["uid"].append(f"{base_uid}-{turn_count * 2 + 1:04d}")
-                rows["did"].append(base_uid)
+                rows["dialogue_id"].append(dialogue_id)
                 rows["sid"].append("CHATBOT")
                 rows["seg"].append(f"{dial[1]} {dial[2]} {dial[3]}")
                 rows["r1"].append(dial[1])
@@ -166,12 +168,12 @@ def _build_segment_dataframe(
 
     return pd.DataFrame(
         list(zip(
-            rows["uid"], rows["did"], rows["sid"], rows["seg"], rows["emotion_list"],
+            rows["uid"], rows["dialogue_id"], rows["sid"], rows["seg"], rows["emotion_list"],
             rows["explanation_list"], rows["r1"], rows["r2"], rows["r3"],
             rows["r1_emotion"], rows["r2_emotion"], rows["r3_emotion"], rows["topic_list"],
         )),
         columns=[
-            "UID", "DID", "SID", "SEG", "EMOTION_SEG", "EXPLANTATION",
+            "UID", "DIALOGUE_ID", "SID", "SEG", "EMOTION_SEG", "EXPLANTATION",
             "RESPONSE_1", "RESPONSE_2", "RESPONSE_3",
             "EMOTION_RESPONSE_1", "EMOTION_RESPONSE_2", "EMOTION_RESPONSE_3", "TOPIC",
         ],

@@ -22,23 +22,23 @@ from _lib import build_dialogue_record, write_json
 DEFAULT_TURNS = "data/rm_prompt_dataset_turns.csv"
 DEFAULT_TRAIN = "data/rm_prompt_dataset_emotional_balanced.json"
 DEFAULT_TEST = "data/rm_prompt_dataset_emotional_balanced_test.json"
-DEFAULT_TEST_DIDS = "data/rm_prompt_dataset_test_dids.json"
+DEFAULT_TEST_DIALOGUE_IDS = "data/rm_prompt_dataset_test_dialogue_ids.json"
 N_TIMES_PER_PAIR = 2
 
 
-def _select_test_indices_from_dids(df_turns: pd.DataFrame, test_dids_path: str) -> list[int]:
+def _select_test_indices_from_dialogue_ids(df_turns: pd.DataFrame, test_dialogue_ids_path: str) -> list[int]:
     """Load the canonical annotated test split and expand it to full dialogues."""
-    with open(test_dids_path, encoding="utf-8") as f:
-        test_dids = json.load(f)
+    with open(test_dialogue_ids_path, encoding="utf-8") as f:
+        test_dialogue_ids = json.load(f)
 
-    missing = sorted(set(test_dids).difference(df_turns["DID"].unique()))
+    missing = sorted(set(test_dialogue_ids).difference(df_turns["DIALOGUE_ID"].unique()))
     if missing:
-        raise ValueError(f"Test DID list contains missing DID values: {missing[:5]}")
+        raise ValueError(f"Test dialogue_id list contains missing values: {missing[:5]}")
 
-    test_set = df_turns.index[df_turns["DID"].isin(test_dids)].tolist()
-    expected_rows = len(test_dids) * 4
+    test_set = df_turns.index[df_turns["DIALOGUE_ID"].isin(test_dialogue_ids)].tolist()
+    expected_rows = len(test_dialogue_ids) * 4
     if len(test_set) != expected_rows:
-        raise ValueError(f"Expected {expected_rows} test rows for {len(test_dids)} DID values, found {len(test_set)}.")
+        raise ValueError(f"Expected {expected_rows} test rows for {len(test_dialogue_ids)} dialogue_id values, found {len(test_set)}.")
 
     return sorted(test_set)
 
@@ -66,11 +66,11 @@ def _select_test_indices_sampled(df_turns: pd.DataFrame, random_seed: int | None
 
 
 def _df_to_records(df_split: pd.DataFrame) -> list[dict]:
-    """Group by DID and convert each dialogue to a single training record."""
+    """Group by DIALOGUE_ID and convert each dialogue to a single training record."""
     records = []
-    for did in df_split["DID"].unique():
-        df_did = df_split[df_split["DID"] == did].reset_index(drop=True)
-        records.append(build_dialogue_record(df_did, did))
+    for dialogue_id in df_split["DIALOGUE_ID"].unique():
+        df_dialogue = df_split[df_split["DIALOGUE_ID"] == dialogue_id].reset_index(drop=True)
+        records.append(build_dialogue_record(df_dialogue, dialogue_id))
     return records
 
 
@@ -78,13 +78,13 @@ def split_train_test(
     turns_csv: str = DEFAULT_TURNS,
     train_json: str = DEFAULT_TRAIN,
     test_json: str = DEFAULT_TEST,
-    test_dids_json: str | None = DEFAULT_TEST_DIDS,
+    test_dialogue_ids_json: str | None = DEFAULT_TEST_DIALOGUE_IDS,
     random_seed: int | None = None,
 ) -> None:
     df_turns = pd.read_csv(turns_csv, encoding="utf-8")
 
-    if test_dids_json and Path(test_dids_json).exists():
-        test_idx = _select_test_indices_from_dids(df_turns, test_dids_json)
+    if test_dialogue_ids_json and Path(test_dialogue_ids_json).exists():
+        test_idx = _select_test_indices_from_dialogue_ids(df_turns, test_dialogue_ids_json)
     else:
         test_idx = _select_test_indices_sampled(df_turns, random_seed=random_seed)
     train_dev_idx = sorted(df_turns.index.difference(test_idx).tolist())
@@ -101,7 +101,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--turns-csv", default=DEFAULT_TURNS)
     parser.add_argument("--train-json", default=DEFAULT_TRAIN)
     parser.add_argument("--test-json", default=DEFAULT_TEST)
-    parser.add_argument("--test-dids-json", default=DEFAULT_TEST_DIDS)
+    parser.add_argument("--test-dialogue-ids-json", default=DEFAULT_TEST_DIALOGUE_IDS)
     parser.add_argument("--random-seed", type=int, default=None)
     return parser.parse_args()
 
@@ -112,6 +112,6 @@ if __name__ == "__main__":
         turns_csv=args.turns_csv,
         train_json=args.train_json,
         test_json=args.test_json,
-        test_dids_json=args.test_dids_json,
+        test_dialogue_ids_json=args.test_dialogue_ids_json,
         random_seed=args.random_seed,
     )

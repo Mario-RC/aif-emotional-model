@@ -1,20 +1,4 @@
-"""Format the pairwise comparison data into the LLaMA-Factory reward-model JSON schema.
-
-Output schema (one entry per UID)::
-
-    {
-      "conversations": [
-        {"from": "system", "value": <system>},
-        {"from": "human",  "value": <history[0][0]>},
-        {"from": "gpt",    "value": <history[0][1]>},
-        ...
-        {"from": "human",  "value": <prompt>}
-      ],
-      "chosen":   {"from": "gpt", "value": <winner_response>},
-      "rejected": {"from": "gpt", "value": <loser_response>},
-      "uid": <uid>
-    }
-"""
+"""Format pairwise comparison data into the LLaMA-Factory preference JSON schema."""
 
 from __future__ import annotations
 
@@ -25,7 +9,24 @@ import pandas as pd
 from _lib import with_suffix, write_json
 
 
-def _build_entry(uid: str, system: str, history: list, prompt: str, winner: str, loser: str) -> dict:
+def _value(df_uid: pd.DataFrame, key: str, default: str = "") -> str:
+    if key not in df_uid:
+        return default
+    value = df_uid[key].values[0]
+    if pd.isna(value):
+        return default
+    return value
+
+
+def _build_entry(
+    uid: str,
+    system: str,
+    history: list,
+    prompt: str,
+    winner: str,
+    loser: str,
+    dialogue_id: str,
+) -> dict:
     conversations = [
         {"from": "system", "value": system},
         {"from": "human", "value": history[0][0]},
@@ -41,6 +42,7 @@ def _build_entry(uid: str, system: str, history: list, prompt: str, winner: str,
         "chosen": {"from": "gpt", "value": winner},
         "rejected": {"from": "gpt", "value": loser},
         "uid": uid,
+        "dialogue_id": dialogue_id,
     }
 
 
@@ -61,6 +63,7 @@ def format_rm_preference_dataset(is_test: bool = False) -> None:
                 prompt=df_uid["PROMPT"].values[0],
                 winner=df_uid["WINNER_RESPONSE"].values[0],
                 loser=df_uid["LOSER_RESPONSE"].values[0],
+                dialogue_id=_value(df_uid, "dialogue_id", _value(df_uid, "DIALOGUE_ID")),
             )
         )
 
