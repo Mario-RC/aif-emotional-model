@@ -85,6 +85,14 @@ The naming convention also applies to generated artifacts:
 - PPO prompt-generation checkpoints use `data/records/ppo_unlabeled_prompts_dataset_checkpoint_<n>.csv`.
 - RLAIF LLaMA-Factory emotional-result files use `ppo_unlabeled_prompts_dataset_test_results.json` for the canonical held-out prompt set and `rm_prompt_ppo_unlabeled_prompts_dataset_test_results.json` for the auxiliary prompt+PPO set.
 
+### Dialogue identity
+
+`dialogue_id` is the canonical dialogue identity across Phase 2 and Phase 3 datasets. It uses the format `RLAIFE-XXXXXX`, with zero-padded numeric suffixes. Shared dialogues keep the same `dialogue_id` when they appear in later stages, and new dialogues continue the sequence after the previous stage range.
+
+Generated JSON datasets should not introduce legacy dialogue identity fields such as `did`, `source_did` or `stage_did`. Those names may still exist temporarily in legacy data files, split-list filenames or intermediate CSVs while the migration is completed, but new final JSON outputs should identify dialogues with `dialogue_id`.
+
+Preference datasets may keep `uid` because it identifies a preference pair or comparison row, not the underlying dialogue. `uid` must not be used as a replacement for `dialogue_id`.
+
 ## Pipeline overview
 
 ### Phase 1: Foundation model evaluation
