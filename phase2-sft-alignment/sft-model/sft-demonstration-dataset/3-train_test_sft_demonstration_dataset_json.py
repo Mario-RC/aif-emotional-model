@@ -20,7 +20,7 @@ import pandas as pd
 TURNS_CSV = Path("data/sft_demonstration_dataset_turns.csv")
 TRAIN_JSON = Path("data/sft_demonstration_dataset.json")
 TEST_JSON = Path("data/sft_demonstration_dataset_test.json")
-TEST_DIDS_JSON = Path("data/sft_demonstration_dataset_test_dids.json")
+TEST_DIALOGUE_IDS_JSON = Path("data/sft_demonstration_dataset_test_dialogue_ids.json")
 
 TURNS_PER_DIALOGUE = 4
 SAMPLES_PER_PAIR = 4
@@ -70,18 +70,18 @@ class StratifiedEmotionSplitter:
         turns_per_dialogue: int = TURNS_PER_DIALOGUE,
         samples_per_pair: int = SAMPLES_PER_PAIR,
         last_turn_suffix: str = LAST_TURN_UID_SUFFIX,
-        test_dids_path: Path | None = TEST_DIDS_JSON,
+        test_dialogue_ids_path: Path | None = TEST_DIALOGUE_IDS_JSON,
         random_state: int | None = None,
     ) -> None:
         self.turns_per_dialogue = turns_per_dialogue
         self.samples_per_pair = samples_per_pair
         self.last_turn_suffix = last_turn_suffix
-        self.test_dids_path = test_dids_path
+        self.test_dialogue_ids_path = test_dialogue_ids_path
         self.random_state = random_state
 
     def split(self, df_turns: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        if self.test_dids_path and self.test_dids_path.exists():
-            return self._split_from_dids(df_turns, self.test_dids_path)
+        if self.test_dialogue_ids_path and self.test_dialogue_ids_path.exists():
+            return self._split_from_dialogue_ids(df_turns, self.test_dialogue_ids_path)
 
         last_turns = df_turns[df_turns["UID"].str.endswith(self.last_turn_suffix)]
         emotions = list(df_turns["EMOTION_RESPONSE_2"].unique())
@@ -111,18 +111,18 @@ class StratifiedEmotionSplitter:
         df_test = df_turns.loc[test_indices].reset_index(drop=True)
         return df_train, df_test
 
-    def _split_from_dids(self, df_turns: pd.DataFrame, test_dids_path: Path) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        with test_dids_path.open(encoding="utf-8") as fh:
-            test_dids = json.load(fh)
+    def _split_from_dialogue_ids(self, df_turns: pd.DataFrame, test_dialogue_ids_path: Path) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        with test_dialogue_ids_path.open(encoding="utf-8") as fh:
+            test_dialogue_ids = json.load(fh)
 
-        missing = sorted(set(test_dids).difference(df_turns["DID"].unique()))
+        missing = sorted(set(test_dialogue_ids).difference(df_turns["DIALOGUE_ID"].unique()))
         if missing:
-            raise ValueError(f"Test DID list contains missing DID values: {missing[:5]}")
+            raise ValueError(f"Test dialogue_id list contains missing values: {missing[:5]}")
 
-        test_indices = df_turns.index[df_turns["DID"].isin(test_dids)].tolist()
-        expected_rows = len(test_dids) * self.turns_per_dialogue
+        test_indices = df_turns.index[df_turns["DIALOGUE_ID"].isin(test_dialogue_ids)].tolist()
+        expected_rows = len(test_dialogue_ids) * self.turns_per_dialogue
         if len(test_indices) != expected_rows:
-            raise ValueError(f"Expected {expected_rows} test rows for {len(test_dids)} DID values, found {len(test_indices)}.")
+            raise ValueError(f"Expected {expected_rows} test rows for {len(test_dialogue_ids)} dialogue_id values, found {len(test_indices)}.")
 
         train_indices = df_turns.index.difference(test_indices).sort_values()
         df_train = df_turns.loc[train_indices].reset_index(drop=True)
@@ -140,6 +140,7 @@ class StratifiedEmotionSplitter:
 # LLaMA-Factory export
 # ---------------------------------------------------------------------------
 
+
 class LlamaFactoryExporter:
     """Build LLaMA-Factory `alpaca`-style JSON entries from a per-turn dataframe."""
 
@@ -155,18 +156,18 @@ class LlamaFactoryExporter:
 
     def to_entries(self, df_turns: pd.DataFrame) -> List[dict]:
         entries: List[dict] = []
-        for did in df_turns["DID"].unique():
-            df_did = df_turns[df_turns["DID"] == did].reset_index(drop=True)
-            if len(df_did) != self.turns_per_dialogue:
+        for dialogue_id in df_turns["DIALOGUE_ID"].unique():
+            df_dialogue = df_turns[df_turns["DIALOGUE_ID"] == dialogue_id].reset_index(drop=True)
+            if len(df_dialogue) != self.turns_per_dialogue:
                 continue
-            entries.append(self._entry_from_dialogue(df_did))
+            entries.append(self._entry_from_dialogue(df_dialogue, dialogue_id))
         return entries
 
-    def _entry_from_dialogue(self, df_did: pd.DataFrame) -> dict:
-        prompts = df_did["PROMPT"].tolist()
-        completions = df_did["COMPLETION"].tolist()
-        human_emotions = df_did["EMOTION"].tolist()
-        chatbot_emotions = df_did["EMOTION_RESPONSE_2"].tolist()
+    def _entry_from_dialogue(self, df_dialogue: pd.DataFrame, dialogue_id: str) -> dict:
+        prompts = df_dialogue["PROMPT"].tolist()
+        completions = df_dialogue["COMPLETION"].tolist()
+        human_emotions = df_dialogue["EMOTION"].tolist()
+        chatbot_emotions = df_dialogue["EMOTION_RESPONSE_2"].tolist()
 
         system = self.system_template.format(
             he1=human_emotions[0], ce1=chatbot_emotions[0],
@@ -180,13 +181,15 @@ class LlamaFactoryExporter:
             [f"({human_emotions[i]}) {prompts[i]}", completions[i]]
             for i in range(self.turns_per_dialogue - 1)
         ]
+        instruction = f"({human_emotions[-1]}) {prompts[-1]}"
 
         return {
             "system": system,
             "history": history,
-            "instruction": f"({human_emotions[-1]}) {prompts[-1]}",
+            "instruction": instruction,
             "input": "",
             "output": completions[-1],
+            "dialogue_id": dialogue_id,
         }
 
     @staticmethod

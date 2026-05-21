@@ -38,13 +38,12 @@ logging.getLogger("httpcore").setLevel(logging.WARNING)
 warnings.simplefilter("ignore")
 
 CHECKPOINT_INTERVAL = 10
-DATA_COLUMNS = ["DID", "PROMPT", "COMPLETION", "EMOTIONS", "EXPRESSION_LEVEL", "MODIFIED"]
+DATA_COLUMNS = ["DIALOGUE_ID", "PROMPT", "COMPLETION", "EMOTIONS", "EXPRESSION_LEVEL", "MODIFIED"]
 REQUIRED_INPUT_KEYS = {
     "history",
     "prompt",
     "target",
     "predict_sft_modified_label",
-    "did",
     *(f"predict_{i}" for i in range(1, 10)),
 }
 
@@ -54,6 +53,8 @@ def _validate_rating_input(records: list[dict], input_file: str) -> None:
         raise ValueError(f"{input_file} is empty.")
 
     missing = sorted(REQUIRED_INPUT_KEYS - set(records[0]))
+    if "dialogue_id" not in records[0]:
+        missing.append("dialogue_id")
     if missing:
         raise ValueError(
             f"{input_file} is not the rating-input dataset; missing keys: {missing}. "
@@ -61,6 +62,13 @@ def _validate_rating_input(records: list[dict], input_file: str) -> None:
             "Note that 5-format_rm_preference_dataset.py overwrites "
             "rm_preference_dataset*.json with the final reward-model format."
         )
+
+
+def _dialogue_id(entry: dict) -> str:
+    dialogue_id = entry.get("dialogue_id")
+    if not dialogue_id:
+        raise KeyError("Record is missing dialogue_id.")
+    return dialogue_id
 
 
 def _iter_records(
@@ -80,7 +88,7 @@ def _iter_records(
         completion = client.complete(prompt)
 
         yield (
-            entry["did"],
+            _dialogue_id(entry),
             prompt_message,
             completion,
             [human_emo, chatbot_emo],

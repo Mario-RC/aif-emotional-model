@@ -178,7 +178,7 @@ def generate_ppo_unlabeled_prompts_dataset(
     client = build_client(cfg)
     topics_emotions = build_topics_emotions()
 
-    dids, prompts, completions, topic_list, emotions_list = [], [], [], [], []
+    generation_ids, prompts, completions, topic_list, emotions_list = [], [], [], [], []
     chkpt = 0
 
     for idx, (topic, emotion) in enumerate(tqdm(topics_emotions, start=1), start=1):
@@ -191,7 +191,7 @@ def generate_ppo_unlabeled_prompts_dataset(
             response = client.chat.completions.create(model=cfg["MODEL"], messages=messages)
             completion = response.choices[0].message.content
 
-        dids.append(f"GPT4-{idx - 1:04d}")
+        generation_ids.append(f"GPT4-{idx - 1:04d}")
         prompts.append(messages)
         completions.append(completion)
         topic_list.append(topic)
@@ -199,15 +199,15 @@ def generate_ppo_unlabeled_prompts_dataset(
 
         if idx % CHECKPOINT_INTERVAL == 0:
             df_chk = pd.DataFrame(
-                list(zip(dids, prompts, completions, topic_list, emotions_list)),
-                columns=["DID", "PROMPT", "COMPLETION", "TOPIC", "EMOTIONS"],
+                list(zip(generation_ids, prompts, completions, topic_list, emotions_list)),
+                columns=["GENERATION_ID", "PROMPT", "COMPLETION", "TOPIC", "EMOTIONS"],
             )
             df_chk.to_csv(f"data/records/ppo_unlabeled_prompts_dataset_checkpoint_{chkpt}.csv", index=False)
             chkpt += 1
 
     df = pd.DataFrame(
-        list(zip(dids, prompts, completions, topic_list, emotions_list)),
-        columns=["DID", "PROMPT", "COMPLETION", "TOPIC", "EMOTIONS"],
+        list(zip(generation_ids, prompts, completions, topic_list, emotions_list)),
+        columns=["GENERATION_ID", "PROMPT", "COMPLETION", "TOPIC", "EMOTIONS"],
     )
     df.to_csv(out_csv, index=False)
 

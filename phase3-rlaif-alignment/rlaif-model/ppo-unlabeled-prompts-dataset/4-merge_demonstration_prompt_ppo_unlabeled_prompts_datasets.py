@@ -1,7 +1,7 @@
 """Merge RM prompt and PPO unlabeled prompt datasets into a single training set.
 
-Re-numbers the PPO unlabeled prompt ``did`` field (1978+ for the train split,
-2880+ for the test split) and writes the final merged Pillar 4 files:
+Final JSON records keep ``dialogue_id`` as the only dialogue identity field and
+write the final merged Pillar 4 files:
     data/ppo_unlabeled_prompts_dataset.json
     data/ppo_unlabeled_prompts_dataset_test.json
 
@@ -22,39 +22,35 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from _lib import check_repeated_dids, read_json, write_json
+from _lib import check_repeated_dialogue_ids, read_json, write_json
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 LOCAL_DATA_DIR = SCRIPT_DIR / "data"
 RM_PROMPT_DATA_DIR = SCRIPT_DIR.parents[1] / "reward-model" / "rm-prompt-dataset" / "data"
 
-PPO_TRAIN_OFFSET = 1978
-PPO_TEST_OFFSET = 2880
 
 
-def _renumber(records: list[dict], start: int) -> list[dict]:
-    for idx, entry in enumerate(records, start=start):
-        entry["did"] = f"GPT4-{idx:06d}"
+def _prepare_records(records: list[dict]) -> list[dict]:
+    for entry in records:
+        if not entry.get("dialogue_id"):
+            raise ValueError("Record is missing dialogue_id.")
     return records
 
 
 def merge(_deprecated_write_combined: bool = False) -> None:
-    ppo_train = _renumber(read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_original.json"), PPO_TRAIN_OFFSET)
-    ppo_test = _renumber(
-        read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_test_original.json"),
-        PPO_TEST_OFFSET,
-    )
+    ppo_train = _prepare_records(read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_original.json"))
+    ppo_test = _prepare_records(read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_test_original.json"))
 
-    prompt_train = read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced.json")
-    prompt_test = read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced_test.json")
-    rm_prompt_train = read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset.json")
-    rm_prompt_test = read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_test.json")
+    prompt_train = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced.json"))
+    prompt_test = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced_test.json"))
+    rm_prompt_train = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset.json"))
+    rm_prompt_test = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_test.json"))
 
-    repeated = check_repeated_dids(rm_prompt_train + rm_prompt_test + ppo_train + ppo_test)
+    repeated = check_repeated_dialogue_ids(rm_prompt_train + rm_prompt_test + ppo_train + ppo_test)
     if repeated:
-        print(f"Repeated 'did' keys found: {repeated}")
+        print(f"Repeated 'dialogue_id' keys found: {repeated}")
     else:
-        print("No repeated 'did' keys found.")
+        print("No repeated 'dialogue_id' keys found.")
 
     write_json(ppo_train, LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_1k.json")
     write_json(ppo_test, LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_1k_test.json")
