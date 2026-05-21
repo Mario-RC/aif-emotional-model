@@ -1,5 +1,5 @@
-DID,PROMPT,COMPLETION,EMOTIONS,EXPRESSION_LEVEL,MODIFIED
-GPT4-002880,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+DIALOGUE_ID,PROMPT,COMPLETION,EMOTIONS,EXPRESSION_LEVEL,MODIFIED
+RLAIFE-002880,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -45,7 +45,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA3: Empathy: 6, Chatbot Emotion: 8, Question: 3\nA4: Empathy: 5, Chatbot Emotion: 6, Question: 8\nA5: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA6: Empathy: 6, Chatbot Emotion: 9, Question: 7\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 7, Chatbot Emotion: 6, Question: 9\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 6, Chatbot Emotion: 8, Question: 5']","['FEAR', 'HAPPINESS']","[5, 2, 5]",False
-GPT4-002881,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002881,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -91,7 +91,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA2: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 8, Chatbot Emotion: 7, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 7, Chatbot Emotion: 9, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 4, Question: 4\nA9: Empathy: 8, Chatbot Emotion: 6, Question: 4\nA10: Empathy: 8, Chatbot Emotion: 4, Question: 8']","['ANGER', 'NEUTRAL']","[5, 5, 5]",False
-GPT4-002882,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002882,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -137,7 +137,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA3: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 9, Question: 6\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 9, Question: 5\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 9\nA8: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA9: Empathy: 5, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 7']","['ANGER', 'ANGER']","[5, 1, 5]",False
-GPT4-002883,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002883,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -183,7 +183,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 4\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 7, Chatbot Emotion: 6, Question: 4\nA5: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA6: Empathy: 7, Chatbot Emotion: 7, Question: 9\nA7: Empathy: 5, Chatbot Emotion: 5, Question: 8\nA8: Empathy: 5, Chatbot Emotion: 6, Question: 9\nA9: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 8']","['ANGER', 'SADNESS']","[5, 2, 5]",False
-GPT4-002884,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002884,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -229,7 +229,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 9, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 4, Chatbot Emotion: 8, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 9, Question: 6\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA7: Empathy: 7, Chatbot Emotion: 6, Question: 5\nA8: Empathy: 5, Chatbot Emotion: 6, Question: 4\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA10: Empathy: 9, Chatbot Emotion: 9, Question: 6']","['ANGER', 'DISGUST']","[5, 1, 5]",False
-GPT4-002885,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002885,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -275,7 +275,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 5, Question: 6\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA9: Empathy: 8, Chatbot Emotion: 5, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 6, Question: 8']","['SURPRISE', 'DISGUST']","[4, 4, 4]",False
-GPT4-002886,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002886,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -321,7 +321,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 7, Question: 4\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA5: Empathy: 9, Chatbot Emotion: 7, Question: 4\nA6: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA7: Empathy: 9, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 5, Question: 8\nA9: Empathy: 1, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 7, Question: 6']","['ANGER', 'SADNESS']","[5, 2, 5]",False
-GPT4-002887,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002887,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -367,7 +367,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 5, Question: 7\nA2: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 6, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 5, Question: 7\nA6: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA7: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA8: Empathy: 8, Chatbot Emotion: 5, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 8']","['DISGUST', 'HAPPINESS']","[4, 5, 4]",False
-GPT4-002888,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002888,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -413,7 +413,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 5\nA3: Empathy: 5, Chatbot Emotion: 8, Question: 7\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA5: Empathy: 8, Chatbot Emotion: 6, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 9, Question: 5\nA7: Empathy: 6, Chatbot Emotion: 5, Question: 9\nA8: Empathy: 6, Chatbot Emotion: 4, Question: 6\nA9: Empathy: 7, Chatbot Emotion: 3, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 7']","['HAPPINESS', 'ANGER']","[3, 5, 3]",False
-GPT4-002889,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002889,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -459,7 +459,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 9, Question: 6\nA2: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 5\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 5\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA6: Empathy: 7, Chatbot Emotion: 9, Question: 9\nA7: Empathy: 6, Chatbot Emotion: 9, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 7']","['ANGER', 'ANGER']","[5, 1, 5]",False
-GPT4-002890,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002890,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -505,7 +505,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 7, Chatbot Emotion: 8, Question: 9\nA3: Empathy: 6, Chatbot Emotion: 6, Question: 8\nA4: Empathy: 5, Chatbot Emotion: 7, Question: 6\nA5: Empathy: 6, Chatbot Emotion: 9, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 7, Chatbot Emotion: 9, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 9, Question: 9\nA10: Empathy: 9, Chatbot Emotion: 7, Question: 6']","['DISGUST', 'SADNESS']","[4, 2, 4]",False
-GPT4-002891,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002891,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -551,7 +551,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA3: Empathy: 6, Chatbot Emotion: 6, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 5, Question: 4\nA5: Empathy: 5, Chatbot Emotion: 5, Question: 5\nA6: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA7: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 8']","['FEAR', 'SADNESS']","[5, 2, 5]",False
-GPT4-002892,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002892,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -597,7 +597,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 6, Question: 7\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA8: Empathy: 6, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 6, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 8']","['HAPPINESS', 'SADNESS']","[3, 5, 3]",False
-GPT4-002893,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002893,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -643,7 +643,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 6, Question: 6\nA4: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA5: Empathy: 8, Chatbot Emotion: 5, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 5, Question: 6\nA7: Empathy: 9, Chatbot Emotion: 4, Question: 4\nA8: Empathy: 6, Chatbot Emotion: 5, Question: 9\nA9: Empathy: 6, Chatbot Emotion: 6, Question: 4\nA10: Empathy: 6, Chatbot Emotion: 7, Question: 8']","['ANGER', 'DISGUST']","[5, 1, 5]",False
-GPT4-002894,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002894,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -689,7 +689,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 8, Chatbot Emotion: 6, Question: 5\nA3: Empathy: 5, Chatbot Emotion: 9, Question: 4\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA5: Empathy: 9, Chatbot Emotion: 7, Question: 5\nA6: Empathy: 4, Chatbot Emotion: 4, Question: 3\nA7: Empathy: 6, Chatbot Emotion: 5, Question: 2\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA9: Empathy: 9, Chatbot Emotion: 9, Question: 6\nA10: Empathy: 5, Chatbot Emotion: 2, Question: 8']","['DISGUST', 'NEUTRAL']","[4, 1, 4]",False
-GPT4-002895,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002895,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -735,7 +735,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA2: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA6: Empathy: 6, Chatbot Emotion: 8, Question: 9\nA7: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA8: Empathy: 7, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 7, Chatbot Emotion: 6, Question: 5\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 8']","['NEUTRAL', 'HAPPINESS']","[3, 5, 5]",False
-GPT4-002896,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002896,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -781,7 +781,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 5, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 4, Question: 6\nA3: Empathy: 9, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA5: Empathy: 9, Chatbot Emotion: 5, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA7: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 6']","['ANGER', 'HAPPINESS']","[5, 2, 5]",False
-GPT4-002897,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002897,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -827,7 +827,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 6, Question: 5\nA2: Empathy: 5, Chatbot Emotion: 5, Question: 6\nA3: Empathy: 4, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 7, Chatbot Emotion: 6, Question: 4\nA5: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA6: Empathy: 9, Chatbot Emotion: 9, Question: 6\nA7: Empathy: 5, Chatbot Emotion: 6, Question: 5\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 6, Question: 5']","['DISGUST', 'SADNESS']","[4, 2, 4]",False
-GPT4-002898,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002898,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -873,7 +873,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 6, Chatbot Emotion: 8, Question: 5\nA3: Empathy: 9, Chatbot Emotion: 4, Question: 6\nA4: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA5: Empathy: 7, Chatbot Emotion: 4, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 5, Question: 9\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 9, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 9, Chatbot Emotion: 8, Question: 5']","['HAPPINESS', 'NEUTRAL']","[3, 5, 3]",False
-GPT4-002899,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002899,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -919,7 +919,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 9, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 8, Chatbot Emotion: 6, Question: 9\nA4: Empathy: 5, Chatbot Emotion: 6, Question: 6\nA5: Empathy: 5, Chatbot Emotion: 6, Question: 5\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA7: Empathy: 4, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 7, Chatbot Emotion: 6, Question: 7']","['SADNESS', 'SADNESS']","[5, 4, 5]",False
-GPT4-002900,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002900,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -965,7 +965,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 8, Question: 6\nA3: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA4: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA5: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA6: Empathy: 9, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 9, Chatbot Emotion: 9, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 7, Chatbot Emotion: 7, Question: 9']","['HAPPINESS', 'HAPPINESS']","[3, 5, 3]",False
-GPT4-002901,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002901,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1011,7 +1011,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 5, Chatbot Emotion: 7, Question: 7\nA2: Empathy: 5, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 7, Chatbot Emotion: 9, Question: 7\nA4: Empathy: 5, Chatbot Emotion: 7, Question: 6\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA6: Empathy: 6, Chatbot Emotion: 9, Question: 8\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA8: Empathy: 5, Chatbot Emotion: 7, Question: 7\nA9: Empathy: 5, Chatbot Emotion: 6, Question: 9\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 6']","['DISGUST', 'ANGER']","[4, 2, 4]",False
-GPT4-002902,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002902,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1057,7 +1057,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 6, Question: 3\nA3: Empathy: 7, Chatbot Emotion: 5, Question: 7\nA4: Empathy: 9, Chatbot Emotion: 7, Question: 4\nA5: Empathy: 9, Chatbot Emotion: 8, Question: 2\nA6: Empathy: 9, Chatbot Emotion: 7, Question: 3\nA7: Empathy: 7, Chatbot Emotion: 4, Question: 3\nA8: Empathy: 9, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 9, Chatbot Emotion: 7, Question: 3']","['SURPRISE', 'SURPRISE']","[4, 4, 4]",False
-GPT4-002903,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002903,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1103,7 +1103,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 5, Chatbot Emotion: 6, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 4, Chatbot Emotion: 5, Question: 6\nA6: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA7: Empathy: 6, Chatbot Emotion: 6, Question: 6\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 5, Chatbot Emotion: 6, Question: 6\nA10: Empathy: 6, Chatbot Emotion: 7, Question: 5']","['NEUTRAL', 'SADNESS']","[3, 5, 5]",False
-GPT4-002904,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002904,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1149,7 +1149,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 8, Question: 5\nA3: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA4: Empathy: 9, Chatbot Emotion: 9, Question: 6\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA6: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA8: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 5']","['SADNESS', 'ANGER']","[5, 1, 5]",False
-GPT4-002905,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002905,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1195,7 +1195,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 7\nA4: Empathy: 5, Chatbot Emotion: 9, Question: 9\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 5, Chatbot Emotion: 6, Question: 5\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA8: Empathy: 5, Chatbot Emotion: 5, Question: 4\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA10: Empathy: 6, Chatbot Emotion: 9, Question: 8']","['NEUTRAL', 'NEUTRAL']","[3, 5, 5]",False
-GPT4-002906,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002906,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1241,7 +1241,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 5, Chatbot Emotion: 6, Question: 4\nA3: Empathy: 5, Chatbot Emotion: 6, Question: 6\nA4: Empathy: 6, Chatbot Emotion: 5, Question: 7\nA5: Empathy: 5, Chatbot Emotion: 7, Question: 5\nA6: Empathy: 4, Chatbot Emotion: 6, Question: 4\nA7: Empathy: 5, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 5, Chatbot Emotion: 8, Question: 5\nA9: Empathy: 5, Chatbot Emotion: 6, Question: 5\nA10: Empathy: 6, Chatbot Emotion: 9, Question: 7']","['NEUTRAL', 'FEAR']","[3, 5, 5]",False
-GPT4-002907,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002907,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1287,7 +1287,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 6, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 5, Question: 6\nA4: Empathy: 7, Chatbot Emotion: 6, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA6: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 7, Question: 9']","['FEAR', 'FEAR']","[5, 1, 5]",False
-GPT4-002908,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002908,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1333,7 +1333,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 9, Chatbot Emotion: 6, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 4\nA10: Empathy: 8, Chatbot Emotion: 2, Question: 5']","['NEUTRAL', 'SURPRISE']","[3, 5, 5]",False
-GPT4-002909,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002909,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1379,7 +1379,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA2: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 5, Chatbot Emotion: 9, Question: 4\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 6, Chatbot Emotion: 8, Question: 5\nA7: Empathy: 5, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA9: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 9']","['FEAR', 'ANGER']","[5, 1, 5]",False
-GPT4-002910,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002910,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1425,7 +1425,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA3: Empathy: 9, Chatbot Emotion: 7, Question: 7\nA4: Empathy: 9, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 5\nA8: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 5, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 6, Chatbot Emotion: 8, Question: 6']","['SURPRISE', 'HAPPINESS']","[4, 4, 4]",False
-GPT4-002911,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002911,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1471,7 +1471,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 6\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 5, Chatbot Emotion: 7, Question: 7\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA9: Empathy: 9, Chatbot Emotion: 6, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 7, Question: 7']","['SURPRISE', 'NEUTRAL']","[4, 4, 4]",False
-GPT4-002912,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002912,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1517,7 +1517,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 4, Chatbot Emotion: 6, Question: 6\nA3: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA4: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA5: Empathy: 6, Chatbot Emotion: 5, Question: 7\nA6: Empathy: 3, Chatbot Emotion: 7, Question: 5\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 8, Chatbot Emotion: 7, Question: 5\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 4\nA10: Empathy: 9, Chatbot Emotion: 9, Question: 6']","['DISGUST', 'HAPPINESS']","[4, 5, 4]",False
-GPT4-002913,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002913,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1563,7 +1563,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 6, Question: 6\nA3: Empathy: 7, Chatbot Emotion: 5, Question: 7\nA4: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA5: Empathy: 9, Chatbot Emotion: 9, Question: 8\nA6: Empathy: 9, Chatbot Emotion: 5, Question: 8\nA7: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA8: Empathy: 7, Chatbot Emotion: 4, Question: 5\nA9: Empathy: 6, Chatbot Emotion: 4, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 6']","['HAPPINESS', 'DISGUST']","[3, 4, 3]",False
-GPT4-002914,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002914,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1609,7 +1609,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 4\nA4: Empathy: 4, Chatbot Emotion: 7, Question: 8\nA5: Empathy: 3, Chatbot Emotion: 6, Question: 5\nA6: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 7, Chatbot Emotion: 7, Question: 8']","['SURPRISE', 'FEAR']","[4, 4, 4]",False
-GPT4-002915,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002915,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1655,7 +1655,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 4, Chatbot Emotion: 5, Question: 8\nA2: Empathy: 4, Chatbot Emotion: 5, Question: 7\nA3: Empathy: 5, Chatbot Emotion: 4, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 6, Question: 8\nA5: Empathy: 5, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 6, Chatbot Emotion: 3, Question: 5\nA7: Empathy: 5, Chatbot Emotion: 5, Question: 4\nA8: Empathy: 4, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 5, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 6, Chatbot Emotion: 6, Question: 8']","['NEUTRAL', 'DISGUST']","[3, 4, 5]",False
-GPT4-002916,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002916,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1701,7 +1701,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 6, Chatbot Emotion: 4, Question: 6\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 5\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 9\nA5: Empathy: 6, Chatbot Emotion: 4, Question: 3\nA6: Empathy: 6, Chatbot Emotion: 6, Question: 7\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 9\nA8: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 5, Chatbot Emotion: 7, Question: 8\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 9']","['ANGER', 'SURPRISE']","[5, 4, 5]",False
-GPT4-002917,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002917,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1747,7 +1747,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 8, Question: 4\nA2: Empathy: 5, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA6: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 5, Chatbot Emotion: 8, Question: 5\nA8: Empathy: 5, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 6, Chatbot Emotion: 9, Question: 8']","['DISGUST', 'ANGER']","[4, 2, 4]",False
-GPT4-002918,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002918,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1793,7 +1793,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 5, Question: 9\nA3: Empathy: 7, Chatbot Emotion: 2, Question: 6\nA4: Empathy: 8, Chatbot Emotion: 3, Question: 8\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA6: Empathy: 8, Chatbot Emotion: 4, Question: 5\nA7: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA9: Empathy: 7, Chatbot Emotion: 5, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 3, Question: 8']","['SURPRISE', 'DISGUST']","[4, 4, 4]",False
-GPT4-002919,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002919,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1839,7 +1839,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA3: Empathy: 5, Chatbot Emotion: 5, Question: 7\nA4: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA5: Empathy: 7, Chatbot Emotion: 5, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 6']","['DISGUST', 'DISGUST']","[4, 4, 4]",False
-GPT4-002920,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002920,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1885,7 +1885,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA3: Empathy: 7, Chatbot Emotion: 9, Question: 5\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 5, Question: 7\nA7: Empathy: 7, Chatbot Emotion: 6, Question: 5\nA8: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 7, Question: 4']","['NEUTRAL', 'ANGER']","[3, 5, 5]",False
-GPT4-002921,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002921,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1931,7 +1931,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 4, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 3, Question: 5\nA5: Empathy: 7, Chatbot Emotion: 5, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA7: Empathy: 8, Chatbot Emotion: 5, Question: 4\nA8: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 5, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 4, Question: 5']","['HAPPINESS', 'DISGUST']","[3, 4, 3]",False
-GPT4-002922,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002922,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -1977,7 +1977,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 5, Chatbot Emotion: 6, Question: 4\nA3: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA8: Empathy: 6, Chatbot Emotion: 9, Question: 6\nA9: Empathy: 9, Chatbot Emotion: 5, Question: 7\nA10: Empathy: 7, Chatbot Emotion: 7, Question: 6']","['SADNESS', 'NEUTRAL']","[5, 5, 5]",False
-GPT4-002923,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002923,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2023,7 +2023,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA3: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA4: Empathy: 5, Chatbot Emotion: 6, Question: 9\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA10: Empathy: 6, Chatbot Emotion: 7, Question: 9']","['FEAR', 'SADNESS']","[5, 2, 5]",False
-GPT4-002924,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002924,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2069,7 +2069,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 4, Question: 9\nA3: Empathy: 6, Chatbot Emotion: 3, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 5, Question: 9\nA5: Empathy: 7, Chatbot Emotion: 4, Question: 8\nA6: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA7: Empathy: 5, Chatbot Emotion: 6, Question: 9\nA8: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 4, Question: 8\nA10: Empathy: 5, Chatbot Emotion: 4, Question: 9']","['FEAR', 'SURPRISE']","[5, 4, 5]",False
-GPT4-002925,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002925,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2115,7 +2115,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 5, Chatbot Emotion: 8, Question: 6\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 9\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 6, Chatbot Emotion: 8, Question: 4\nA6: Empathy: 5, Chatbot Emotion: 8, Question: 8\nA7: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 4, Chatbot Emotion: 7, Question: 5\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA10: Empathy: 6, Chatbot Emotion: 6, Question: 9']","['HAPPINESS', 'NEUTRAL']","[3, 5, 3]",False
-GPT4-002926,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002926,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2161,7 +2161,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA5: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 4\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 4\nA8: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA9: Empathy: 6, Chatbot Emotion: 6, Question: 7\nA10: Empathy: 9, Chatbot Emotion: 8, Question: 5']","['ANGER', 'FEAR']","[5, 1, 5]",False
-GPT4-002927,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002927,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2207,7 +2207,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 4, Chatbot Emotion: 5, Question: 7\nA3: Empathy: 4, Chatbot Emotion: 8, Question: 8\nA4: Empathy: 7, Chatbot Emotion: 5, Question: 7\nA5: Empathy: 5, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 6, Chatbot Emotion: 4, Question: 7\nA7: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 3, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 6, Chatbot Emotion: 7, Question: 9\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 9']","['NEUTRAL', 'ANGER']","[3, 5, 5]",False
-GPT4-002928,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002928,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2253,7 +2253,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 9, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 6, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA5: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 6, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 9\nA10: Empathy: 7, Chatbot Emotion: 6, Question: 7']","['FEAR', 'DISGUST']","[5, 2, 5]",False
-GPT4-002929,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002929,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2299,7 +2299,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA3: Empathy: 8, Chatbot Emotion: 5, Question: 9\nA4: Empathy: 9, Chatbot Emotion: 5, Question: 9\nA5: Empathy: 9, Chatbot Emotion: 5, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 5, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 7, Chatbot Emotion: 4, Question: 6\nA9: Empathy: 9, Chatbot Emotion: 2, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 8']","['SURPRISE', 'ANGER']","[4, 4, 4]",False
-GPT4-002930,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002930,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2345,7 +2345,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 3, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 4\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 4\nA4: Empathy: 8, Chatbot Emotion: 4, Question: 2\nA5: Empathy: 4, Chatbot Emotion: 2, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA7: Empathy: 8, Chatbot Emotion: 5, Question: 5\nA8: Empathy: 7, Chatbot Emotion: 4, Question: 7\nA9: Empathy: 6, Chatbot Emotion: 6, Question: 4\nA10: Empathy: 7, Chatbot Emotion: 5, Question: 4']","['HAPPINESS', 'FEAR']","[3, 5, 3]",False
-GPT4-002931,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002931,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2391,7 +2391,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA5: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA6: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA8: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA10: Empathy: 7, Chatbot Emotion: 7, Question: 6']","['NEUTRAL', 'SURPRISE']","[3, 5, 5]",False
-GPT4-002932,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002932,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2437,7 +2437,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 5, Question: 4\nA3: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA4: Empathy: 8, Chatbot Emotion: 5, Question: 7\nA5: Empathy: 7, Chatbot Emotion: 9, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 4, Question: 5\nA8: Empathy: 8, Chatbot Emotion: 5, Question: 4\nA9: Empathy: 7, Chatbot Emotion: 5, Question: 4\nA10: Empathy: 6, Chatbot Emotion: 4, Question: 4']","['HAPPINESS', 'FEAR']","[3, 5, 3]",False
-GPT4-002933,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002933,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2483,7 +2483,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA3: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA4: Empathy: 7, Chatbot Emotion: 6, Question: 5\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA9: Empathy: 5, Chatbot Emotion: 8, Question: 3\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 9']","['SURPRISE', 'HAPPINESS']","[4, 4, 4]",False
-GPT4-002934,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002934,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2529,7 +2529,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA3: Empathy: 9, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA5: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA7: Empathy: 9, Chatbot Emotion: 7, Question: 7\nA8: Empathy: 7, Chatbot Emotion: 7, Question: 5\nA9: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 6']","['ANGER', 'NEUTRAL']","[5, 5, 5]",False
-GPT4-002935,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002935,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2575,7 +2575,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 8, Question: 9\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA6: Empathy: 5, Chatbot Emotion: 9, Question: 9\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 7, Chatbot Emotion: 8, Question: 9\nA9: Empathy: 5, Chatbot Emotion: 9, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 7']","['SADNESS', 'FEAR']","[5, 1, 5]",False
-GPT4-002936,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002936,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2621,7 +2621,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA3: Empathy: 7, Chatbot Emotion: 5, Question: 3\nA4: Empathy: 5, Chatbot Emotion: 7, Question: 4\nA5: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 6, Chatbot Emotion: 5, Question: 2\nA8: Empathy: 6, Chatbot Emotion: 7, Question: 9\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 9\nA10: Empathy: 7, Chatbot Emotion: 5, Question: 5']","['SADNESS', 'NEUTRAL']","[5, 5, 5]",False
-GPT4-002937,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002937,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2667,7 +2667,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA3: Empathy: 7, Chatbot Emotion: 4, Question: 7\nA4: Empathy: 5, Chatbot Emotion: 8, Question: 4\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA6: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 5, Question: 8\nA8: Empathy: 6, Chatbot Emotion: 9, Question: 5\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 7']","['SURPRISE', 'SADNESS']","[4, 4, 4]",False
-GPT4-002938,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002938,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2713,7 +2713,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 8, Question: 4\nA3: Empathy: 7, Chatbot Emotion: 5, Question: 9\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 4\nA8: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA10: Empathy: 9, Chatbot Emotion: 6, Question: 6']","['DISGUST', 'FEAR']","[4, 2, 4]",False
-GPT4-002939,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002939,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2759,7 +2759,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 5, Question: 7\nA4: Empathy: 6, Chatbot Emotion: 9, Question: 7\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA6: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA7: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA8: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 8']","['SADNESS', 'FEAR']","[5, 1, 5]",False
-GPT4-002940,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002940,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2805,7 +2805,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 9, Question: 9\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 3\nA3: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA4: Empathy: 5, Chatbot Emotion: 4, Question: 3\nA5: Empathy: 8, Chatbot Emotion: 7, Question: 5\nA6: Empathy: 7, Chatbot Emotion: 6, Question: 9\nA7: Empathy: 6, Chatbot Emotion: 6, Question: 8\nA8: Empathy: 5, Chatbot Emotion: 4, Question: 3\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA10: Empathy: 8, Chatbot Emotion: 7, Question: 8']","['SURPRISE', 'SURPRISE']","[4, 4, 4]",False
-GPT4-002941,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002941,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2851,7 +2851,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 8, Question: 4\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 2\nA5: Empathy: 9, Chatbot Emotion: 8, Question: 4\nA6: Empathy: 8, Chatbot Emotion: 7, Question: 4\nA7: Empathy: 9, Chatbot Emotion: 9, Question: 4\nA8: Empathy: 7, Chatbot Emotion: 7, Question: 4\nA9: Empathy: 6, Chatbot Emotion: 7, Question: 4\nA10: Empathy: 9, Chatbot Emotion: 9, Question: 4']","['SURPRISE', 'SADNESS']","[4, 4, 4]",False
-GPT4-002942,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002942,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2897,7 +2897,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 5, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 8, Question: 5\nA6: Empathy: 7, Chatbot Emotion: 6, Question: 5\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 5\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 5\nA10: Empathy: 9, Chatbot Emotion: 9, Question: 5']","['SADNESS', 'HAPPINESS']","[5, 1, 5]",False
-GPT4-002943,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002943,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2943,7 +2943,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA5: Empathy: 8, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 7, Chatbot Emotion: 5, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 7, Chatbot Emotion: 5, Question: 6\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 8']","['ANGER', 'HAPPINESS']","[5, 2, 5]",False
-GPT4-002944,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002944,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -2989,7 +2989,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 8, Chatbot Emotion: 9, Question: 6\nA4: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 5\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 5\nA8: Empathy: 6, Chatbot Emotion: 7, Question: 4\nA9: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 9']","['SURPRISE', 'FEAR']","[4, 4, 4]",False
-GPT4-002945,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002945,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3035,7 +3035,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 9\nA2: Empathy: 7, Chatbot Emotion: 5, Question: 6\nA3: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA4: Empathy: 8, Chatbot Emotion: 4, Question: 7\nA5: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA7: Empathy: 5, Chatbot Emotion: 3, Question: 5\nA8: Empathy: 5, Chatbot Emotion: 4, Question: 4\nA9: Empathy: 7, Chatbot Emotion: 5, Question: 6\nA10: Empathy: 7, Chatbot Emotion: 9, Question: 9']","['SADNESS', 'DISGUST']","[5, 1, 5]",False
-GPT4-002946,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002946,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3081,7 +3081,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA2: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 5, Chatbot Emotion: 7, Question: 5\nA5: Empathy: 6, Chatbot Emotion: 8, Question: 4\nA6: Empathy: 7, Chatbot Emotion: 9, Question: 8\nA7: Empathy: 5, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 4, Chatbot Emotion: 6, Question: 7\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 5\nA10: Empathy: 6, Chatbot Emotion: 8, Question: 8']","['DISGUST', 'DISGUST']","[4, 4, 4]",False
-GPT4-002947,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002947,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3127,7 +3127,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA2: Empathy: 8, Chatbot Emotion: 5, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 4, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA6: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA10: Empathy: 9, Chatbot Emotion: 5, Question: 9']","['HAPPINESS', 'SURPRISE']","[3, 5, 3]",False
-GPT4-002948,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002948,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3173,7 +3173,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA3: Empathy: 4, Chatbot Emotion: 5, Question: 2\nA4: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA5: Empathy: 5, Chatbot Emotion: 5, Question: 3\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 8']","['NEUTRAL', 'NEUTRAL']","[3, 5, 5]",False
-GPT4-002949,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002949,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3219,7 +3219,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 9, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 6, Chatbot Emotion: 6, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA6: Empathy: 5, Chatbot Emotion: 5, Question: 6\nA7: Empathy: 7, Chatbot Emotion: 9, Question: 8\nA8: Empathy: 5, Chatbot Emotion: 8, Question: 5\nA9: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 7']","['SURPRISE', 'ANGER']","[4, 4, 4]",False
-GPT4-002950,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002950,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3265,7 +3265,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA4: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA5: Empathy: 5, Chatbot Emotion: 8, Question: 7\nA6: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 7, Question: 6']","['FEAR', 'NEUTRAL']","[5, 5, 5]",False
-GPT4-002951,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002951,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3311,7 +3311,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 6, Question: 5\nA8: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA10: Empathy: 6, Chatbot Emotion: 8, Question: 7']","['HAPPINESS', 'ANGER']","[3, 5, 3]",False
-GPT4-002952,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002952,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3357,7 +3357,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 7, Chatbot Emotion: 9, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA6: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA7: Empathy: 5, Chatbot Emotion: 6, Question: 5\nA8: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 7, Chatbot Emotion: 9, Question: 8']","['FEAR', 'FEAR']","[5, 1, 5]",False
-GPT4-002953,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002953,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3403,7 +3403,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA5: Empathy: 6, Chatbot Emotion: 4, Question: 7\nA6: Empathy: 7, Chatbot Emotion: 9, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 9\nA8: Empathy: 5, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 7, Chatbot Emotion: 8, Question: 9']","['FEAR', 'NEUTRAL']","[5, 5, 5]",False
-GPT4-002954,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002954,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3449,7 +3449,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 9, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 6, Question: 7\nA5: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 7, Chatbot Emotion: 5, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 9, Chatbot Emotion: 7, Question: 9\nA9: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA10: Empathy: 9, Chatbot Emotion: 8, Question: 6']","['ANGER', 'SURPRISE']","[5, 4, 5]",False
-GPT4-002955,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002955,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3495,7 +3495,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA3: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA4: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 6, Question: 2\nA9: Empathy: 8, Chatbot Emotion: 5, Question: 3\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 8']","['HAPPINESS', 'SURPRISE']","[3, 5, 3]",False
-GPT4-002956,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002956,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3541,7 +3541,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA3: Empathy: 9, Chatbot Emotion: 4, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 8, Question: 4\nA5: Empathy: 5, Chatbot Emotion: 7, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 4, Question: 5\nA7: Empathy: 7, Chatbot Emotion: 6, Question: 7\nA8: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 9, Question: 8\nA10: Empathy: 6, Chatbot Emotion: 4, Question: 8']","['DISGUST', 'SURPRISE']","[4, 4, 4]",False
-GPT4-002957,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002957,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3587,7 +3587,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA2: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA3: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA4: Empathy: 7, Chatbot Emotion: 6, Question: 7\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 5\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 6, Chatbot Emotion: 9, Question: 6\nA10: Empathy: 6, Chatbot Emotion: 8, Question: 7']","['FEAR', 'HAPPINESS']","[5, 2, 5]",False
-GPT4-002958,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002958,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3633,7 +3633,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 6, Question: 7\nA3: Empathy: 6, Chatbot Emotion: 5, Question: 6\nA4: Empathy: 6, Chatbot Emotion: 8, Question: 5\nA5: Empathy: 7, Chatbot Emotion: 6, Question: 6\nA6: Empathy: 6, Chatbot Emotion: 5, Question: 6\nA7: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA8: Empathy: 5, Chatbot Emotion: 6, Question: 5\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 9\nA10: Empathy: 6, Chatbot Emotion: 6, Question: 6']","['FEAR', 'SURPRISE']","[5, 4, 5]",False
-GPT4-002959,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002959,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3679,7 +3679,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 5, Question: 7\nA3: Empathy: 5, Chatbot Emotion: 4, Question: 7\nA4: Empathy: 4, Chatbot Emotion: 3, Question: 6\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 4, Question: 5\nA7: Empathy: 6, Chatbot Emotion: 6, Question: 7\nA8: Empathy: 7, Chatbot Emotion: 2, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 5, Question: 4\nA10: Empathy: 6, Chatbot Emotion: 7, Question: 4']","['SADNESS', 'SURPRISE']","[5, 4, 5]",False
-GPT4-002960,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002960,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3725,7 +3725,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 6\nA2: Empathy: 7, Chatbot Emotion: 2, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA4: Empathy: 5, Chatbot Emotion: 5, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 4, Question: 7\nA6: Empathy: 5, Chatbot Emotion: 6, Question: 8\nA7: Empathy: 6, Chatbot Emotion: 3, Question: 2\nA8: Empathy: 5, Chatbot Emotion: 5, Question: 8\nA9: Empathy: 5, Chatbot Emotion: 6, Question: 7\nA10: Empathy: 4, Chatbot Emotion: 6, Question: 7']","['NEUTRAL', 'FEAR']","[3, 5, 5]",False
-GPT4-002961,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002961,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3771,7 +3771,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 5, Chatbot Emotion: 7, Question: 6\nA4: Empathy: 6, Chatbot Emotion: 8, Question: 7\nA5: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA6: Empathy: 4, Chatbot Emotion: 6, Question: 6\nA7: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 4, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 6, Chatbot Emotion: 5, Question: 6\nA10: Empathy: 5, Chatbot Emotion: 8, Question: 7']","['NEUTRAL', 'DISGUST']","[3, 4, 5]",False
-GPT4-002962,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002962,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3817,7 +3817,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 8, Chatbot Emotion: 7, Question: 7\nA3: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 9, Chatbot Emotion: 8, Question: 7\nA6: Empathy: 5, Chatbot Emotion: 7, Question: 6\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 3\nA8: Empathy: 7, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 5\nA10: Empathy: 9, Chatbot Emotion: 9, Question: 9']","['HAPPINESS', 'HAPPINESS']","[3, 5, 3]",False
-GPT4-002963,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002963,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3863,7 +3863,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 5, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 9\nA3: Empathy: 5, Chatbot Emotion: 6, Question: 7\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 9\nA5: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA6: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA7: Empathy: 8, Chatbot Emotion: 6, Question: 9\nA8: Empathy: 6, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 8']","['HAPPINESS', 'SADNESS']","[3, 5, 3]",False
-GPT4-002964,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002964,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3909,7 +3909,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 5, Chatbot Emotion: 8, Question: 4\nA3: Empathy: 8, Chatbot Emotion: 6, Question: 7\nA4: Empathy: 5, Chatbot Emotion: 9, Question: 8\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 4\nA6: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 9, Question: 9\nA8: Empathy: 4, Chatbot Emotion: 8, Question: 5\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 4']","['SADNESS', 'DISGUST']","[5, 1, 5]",False
-GPT4-002965,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002965,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -3955,7 +3955,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 7, Question: 6\nA2: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA4: Empathy: 4, Chatbot Emotion: 6, Question: 4\nA5: Empathy: 4, Chatbot Emotion: 6, Question: 4\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA7: Empathy: 4, Chatbot Emotion: 7, Question: 7\nA8: Empathy: 4, Chatbot Emotion: 6, Question: 5\nA9: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA10: Empathy: 6, Chatbot Emotion: 5, Question: 6']","['SADNESS', 'SURPRISE']","[5, 4, 5]",False
-GPT4-002966,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002966,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4001,7 +4001,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 7, Question: 2\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA4: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA5: Empathy: 7, Chatbot Emotion: 8, Question: 5\nA6: Empathy: 7, Chatbot Emotion: 6, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA8: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 7, Chatbot Emotion: 7, Question: 8']","['SADNESS', 'HAPPINESS']","[5, 1, 5]",False
-GPT4-002967,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002967,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4047,7 +4047,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 2\nA3: Empathy: 7, Chatbot Emotion: 5, Question: 8\nA4: Empathy: 5, Chatbot Emotion: 6, Question: 2\nA5: Empathy: 6, Chatbot Emotion: 8, Question: 1\nA6: Empathy: 7, Chatbot Emotion: 7, Question: 9\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 5, Chatbot Emotion: 8, Question: 9\nA9: Empathy: 6, Chatbot Emotion: 5, Question: 2\nA10: Empathy: 7, Chatbot Emotion: 7, Question: 9']","['NEUTRAL', 'SADNESS']","[3, 5, 5]",False
-GPT4-002968,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002968,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4093,7 +4093,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA3: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 7, Chatbot Emotion: 7, Question: 7\nA6: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 7, Question: 6']","['SADNESS', 'ANGER']","[5, 1, 5]",False
-GPT4-002969,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002969,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4139,7 +4139,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 4, Chatbot Emotion: 8, Question: 6\nA2: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA3: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 5, Chatbot Emotion: 8, Question: 5\nA5: Empathy: 4, Chatbot Emotion: 7, Question: 4\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 6\nA7: Empathy: 5, Chatbot Emotion: 8, Question: 6\nA8: Empathy: 6, Chatbot Emotion: 8, Question: 5\nA9: Empathy: 6, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 8']","['SURPRISE', 'NEUTRAL']","[4, 4, 4]",False
-GPT4-002970,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002970,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4185,7 +4185,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 7, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 4, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 5, Question: 6\nA5: Empathy: 8, Chatbot Emotion: 7, Question: 9\nA6: Empathy: 8, Chatbot Emotion: 5, Question: 7\nA7: Empathy: 7, Chatbot Emotion: 5, Question: 7\nA8: Empathy: 8, Chatbot Emotion: 6, Question: 7\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA10: Empathy: 7, Chatbot Emotion: 6, Question: 5']","['DISGUST', 'NEUTRAL']","[4, 1, 4]",False
-GPT4-002971,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002971,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4231,7 +4231,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 8, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 9, Question: 7\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA5: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 9, Question: 7\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 6']","['ANGER', 'FEAR']","[5, 1, 5]",False
-GPT4-002972,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002972,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4277,7 +4277,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA3: Empathy: 7, Chatbot Emotion: 7, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA5: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA6: Empathy: 6, Chatbot Emotion: 6, Question: 6\nA7: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA8: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA9: Empathy: 8, Chatbot Emotion: 8, Question: 6\nA10: Empathy: 8, Chatbot Emotion: 8, Question: 8']","['NEUTRAL', 'HAPPINESS']","[3, 5, 5]",False
-GPT4-002973,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002973,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4323,7 +4323,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA2: Empathy: 8, Chatbot Emotion: 7, Question: 8\nA3: Empathy: 6, Chatbot Emotion: 6, Question: 9\nA4: Empathy: 9, Chatbot Emotion: 6, Question: 7\nA5: Empathy: 9, Chatbot Emotion: 8, Question: 9\nA6: Empathy: 6, Chatbot Emotion: 7, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA8: Empathy: 9, Chatbot Emotion: 9, Question: 9\nA9: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA10: Empathy: 9, Chatbot Emotion: 6, Question: 8']","['SADNESS', 'SADNESS']","[5, 4, 5]",False
-GPT4-002974,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002974,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4369,7 +4369,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA2: Empathy: 6, Chatbot Emotion: 6, Question: 5\nA3: Empathy: 4, Chatbot Emotion: 8, Question: 7\nA4: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 8, Chatbot Emotion: 9, Question: 9\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 9\nA8: Empathy: 6, Chatbot Emotion: 7, Question: 8\nA9: Empathy: 7, Chatbot Emotion: 8, Question: 5\nA10: Empathy: 6, Chatbot Emotion: 7, Question: 8']","['FEAR', 'ANGER']","[5, 1, 5]",False
-GPT4-002975,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002975,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4415,7 +4415,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA2: Empathy: 9, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 8, Chatbot Emotion: 9, Question: 8\nA4: Empathy: 6, Chatbot Emotion: 7, Question: 6\nA5: Empathy: 9, Chatbot Emotion: 9, Question: 8\nA6: Empathy: 7, Chatbot Emotion: 8, Question: 5\nA7: Empathy: 8, Chatbot Emotion: 8, Question: 7\nA8: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA9: Empathy: 8, Chatbot Emotion: 7, Question: 7\nA10: Empathy: 8, Chatbot Emotion: 9, Question: 8']","['DISGUST', 'FEAR']","[4, 2, 4]",False
-GPT4-002976,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002976,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
@@ -4461,7 +4461,7 @@ A7: Empathy: ,Chatbot Emotion: ,Question:
 A8: Empathy: ,Chatbot Emotion: ,Question: 
 A9: Empathy: ,Chatbot Emotion: ,Question: 
 A10: Empathy: ,Chatbot Emotion: ,Question: ","['A1: Empathy: 8, Chatbot Emotion: 6, Question: 8\nA2: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA3: Empathy: 7, Chatbot Emotion: 8, Question: 8\nA4: Empathy: 8, Chatbot Emotion: 8, Question: 8\nA5: Empathy: 6, Chatbot Emotion: 9, Question: 9\nA6: Empathy: 6, Chatbot Emotion: 4, Question: 8\nA7: Empathy: 7, Chatbot Emotion: 8, Question: 7\nA8: Empathy: 7, Chatbot Emotion: 5, Question: 8\nA9: Empathy: 6, Chatbot Emotion: 5, Question: 8\nA10: Empathy: 5, Chatbot Emotion: 8, Question: 2']","['FEAR', 'DISGUST']","[5, 2, 5]",False
-GPT4-002977,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
+RLAIFE-002977,"You are an expert at scoring responses that contain empathy, emotion and follow-up questions.
 
 This is a conversation on a specific topic and with a certain emotional tone in each turn. At the end of the conversation, 10 different answers have been created for the last chatbot turn.
 
