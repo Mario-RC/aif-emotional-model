@@ -30,19 +30,25 @@ RM_PROMPT_DATA_DIR = SCRIPT_DIR.parents[1] / "reward-model" / "rm-prompt-dataset
 
 
 
-def _prepare_records(records: list[dict]) -> list[dict]:
+def _prepare_records(records: list[dict], expected_set: str | None = None) -> list[dict]:
     for entry in records:
         if not entry.get("dialogue_id"):
             raise ValueError("Record is missing dialogue_id.")
+        if expected_set is not None:
+            entry.setdefault("set", expected_set)
+            if entry["set"] != expected_set:
+                raise ValueError(f"Expected set={expected_set!r}, found {entry['set']!r}.")
+        elif "set" not in entry:
+            raise ValueError("Record is missing set.")
     return records
 
 
 def merge(_deprecated_write_combined: bool = False) -> None:
-    ppo_train = _prepare_records(read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_original.json"))
-    ppo_test = _prepare_records(read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_test_original.json"))
+    ppo_train = _prepare_records(read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_original.json"), "ppo-unlabeled-prompts")
+    ppo_test = _prepare_records(read_json(LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_test_original.json"), "ppo-unlabeled-prompts")
 
-    prompt_train = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced.json"))
-    prompt_test = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced_test.json"))
+    prompt_train = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced.json"), "rm-prompt")
+    prompt_test = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_emotional_balanced_test.json"), "rm-prompt")
     rm_prompt_train = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset.json"))
     rm_prompt_test = _prepare_records(read_json(RM_PROMPT_DATA_DIR / "rm_prompt_dataset_test.json"))
 

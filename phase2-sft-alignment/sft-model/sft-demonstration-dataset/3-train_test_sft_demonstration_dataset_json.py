@@ -26,6 +26,7 @@ TURNS_PER_DIALOGUE = 4
 SAMPLES_PER_PAIR = 4
 LAST_TURN_UID_SUFFIX = "6"  # UIDs for the chatbot row of the 4th turn end in '6'
 NEUTRAL = "NEUTRAL"
+DATASET_SET = "sft-demonstration"
 
 
 # ---------------------------------------------------------------------------
@@ -190,6 +191,7 @@ class LlamaFactoryExporter:
             "input": "",
             "output": completions[-1],
             "dialogue_id": dialogue_id,
+            "set": DATASET_SET,
         }
 
     @staticmethod

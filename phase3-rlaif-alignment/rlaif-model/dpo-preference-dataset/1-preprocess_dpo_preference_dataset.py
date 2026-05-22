@@ -45,7 +45,7 @@ def _rename_keys(dpo_preference_dataset: list[dict]) -> list[dict]:
         if not entry.get("dialogue_id"):
             raise KeyError("Preference row is missing dialogue_id.")
 
-        for tail in ("predict_sft_modified_label", "scores", "dialogue_id"):
+        for tail in ("predict_sft_modified_label", "scores", "dialogue_id", "set"):
             if tail in entry:
                 entry[tail] = entry.pop(tail)
     return dpo_preference_dataset
