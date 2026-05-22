@@ -27,6 +27,7 @@ from _lib import check_repeated_dialogue_ids, read_json, write_json
 SCRIPT_DIR = Path(__file__).resolve().parent
 LOCAL_DATA_DIR = SCRIPT_DIR / "data"
 RM_PROMPT_DATA_DIR = SCRIPT_DIR.parents[1] / "reward-model" / "rm-prompt-dataset" / "data"
+SET_ORDER = ("sft-demonstration", "rm-prompt", "ppo-unlabeled-prompts")
 
 
 
@@ -41,6 +42,20 @@ def _prepare_records(records: list[dict], expected_set: str | None = None) -> li
         elif "set" not in entry:
             raise ValueError("Record is missing set.")
     return records
+
+
+def _sort_by_set(records: list[dict]) -> list[dict]:
+    order = {set_name: idx for idx, set_name in enumerate(SET_ORDER)}
+    try:
+        return [
+            record
+            for _, record in sorted(
+                enumerate(records),
+                key=lambda item: (order[item[1]["set"]], item[0]),
+            )
+        ]
+    except KeyError as exc:
+        raise ValueError(f"Unknown or missing set while sorting records: {exc}") from exc
 
 
 def merge(_deprecated_write_combined: bool = False) -> None:
@@ -63,15 +78,15 @@ def merge(_deprecated_write_combined: bool = False) -> None:
 
     prompt_ppo_train = prompt_train + ppo_train
     prompt_ppo_test = prompt_test + ppo_test
-    write_json(prompt_ppo_train, LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_prompt.json")
-    write_json(prompt_ppo_test, LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_prompt_test.json")
+    write_json(_sort_by_set(prompt_ppo_train), LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_prompt.json")
+    write_json(_sort_by_set(prompt_ppo_test), LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_prompt_test.json")
 
     write_json(
-        rm_prompt_train + ppo_train,
+        _sort_by_set(rm_prompt_train + ppo_train),
         LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset.json",
     )
     write_json(
-        rm_prompt_test + ppo_test,
+        _sort_by_set(rm_prompt_test + ppo_test),
         LOCAL_DATA_DIR / "ppo_unlabeled_prompts_dataset_test.json",
     )
 

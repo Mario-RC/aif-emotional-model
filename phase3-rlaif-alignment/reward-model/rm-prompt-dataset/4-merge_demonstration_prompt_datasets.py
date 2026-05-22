@@ -13,6 +13,7 @@ from __future__ import annotations
 from _lib import read_json, write_json
 
 SFT_CANONICAL_DIR = "../../../phase2-sft-alignment/sft-model/sft-demonstration-dataset/data"
+SET_ORDER = ("sft-demonstration", "rm-prompt", "ppo-unlabeled-prompts")
 
 
 
@@ -26,6 +27,20 @@ def _prepare_records(records: list[dict], expected_set: str) -> list[dict]:
     return records
 
 
+def _sort_by_set(records: list[dict]) -> list[dict]:
+    order = {set_name: idx for idx, set_name in enumerate(SET_ORDER)}
+    try:
+        return [
+            record
+            for _, record in sorted(
+                enumerate(records),
+                key=lambda item: (order[item[1]["set"]], item[0]),
+            )
+        ]
+    except KeyError as exc:
+        raise ValueError(f"Unknown or missing set while sorting records: {exc}") from exc
+
+
 def merge() -> None:
     demo_train = _prepare_records(read_json(f"{SFT_CANONICAL_DIR}/sft_demonstration_dataset.json"), "sft-demonstration")
     demo_test = _prepare_records(read_json(f"{SFT_CANONICAL_DIR}/sft_demonstration_dataset_test.json"), "sft-demonstration")
@@ -34,11 +49,11 @@ def merge() -> None:
     prompt_test = _prepare_records(read_json("data/rm_prompt_dataset_emotional_balanced_test.json"), "rm-prompt")
 
     write_json(
-        prompt_train + demo_train,
+        _sort_by_set(demo_train + prompt_train),
         "data/rm_prompt_dataset.json",
     )
     write_json(
-        prompt_test + demo_test,
+        _sort_by_set(demo_test + prompt_test),
         "data/rm_prompt_dataset_test.json",
     )
 
