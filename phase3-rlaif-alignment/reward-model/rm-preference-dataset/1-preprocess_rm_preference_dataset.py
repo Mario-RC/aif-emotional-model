@@ -7,12 +7,13 @@ Steps:
 4. Reformat each response by replacing literal emotion tags with ``(EMPATHY)`` /
    ``(QUESTION)`` placeholders via :func:`empathy_question_modify`.
 
-Run ``python 1-preprocess_rm_preference_dataset.py`` for the train split or import
-:func:`preprocess` to run on the test split.
+Run ``python 1-preprocess_rm_preference_dataset.py`` for the train split or
+``python 1-preprocess_rm_preference_dataset.py --test`` for the test split.
 """
 
 from __future__ import annotations
 
+import argparse
 from copy import deepcopy
 
 from _lib import empathy_question_modify, read_json, with_suffix, write_json
@@ -76,5 +77,12 @@ def preprocess(is_test: bool = False) -> None:
     write_json(rating_input, out_file)
 
 
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--test", action="store_true")
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    preprocess(is_test=False)
+    args = _parse_args()
+    preprocess(is_test=args.test)
