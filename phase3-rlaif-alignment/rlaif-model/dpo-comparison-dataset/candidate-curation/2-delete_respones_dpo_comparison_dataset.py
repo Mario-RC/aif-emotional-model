@@ -40,7 +40,7 @@ BASE_CHOSEN_COLUMNS = [
     "instruction", "history", "prompt", "target",
     "predict_sft_0", "predict_sft_chosen", "model",
 ]
-IDENTITY_COLUMNS = ("dialogue_id",)
+IDENTITY_COLUMNS = ("dialogue_id", "set")
 PREDICT_SFT_KEYS = [f"predict_sft_{m}_{stage}" for m in ["gemma2", "glm4", "llama3", "mistral", "phi3"] for stage in ("0", "x")]
 PREDICT_SFT_COLUMNS = ["target"] + PREDICT_SFT_KEYS
 SPLIT_COLUMNS = [f"{c}_split" for c in PREDICT_SFT_COLUMNS]
@@ -97,11 +97,14 @@ def combine_models(is_test: bool) -> None:
             entry[f"predict_sft_{short}_0"] = per_model[model][idx]["predict_sft_0"]
             entry[f"predict_sft_{short}_x"] = per_model[model][idx]["predict_sft_chosen"]
         base_entry = per_model[base_model][idx]
+        metadata = {"dialogue_id": _dialogue_id(base_entry)}
+        if base_entry.get("set"):
+            metadata["set"] = base_entry["set"]
         entry.update({
             "predict_sft_modified": "",
             "predict_sft_modified_label": "",
             "scores": [],
-            "dialogue_id": _dialogue_id(base_entry),
+            **metadata,
         })
         combined.append(entry)
 

@@ -20,6 +20,7 @@ from typing import Any
 # ---------------------------------------------------------------------------
 
 EMOTIONS = ["ANGER", "DISGUST", "FEAR", "HAPPINESS", "SADNESS", "SURPRISE", "NEUTRAL"]
+DATASET_SET = "ppo-unlabeled-prompts"
 
 #: First half of the topic list (shared with phase3-rlaif-alignment/reward-model/rm-prompt-dataset).
 TOPICS_BASE: list[str] = [
@@ -375,6 +376,7 @@ def build_dialogue_record(df_dialogue, dialogue_id: str) -> dict:
         "input": "",
         "output": c[3],
         "dialogue_id": dialogue_id,
+        "set": DATASET_SET,
     }
 
 

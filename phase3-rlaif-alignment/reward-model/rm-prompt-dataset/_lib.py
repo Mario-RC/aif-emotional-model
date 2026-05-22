@@ -18,6 +18,7 @@ from typing import Any
 # ---------------------------------------------------------------------------
 
 EMOTIONS = ["ANGER", "DISGUST", "FEAR", "HAPPINESS", "SADNESS", "SURPRISE", "NEUTRAL"]
+DATASET_SET = "rm-prompt"
 
 TOPICS: list[str] = [
     "sunny", "healthy habits", "time management", "social media", "relatives",
@@ -227,4 +228,5 @@ def build_dialogue_record(df_dialogue, dialogue_id: str) -> dict:
         "input": "",
         "output": c[3],
         "dialogue_id": dialogue_id,
+        "set": DATASET_SET,
     }

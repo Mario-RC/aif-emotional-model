@@ -37,13 +37,16 @@ def _build_entry(
         {"from": "gpt", "value": history[2][1]},
         {"from": "human", "value": prompt},
     ]
-    return {
+    entry = {
         "conversations": conversations,
         "chosen": {"from": "gpt", "value": winner},
         "rejected": {"from": "gpt", "value": loser},
         "uid": uid,
         "dialogue_id": dialogue_id,
     }
+    if source_set:
+        entry["set"] = source_set
+    return entry
 
 
 def format_dpo_preference_dataset(is_test: bool = False, with_demonstration_concat: bool = False) -> None:
@@ -64,6 +67,7 @@ def format_dpo_preference_dataset(is_test: bool = False, with_demonstration_conc
                 winner=df_uid["WINNER_RESPONSE"].values[0],
                 loser=df_uid["LOSER_RESPONSE"].values[0],
                 dialogue_id=_value(df_uid, "dialogue_id", _value(df_uid, "DIALOGUE_ID")),
+                source_set=_value(df_uid, "set", _value(df_uid, "SET", None)),
             )
         )
 
