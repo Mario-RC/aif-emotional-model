@@ -8,6 +8,19 @@ import pandas as pd
 
 from _lib import with_suffix, write_json
 
+SET_ORDER = ("sft-demonstration", "rm-prompt", "ppo-unlabeled-prompts")
+
+
+def _sort_by_set(records: list[dict]) -> list[dict]:
+    order = {set_name: idx for idx, set_name in enumerate(SET_ORDER)}
+    return [
+        record
+        for _, record in sorted(
+            enumerate(records),
+            key=lambda item: (order.get(item[1].get("set"), len(order)), item[0]),
+        )
+    ]
+
 
 def _value(df_uid: pd.DataFrame, key: str, default: str = "") -> str:
     if key not in df_uid:
@@ -26,6 +39,7 @@ def _build_entry(
     winner: str,
     loser: str,
     dialogue_id: str,
+    source_set: str | None = None,
 ) -> dict:
     conversations = [
         {"from": "system", "value": system},
@@ -71,7 +85,7 @@ def format_rm_preference_dataset(is_test: bool = False) -> None:
             )
         )
 
-    write_json(entries, out)
+    write_json(_sort_by_set(entries), out)
 
 
 def _parse_args() -> argparse.Namespace:
