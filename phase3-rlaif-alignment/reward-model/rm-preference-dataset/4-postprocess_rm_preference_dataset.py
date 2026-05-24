@@ -38,7 +38,7 @@ def _series_value(row: pd.Series, key: str, default: str = "") -> str:
 
 
 def _lookup_original_row(original: pd.DataFrame, identity: str) -> pd.Series:
-    rows = original.loc[original["dialogue_id"] == identity]
+    rows = original.loc[original["dialogue_id"].astype(str) == str(identity)]
     if not rows.empty:
         return rows.iloc[0]
     raise KeyError(f"Could not find original row for dialogue identity {identity!r}.")
@@ -50,6 +50,31 @@ def _comparison_uid_prefix(identity: str) -> str:
         _, suffix = text.split("-", 1)
         return f"COMPAR-{suffix}"
     return f"COMPAR-{text}"
+
+
+def _legacy_sft_identity_remap(
+    pairwise_df: pd.DataFrame, original: pd.DataFrame, id_col: str
+) -> dict[str, str]:
+    """Map legacy SFT rating IDs onto the current dialogue_id values."""
+    original_ids = set(original["dialogue_id"].astype(str))
+    ordered_pair_ids = [str(value) for value in pairwise_df[id_col].drop_duplicates()]
+    missing_ids = [identity for identity in ordered_pair_ids if identity not in original_ids]
+    if not missing_ids:
+        return {}
+
+    if "set" not in original.columns:
+        raise KeyError("Cannot remap legacy rating IDs because original data has no set column.")
+
+    sft_ids = [
+        str(value)
+        for value in original.loc[original["set"] == "sft-demonstration", "dialogue_id"].tolist()
+    ]
+    if len(missing_ids) != len(sft_ids):
+        raise KeyError(
+            "Cannot safely remap legacy rating IDs: "
+            f"{len(missing_ids)} missing IDs, but {len(sft_ids)} sft-demonstration rows."
+        )
+    return dict(zip(missing_ids, sft_ids))
 
 
 def add_modified_rank(is_test: bool) -> pd.DataFrame:
@@ -80,10 +105,15 @@ def combine_pairs_with_responses(is_test: bool) -> None:
     pairwise_df = pd.read_csv(f"data/{with_suffix('rm_preference_dataset_df', 'csv', is_test)}")
     original = pd.read_json(f"data/{with_suffix('rm_preference_dataset_original', 'json', is_test)}")
     id_col = _identity_column(pairwise_df)
+    legacy_remap = _legacy_sft_identity_remap(pairwise_df, original, id_col)
+    if legacy_remap:
+        pairwise_df[id_col] = pairwise_df[id_col].astype(str).map(
+            lambda identity: legacy_remap.get(identity, identity)
+        )
 
     instructions, histories, prompts = [], [], []
     winner_responses, loser_responses = [], []
-    dialogue_ids = []
+    dialogue_ids, source_sets = [], []
 
     for _, row in pairwise_df.iterrows():
         identity = row[id_col]
@@ -92,6 +122,7 @@ def combine_pairs_with_responses(is_test: bool) -> None:
         histories.append(original_row["history"])
         prompts.append(original_row["prompt"])
         dialogue_ids.append(_series_value(original_row, "dialogue_id", str(identity)))
+        source_sets.append(_series_value(original_row, "set", _series_value(original_row, "SET", None)))
 
         for response_list, idx in (
             (winner_responses, row["WINNER"]),
@@ -106,6 +137,7 @@ def combine_pairs_with_responses(is_test: bool) -> None:
     pairwise_df["WINNER_RESPONSE"] = winner_responses
     pairwise_df["LOSER_RESPONSE"] = loser_responses
     pairwise_df["dialogue_id"] = dialogue_ids
+    pairwise_df["set"] = source_sets
 
     pairwise_df.insert(0, "UID", pairwise_df.groupby(id_col).cumcount())
     pairwise_df["UID"] = (
