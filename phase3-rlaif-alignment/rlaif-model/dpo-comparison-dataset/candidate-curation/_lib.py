@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +30,65 @@ MODELS = [
 ]
 MODEL_NAMES = ["gemma2", "glm4", "llama3", "mistral", "phi3"]
 MODEL_TO_NAME = dict(zip(MODELS, MODEL_NAMES))
+REPO_ROOT = Path(__file__).resolve().parents[4]
+CANONICAL_DATASETS = (
+    REPO_ROOT / "phase2-sft-alignment/sft-model/sft-demonstration-dataset/data/sft_demonstration_dataset.json",
+    REPO_ROOT / "phase2-sft-alignment/sft-model/sft-demonstration-dataset/data/sft_demonstration_dataset_test.json",
+    REPO_ROOT / "phase3-rlaif-alignment/reward-model/rm-prompt-dataset/data/rm_prompt_dataset.json",
+    REPO_ROOT / "phase3-rlaif-alignment/reward-model/rm-prompt-dataset/data/rm_prompt_dataset_test.json",
+    REPO_ROOT / "phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/data/ppo_unlabeled_prompts_dataset.json",
+    REPO_ROOT / "phase3-rlaif-alignment/rlaif-model/ppo-unlabeled-prompts-dataset/data/ppo_unlabeled_prompts_dataset_test.json",
+)
+
+
+def _clean_text(value: Any) -> str:
+    return re.sub(r"\s+", " ", "" if value is None else str(value)).strip()
+
+
+def _prompt_value(row: dict | pd.Series) -> Any:
+    return row.get("prompt") or row.get("input") or row.get("instruction")
+
+
+def _target_value(row: dict | pd.Series) -> Any:
+    return row.get("target") or row.get("output")
+
+
+def canonical_metadata_by_content() -> dict[tuple[str, str], tuple[str, str]]:
+    """Map ``(prompt, target)`` content to canonical ``(set, dialogue_id)``."""
+    metadata: dict[tuple[str, str], tuple[str, str]] = {}
+    for path in CANONICAL_DATASETS:
+        for entry in read_json(path):
+            key = (_clean_text(_prompt_value(entry)), _clean_text(_target_value(entry)))
+            metadata[key] = (entry["set"], entry["dialogue_id"])
+    return metadata
+
+
+def add_canonical_identity_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Attach canonical ``dialogue_id``/``set`` columns and remove legacy ``did``."""
+    metadata = canonical_metadata_by_content()
+    dialogue_ids, source_sets = [], []
+    missing: list[str] = []
+
+    for _, row in df.iterrows():
+        key = (_clean_text(_prompt_value(row)), _clean_text(_target_value(row)))
+        values = metadata.get(key)
+        if values is None:
+            missing.append(_clean_text(_prompt_value(row))[:120])
+            dialogue_ids.append(row.get("dialogue_id", ""))
+            source_sets.append(row.get("set", ""))
+            continue
+        source_set, dialogue_id = values
+        dialogue_ids.append(dialogue_id)
+        source_sets.append(source_set)
+
+    if missing:
+        sample = "\n  - ".join(missing[:5])
+        raise KeyError(f"Could not map {len(missing)} rows to canonical dialogue_id:\n  - {sample}")
+
+    df = df.copy()
+    df["dialogue_id"] = dialogue_ids
+    df["set"] = source_sets
+    return df.drop(columns=["did"], errors="ignore")
 
 
 # ---------------------------------------------------------------------------
