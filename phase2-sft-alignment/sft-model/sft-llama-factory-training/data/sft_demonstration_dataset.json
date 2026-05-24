@@ -2723,7 +2723,7 @@
     ],
     "instruction": "(NEUTRAL) Not lately, but we do have a few family recipes passed down through generations.",
     "input": "",
-    "output": "(NEUTRAL) That's amazing. Would you be willing to share any of them? (NEUTRAL) :That would be wonderful. Thank you so much for sharing. (NEUTRAL) What's your favorite family recipe that you'd like to share first?",
+    "output": "(NEUTRAL) That's amazing. Would you be willing to share any of them? (NEUTRAL) That would be wonderful. Thank you so much for sharing. (NEUTRAL) What's your favorite family recipe that you'd like to share first?",
     "dialogue_id": "RLAIFE-000147",
     "set": "sft-demonstration"
   },
