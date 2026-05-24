@@ -114,6 +114,19 @@ def empathy_question_modify(response: str) -> str:
     res_ini = [i for i in range(len(response)) if response.startswith("(", i)]
     res_end = [i for i in range(len(response)) if response.startswith(")", i)]
 
+    if len(res_ini) == 2 and len(res_end) == 2:
+        r_empathy = response[res_end[0] + 1 : res_ini[1]].strip()
+        emo2 = response[res_ini[1] : res_end[1] + 1].strip()
+        tail = response[res_end[1] + 1 :].strip()
+        split_at = max(tail.rfind(". "), tail.rfind("! "), tail.rfind("? "))
+        if split_at != -1 and tail.endswith("?"):
+            r_emotion = tail[: split_at + 1].strip()
+            r_question = tail[split_at + 2 :].strip()
+        else:
+            r_emotion = ""
+            r_question = tail
+        return f"(EMPATHY) {r_empathy} {emo2} {r_emotion} (QUESTION) {r_question}".replace("  ", " ").strip()
+
     r_empathy = response[res_end[0] + 1 : res_ini[1]].strip()
     emo2 = response[res_ini[1] : res_end[1] + 1].strip()
     r_emotion = response[res_end[1] + 1 : res_ini[2]].strip()
