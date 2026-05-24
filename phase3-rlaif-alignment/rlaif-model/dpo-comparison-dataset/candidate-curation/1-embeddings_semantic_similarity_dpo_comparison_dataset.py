@@ -22,6 +22,7 @@ from sentence_transformers import SentenceTransformer
 from _lib import (
     MODELS,
     MODEL_TO_NAME,
+    add_canonical_identity_columns,
     get_distinct_n_for_columns,
     get_embeddings,
     normalize_lengths,
@@ -56,6 +57,7 @@ def json_to_csv(is_test: bool) -> dict[str, pd.DataFrame]:
     dfs: dict[str, pd.DataFrame] = {}
     for model in MODELS:
         df = pd.DataFrame(read_json(_llama_factory_path(model, is_test)))
+        df = add_canonical_identity_columns(df)
         out_path = _model_data_path(model, "", is_test)
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
         df.to_csv(out_path, index=False)

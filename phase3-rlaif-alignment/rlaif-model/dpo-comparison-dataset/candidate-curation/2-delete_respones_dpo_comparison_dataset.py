@@ -24,6 +24,7 @@ from sentence_transformers import SentenceTransformer
 from _lib import (
     MODELS,
     MODEL_TO_NAME,
+    add_canonical_identity_columns,
     get_distinct_n_for_columns,
     get_embeddings,
     normalize_lengths,
@@ -74,6 +75,7 @@ def per_model_csv_to_json(is_test: bool) -> None:
     for model in MODELS:
         in_path = _per_model_path(model, "_predict_sft_chosen", is_test)
         df = pd.read_csv(in_path, encoding="utf-8")
+        df = add_canonical_identity_columns(df)
         subset = df[_chosen_columns(df)].copy()
         subset["history"] = subset["history"].apply(ast.literal_eval)
         out_path = _per_model_path(model, "", is_test, ext="json")

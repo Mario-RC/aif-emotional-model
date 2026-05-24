@@ -9,13 +9,15 @@ simply renames the upstream ``dpo_comparison_dataset_filtered[*test].json`` into
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 
 from _lib import read_json, with_suffix, write_json
 
 
 def add_negative_samples(is_test: bool = False) -> None:
-    in_path = f"data/{with_suffix('dpo_comparison_dataset_filtered', 'json', is_test)}"
+    filtered_path = f"data/{with_suffix('dpo_comparison_dataset_filtered', 'json', is_test)}"
     out_path = f"data/{with_suffix('dpo_comparison_dataset', 'json', is_test)}"
+    in_path = filtered_path if Path(filtered_path).exists() else out_path
 
     data = read_json(in_path)
     for entry in data:
