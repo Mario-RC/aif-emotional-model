@@ -24,6 +24,7 @@ DEFAULT_TRAIN = "data/ppo_unlabeled_prompts_dataset_original.json"
 DEFAULT_TEST = "data/ppo_unlabeled_prompts_dataset_test_original.json"
 DEFAULT_TEST_DIALOGUE_IDS = "data/ppo_unlabeled_prompts_dataset_test_dialogue_ids.json"
 N_TIMES_PER_PAIR = 2
+PPO_DIALOGUE_OFFSET = 1978
 
 
 def _select_test_indices_from_dialogue_ids(df_turns: pd.DataFrame, test_dialogue_ids_path: str) -> list[int]:
@@ -65,12 +66,13 @@ def _select_test_indices_sampled(df_turns: pd.DataFrame, random_seed: int | None
     return test_set
 
 
-def _df_to_records(df_split: pd.DataFrame) -> list[dict]:
+def _df_to_records(df_split: pd.DataFrame, start_dialogue_idx: int) -> list[dict]:
     """Group by DIALOGUE_ID and convert each dialogue to a single training record."""
     records = []
-    for dialogue_id in df_split["DIALOGUE_ID"].unique():
+    for offset, dialogue_id in enumerate(df_split["DIALOGUE_ID"].unique()):
         df_dialogue = df_split[df_split["DIALOGUE_ID"] == dialogue_id].reset_index(drop=True)
-        records.append(build_dialogue_record(df_dialogue, dialogue_id))
+        output_dialogue_id = f"RLAIFE-{start_dialogue_idx + offset:06d}"
+        records.append(build_dialogue_record(df_dialogue, output_dialogue_id))
     return records
 
 
@@ -92,8 +94,11 @@ def split_train_test(
     df_train = df_turns.loc[train_dev_idx].reset_index(drop=True)
     df_test = df_turns.loc[test_idx].reset_index(drop=True)
 
-    write_json(_df_to_records(df_train), train_json)
-    write_json(_df_to_records(df_test), test_json)
+    train_records = _df_to_records(df_train, PPO_DIALOGUE_OFFSET)
+    test_records = _df_to_records(df_test, PPO_DIALOGUE_OFFSET + len(train_records))
+
+    write_json(train_records, train_json)
+    write_json(test_records, test_json)
 
 
 def _parse_args() -> argparse.Namespace:

@@ -87,10 +87,13 @@ def format_dpo_preference_dataset(is_test: bool = False, with_demonstration_conc
 
     write_json(_sort_by_set(entries), out)
 
-    if with_demonstration_concat and not is_test:
-        comparison = read_json("data/rm_preference_dataset.json")
+    if with_demonstration_concat or is_test:
+        comparison = read_json(f"data/{with_suffix('rm_preference_dataset', 'json', is_test)}")
         rlaif = read_json(out)
-        write_json(_sort_by_set(comparison + rlaif), "data/dpo_preference_dataset.json")
+        write_json(
+            _sort_by_set(comparison + rlaif),
+            f"data/{with_suffix('dpo_preference_dataset', 'json', is_test)}",
+        )
 
 
 
