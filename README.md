@@ -279,10 +279,9 @@ The repository includes several stage-specific LLaMA-Factory workspaces under `p
 In practice, these runs are launched from inside the corresponding workspace with project-specific YAML files and shell scripts. Reward-model and RLAIF training YAMLs should reference the Phase 2 `sft_3ep` adapters by relative path instead of copying SFT checkpoints between phases.
 
 ```bash
-python 3-analyze_reward_model_test_results.py
+python 4-generate_ab_human_evaluation_dataset.py
+python 5-analyze_ab_human_evaluation_results.py
 ```
-
-`1-generate_human_eval_sft_predictions_csv.py` is only needed when regenerating `data/rm_human_eval_sft_predictions_test.csv` from raw SFT prediction JSON/JSONL files.
 
 ## Data and outputs
 
