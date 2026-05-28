@@ -133,7 +133,7 @@ def _build_segment_dataframe(
     ):
         for dialogue, explanation, emotion in zip(dialogues, explanations, emotions):
             for turn_count, (dial, expl, emo) in enumerate(zip(dialogue, explanation, emotion)):
-                base_uid = f"GPT4-{dial_count:06d}"
+                base_uid = f"RLAIFANNO-{dial_count:06d}"
                 dialogue_id = f"RLAIFE-{dial_count + RM_DIALOGUE_OFFSET:06d}"
                 # USER segment
                 rows["uid"].append(f"{base_uid}-{turn_count * 2:04d}")
