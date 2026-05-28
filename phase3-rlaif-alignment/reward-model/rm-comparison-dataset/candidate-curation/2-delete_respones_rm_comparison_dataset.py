@@ -42,7 +42,7 @@ BASE_CHOSEN_COLUMNS = [
     "instruction", "history", "prompt", "target",
     "predict_sft_0", "predict_sft_chosen", "model",
 ]
-IDENTITY_COLUMNS = ("dialogue_id", "set")
+IDENTITY_COLUMNS = ("DIALOGUE_ID", "set")
 PREDICT_SFT_KEYS = [f"predict_sft_{m}_{stage}" for m in ["gemma2", "glm4", "llama3", "mistral", "phi3"] for stage in ("0", "x")]
 PREDICT_SFT_COLUMNS = ["target"] + PREDICT_SFT_KEYS
 SPLIT_COLUMNS = [f"{c}_split" for c in PREDICT_SFT_COLUMNS]
@@ -60,15 +60,15 @@ def _per_model_path(model: str, suffix: str, is_test: bool, ext: str = "csv") ->
 
 def _chosen_columns(df: pd.DataFrame) -> list[str]:
     columns = [*BASE_CHOSEN_COLUMNS, *[col for col in IDENTITY_COLUMNS if col in df.columns]]
-    if "dialogue_id" not in columns:
-        raise KeyError("Prediction CSV is missing dialogue_id.")
+    if "DIALOGUE_ID" not in columns:
+        raise KeyError("Prediction CSV is missing DIALOGUE_ID.")
     return columns
 
 
 def _dialogue_id(entry: dict) -> str:
-    dialogue_id = entry.get("dialogue_id")
+    dialogue_id = entry.get("DIALOGUE_ID", entry.get("dialogue_id"))
     if not dialogue_id:
-        raise KeyError("Prediction row is missing dialogue_id.")
+        raise KeyError("Prediction row is missing DIALOGUE_ID.")
     return dialogue_id
 
 
@@ -186,7 +186,10 @@ def add_scores(is_test: bool, model_name: str = "jinaai/jina-embeddings-v3") -> 
     df["predict_sft_score"] = [
         _score_row(df, idx) for idx in tqdm(range(len(df)), desc="3/4 Score rows", unit="row")
     ]
-    df.to_csv(f"data/{with_suffix('df_combined_data', 'csv', is_test)}", index=False)
+    df.rename(columns={"dialogue_id": "DIALOGUE_ID"}).to_csv(
+        f"data/{with_suffix('df_combined_data', 'csv', is_test)}",
+        index=False,
+    )
 
     # Persist the per-row scores back into the JSON.
     for idx, score in tqdm(

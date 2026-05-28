@@ -32,7 +32,7 @@ def _value(df_uid: pd.DataFrame, key: str, default: str = "") -> str:
 
 
 def _build_entry(
-    uid: str,
+    preference_id: str,
     system: str,
     history: list,
     prompt: str,
@@ -55,7 +55,7 @@ def _build_entry(
         "conversations": conversations,
         "chosen": {"from": "gpt", "value": winner},
         "rejected": {"from": "gpt", "value": loser},
-        "uid": uid,
+        "preference_id": preference_id,
         "dialogue_id": dialogue_id,
     }
     if source_set:
@@ -70,11 +70,12 @@ def format_dpo_preference_dataset(is_test: bool = False, with_demonstration_conc
     df = pd.read_json(src)
 
     entries: list[dict] = []
-    for uid in df["UID"].unique():
-        df_uid = df[df["UID"] == uid].reset_index(drop=True)
+    preference_id_col = "PREFERENCE_ID" if "PREFERENCE_ID" in df.columns else "UID"
+    for preference_id in df[preference_id_col].unique():
+        df_uid = df[df[preference_id_col] == preference_id].reset_index(drop=True)
         entries.append(
             _build_entry(
-                uid=uid,
+                preference_id=preference_id,
                 system=df_uid["SYSTEM"].values[0],
                 history=df_uid["HISTORY"].values[0],
                 prompt=df_uid["PROMPT"].values[0],

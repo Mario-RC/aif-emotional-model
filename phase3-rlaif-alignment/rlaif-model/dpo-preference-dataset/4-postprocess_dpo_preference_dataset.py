@@ -44,12 +44,12 @@ def _lookup_original_row(original: pd.DataFrame, identity: str) -> pd.Series:
     raise KeyError(f"Could not find original row for dialogue identity {identity!r}.")
 
 
-def _comparison_uid_prefix(identity: str) -> str:
+def _preference_id_prefix(identity: str) -> str:
     text = str(identity)
     if "-" in text:
         _, suffix = text.split("-", 1)
-        return f"COMPAR-{suffix}"
-    return f"COMPAR-{text}"
+        return f"RLAIFEP-{suffix}"
+    return f"RLAIFEP-{text}"
 
 
 def _legacy_sft_identity_remap(
@@ -136,18 +136,18 @@ def combine_pairs_with_responses(is_test: bool) -> None:
     pairwise_df["PROMPT"] = prompts
     pairwise_df["WINNER_RESPONSE"] = winner_responses
     pairwise_df["LOSER_RESPONSE"] = loser_responses
-    pairwise_df["dialogue_id"] = dialogue_ids
+    pairwise_df["DIALOGUE_ID"] = dialogue_ids
     pairwise_df["set"] = source_sets
 
-    pairwise_df.insert(0, "UID", pairwise_df.groupby(id_col).cumcount())
-    pairwise_df["UID"] = (
-        pairwise_df[id_col].map(_comparison_uid_prefix)
+    pairwise_df.insert(0, "PREFERENCE_ID", pairwise_df.groupby(id_col).cumcount())
+    pairwise_df["PREFERENCE_ID"] = (
+        pairwise_df[id_col].map(_preference_id_prefix)
         + "-"
-        + pairwise_df["UID"].astype(str).str.zfill(4)
+        + pairwise_df["PREFERENCE_ID"].astype(str).str.zfill(4)
     )
 
     pairwise_df.to_csv(f"data/{with_suffix('dpo_preference_dataset_response', 'csv', is_test)}", index=False)
-    pairwise_df = pairwise_df.drop(columns=[id_col])
+    pairwise_df = pairwise_df.rename(columns={"DIALOGUE_ID": "dialogue_id"})
 
     json_records = ast.literal_eval(pairwise_df.to_json(orient="records"))
     out_path = f"data/{with_suffix('dpo_preference_dataset_response', 'json', is_test)}"
