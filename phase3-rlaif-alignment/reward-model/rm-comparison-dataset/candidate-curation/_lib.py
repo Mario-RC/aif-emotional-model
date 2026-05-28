@@ -54,7 +54,7 @@ def _target_value(row: dict | pd.Series) -> Any:
 
 
 def canonical_metadata_by_content() -> dict[tuple[str, str], tuple[str, str]]:
-    """Map ``(prompt, target)`` content to canonical ``(set, dialogue_id)``."""
+    """Map ``(prompt, target)`` content to canonical ``(set, DIALOGUE_ID)``."""
     metadata: dict[tuple[str, str], tuple[str, str]] = {}
     for path in CANONICAL_DATASETS:
         for entry in read_json(path):
@@ -64,7 +64,7 @@ def canonical_metadata_by_content() -> dict[tuple[str, str], tuple[str, str]]:
 
 
 def add_canonical_identity_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """Attach canonical ``dialogue_id``/``set`` columns and remove legacy ``did``."""
+    """Attach canonical ``DIALOGUE_ID``/``set`` columns and remove legacy ``did``."""
     metadata = canonical_metadata_by_content()
     dialogue_ids, source_sets = [], []
     missing: list[str] = []
@@ -74,7 +74,7 @@ def add_canonical_identity_columns(df: pd.DataFrame) -> pd.DataFrame:
         values = metadata.get(key)
         if values is None:
             missing.append(_clean_text(_prompt_value(row))[:120])
-            dialogue_ids.append(row.get("dialogue_id", ""))
+            dialogue_ids.append(row.get("DIALOGUE_ID", row.get("dialogue_id", "")))
             source_sets.append(row.get("set", ""))
             continue
         source_set, dialogue_id = values
@@ -83,12 +83,12 @@ def add_canonical_identity_columns(df: pd.DataFrame) -> pd.DataFrame:
 
     if missing:
         sample = "\n  - ".join(missing[:5])
-        raise KeyError(f"Could not map {len(missing)} rows to canonical dialogue_id:\n  - {sample}")
+        raise KeyError(f"Could not map {len(missing)} rows to canonical DIALOGUE_ID:\n  - {sample}")
 
     df = df.copy()
-    df["dialogue_id"] = dialogue_ids
+    df["DIALOGUE_ID"] = dialogue_ids
     df["set"] = source_sets
-    return df.drop(columns=["did"], errors="ignore")
+    return df.drop(columns=["did", "dialogue_id"], errors="ignore")
 
 
 # ---------------------------------------------------------------------------
