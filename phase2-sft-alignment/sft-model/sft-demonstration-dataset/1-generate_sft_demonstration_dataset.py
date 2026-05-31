@@ -31,6 +31,7 @@ CHECKPOINT_EVERY = 30
 DIALOGUES_PER_REQUEST = 3
 TURNS_PER_DIALOGUE = 4
 EMOTIONS_PER_REQUEST = DIALOGUES_PER_REQUEST * TURNS_PER_DIALOGUE
+RANDOM_SEED = 42
 
 EMOTIONS: Tuple[str, ...] = (
     "ANGER", "DISGUST", "FEAR", "HAPPINESS", "SADNESS", "SURPRISE", "NEUTRAL",
@@ -38,7 +39,7 @@ EMOTIONS: Tuple[str, ...] = (
 
 TOPICS: Tuple[str, ...] = (
     "books", "author", "bestsellers", "education technology", "online learning",
-    "photography", "camera", "lens", "light", "optics", "zoom", "portrait",
+    "camera", "lens", "light", "optics", "zoom", "portrait",
     "animals", "cats", "dogs", "pets", "birds", "reptiles", "wildlife conservation",
     "art", "ballet", "cinema", "museum", "painting", "theater", "sculpture",
     "street art", "art history", "astronomy", "galaxy", "planets", "stars",
@@ -55,7 +56,7 @@ TOPICS: Tuple[str, ...] = (
     "director", "movie genres", "movies plot", "synopsis", "film festivals",
     "movie awards", "film analysis", "music", "band", "dance", "music genre",
     "lyrics", "rhythm", "singer", "song", "concerts", "news", "exclusive",
-    "fake news", "interview", "trending", "headlines", "journalism", "press",
+    "fake news", "interview", "trending", "headlines", "journalism",
     "nutrition", "allergies", "diabetes", "diet", "obesity",
     "nutritional supplements", "meal planning", "politics", "elections", "poll",
     "vote", "political ideologies", "government policies", "science", "biology",
@@ -78,7 +79,7 @@ TOPICS: Tuple[str, ...] = (
     "botanical gardens", "horticulture", "plant genetics", "travel",
     "destinations", "adventure", "backpacking", "cultural experiences",
     "travel tips", "world landmarks", "technology", "gadgets", "virtual reality",
-    "wearable tech", "tech innovations", "environment", "climate change",
+    "wearable tech", "tech innovations", "environment",
     "sustainability", "renewable energy", "eco-friendly practices",
     "conservation efforts", "psychology", "emotions", "therapy techniques",
     "mental disorders", "personality traits", "hobbies", "crafts", "knitting",
@@ -92,10 +93,10 @@ TOPICS: Tuple[str, ...] = (
     "travel experiences", "vacation stories", "memorable trips", "local cuisine",
     "lifestyle", "self-care", "wellness", "mindfulness", "meditation",
     "stress management", "healthy habits", "gaming", "board games", "mobile games",
-    "game development", "game design", "game streaming", "cooking", "recipes",
+    "game development", "game design", "game streaming", "recipes",
     "culinary techniques", "cooking competitions", "food blogs",
     "chef recommendations", "current events", "global issues",
-    "humanitarian efforts", "international relations", "history",
+    "humanitarian efforts", "international relations",
     "ancient civilizations", "historical events", "unsolved mysteries",
     "historical figures", "environmental conservation", "endangered species",
     "green initiatives", "sustainable living", "home entertainment",
@@ -413,12 +414,14 @@ class DialogueGenerator:
 # IO helpers
 # ---------------------------------------------------------------------------
 
-COLUMNS = ["GENERATION_ID", "PROMPT", "COMPLETION", "TOPIC", "EMOTIONS"]
+RAW_DATASET_COLUMNS = ["PROMPT", "GENERATION_ID", "COMPLETION", "TOPIC", "EMOTIONS"]
 
 
-def save_dataframe(rows: List[tuple], output_path: Path) -> None:
+def save_dataframe(rows: List[dict], output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows, columns=COLUMNS).to_csv(output_path, index=False)
+    pd.DataFrame(rows).reindex(columns=RAW_DATASET_COLUMNS).to_csv(
+        output_path, index=False
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -426,22 +429,26 @@ def save_dataframe(rows: List[tuple], output_path: Path) -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    random.seed(RANDOM_SEED)
+
     config = OpenAIConfig.load(CONFIG_PATH)
     generator = DialogueGenerator(config, PromptBuilder())
 
     plan = build_topic_emotion_plan()
-    rows: List[tuple] = []
+    rows: List[dict] = []
     checkpoint_idx = 0
 
     for idx, (topic, emotions) in enumerate(tqdm(plan), start=1):
         messages, completion = generator.generate(topic, emotions)
-        rows.append((
-            f"CHATGPT-{str(idx - 1).zfill(4)}",
-            messages,
-            completion,
-            topic,
-            emotions,
-        ))
+        rows.append(
+            {
+                "PROMPT": messages,
+                "GENERATION_ID": f"CHATGPT-{str(idx - 1).zfill(4)}",
+                "COMPLETION": completion,
+                "TOPIC": topic,
+                "EMOTIONS": emotions,
+            }
+        )
 
         if idx % CHECKPOINT_EVERY == 0:
             logging.info("iter: %d", idx)
