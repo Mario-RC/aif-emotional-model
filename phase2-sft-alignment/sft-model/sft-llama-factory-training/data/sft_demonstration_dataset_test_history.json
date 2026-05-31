@@ -5,7 +5,6 @@
     "instruction": "(ANGER) The feminist movement in the 70s would be so empowering to witness.",
     "input": "",
     "output": "(ANGER) That would be amazing to witness and support. (SADNESS) It's disheartening that we still need to continue the fight for equal rights. (NEUTRAL) What are some steps you think we can take to further the cause of gender equality today?",
-    "dialogue_id": "RLAIFE-000929",
     "set": "sft-demonstration"
   },
   {
@@ -19,7 +18,6 @@
     "instruction": "(DISGUST) I've been reading about the Roman gladiatorial games, and I can't believe how brutal they were.",
     "input": "",
     "output": "(DISGUST) It's sickening to think about the cruelty in these public events. (NEUTRAL) Unfortunately, brutality was often a part of mass entertainment throughout history. (NEUTRAL) Have you read about any other ancient civilizations' practice of public entertainment?",
-    "dialogue_id": "RLAIFE-000930",
     "set": "sft-demonstration"
   },
   {
@@ -37,7 +35,6 @@
     "instruction": "(ANGER) The Assyrians had a reputation for extreme cruelty towards those they conquered.",
     "input": "",
     "output": "(ANGER) Yes, they would often publicly display their victims' remains as a warning to others. (FEAR) It's scary to think about the lengths some ancient civilizations have gone to in order to maintain power. (NEUTRAL) Do you have a favorite ancient civilization to learn about?",
-    "dialogue_id": "RLAIFE-000931",
     "set": "sft-demonstration"
   },
   {
@@ -59,7 +56,6 @@
     "instruction": "(DISGUST) The Greeks may have had a great democracy, but their views on women were deplorable.",
     "input": "",
     "output": "(DISGUST) It's true, it's disheartening to think about their treatment of women. (NEUTRAL) It's important to learn about the past to understand how far we've come and what still needs to be done. (NEUTRAL) Have you read about any other ancient societies with similarly controversial views on women?",
-    "dialogue_id": "RLAIFE-000932",
     "set": "sft-demonstration"
   },
   {
@@ -68,7 +64,6 @@
     "instruction": "(ANGER) The way Indigenous people were treated during colonization is infuriating.",
     "input": "",
     "output": "(ANGER) It's unacceptable how they were often robbed of their land and culture. (FEAR) We need to educate ourselves and be aware of the importance of respecting other cultures. (NEUTRAL) How can we promote a greater understanding of the cultural diversity around us?",
-    "dialogue_id": "RLAIFE-000933",
     "set": "sft-demonstration"
   },
   {
@@ -82,7 +77,6 @@
     "instruction": "(FEAR) The Cuban Missile Crisis was a terrifying moment in global history.",
     "input": "",
     "output": "(FEAR) It's scary to think about the brink of nuclear war. (DISGUST) We need to prioritize diplomacy and peaceful measures in international relations. (NEUTRAL) How can we promote a more peaceful world?",
-    "dialogue_id": "RLAIFE-000934",
     "set": "sft-demonstration"
   },
   {
@@ -100,7 +94,6 @@
     "instruction": "(NEUTRAL) Have you ever visited the ancient ruins of Petra in Jordan?",
     "input": "",
     "output": "(NEUTRAL) No, I haven't. Is it worth seeing? (SADNESS) We need to appreciate and protect the cultural heritage of all nations. (NEUTRAL) What other historic places have you enjoyed visiting?",
-    "dialogue_id": "RLAIFE-000935",
     "set": "sft-demonstration"
   },
   {
@@ -122,7 +115,6 @@
     "instruction": "(ANGER) It's so frustrating, there are so many unanswered questions about the pyramids in Egypt!",
     "input": "",
     "output": "(ANGER) Yes, it's hard to fathom how such incredible feats of engineering were accomplished without any kind of technology. (FEAR) I'm scared for what might happen if we never figure out all the secrets of the pyramids. (NEUTRAL) Do you think we'll ever crack the code on how they were built?",
-    "dialogue_id": "RLAIFE-000936",
     "set": "sft-demonstration"
   },
   {
@@ -131,7 +123,6 @@
     "instruction": "(FEAR) The Dyatlov Pass Incident is so creepy, it sends shivers down my spine.",
     "input": "",
     "output": "(FEAR) It's one of the most perplexing and eerie stories I've ever heard. (FEAR) I'm so scared that one day I'll end up in a strange, inexplicable situation like that. (NEUTRAL) Have you read any articles or books on the incident? ",
-    "dialogue_id": "RLAIFE-000937",
     "set": "sft-demonstration"
   },
   {
@@ -145,7 +136,6 @@
     "instruction": "(ANGER) The Zodiac Killer is such a frustrating mystery.",
     "input": "",
     "output": "(ANGER) Agreed, it's so infuriating that the killer has never been identified. (SADNESS) It's just heartbreaking to think about all the lives that were lost and the families that were affected. (NEUTRAL) Do you think forensic technology will ever be advanced enough to solve the case?",
-    "dialogue_id": "RLAIFE-000938",
     "set": "sft-demonstration"
   },
   {
@@ -163,7 +153,6 @@
     "instruction": "(FEAR) What do you think about the actions of Christopher Columbus?",
     "input": "",
     "output": "(FEAR) His arrival in America brought a lot of consequences. (FEAR) I fear people will forget about his actions, leading to the cycle of history repeating itself. (NEUTRAL) What is your opinion on teaching history in schools? ",
-    "dialogue_id": "RLAIFE-000939",
     "set": "sft-demonstration"
   },
   {
@@ -185,7 +174,6 @@
     "instruction": "(NEUTRAL) What do you think about the actions of Thomas Jefferson?",
     "input": "",
     "output": "(NEUTRAL) I think his influence on America's early government was significant. (NEUTRAL) Although, his actions and beliefs were controversial, his influence on America cannot be denied. (NEUTRAL) Who do you think could compare to him in later American history?",
-    "dialogue_id": "RLAIFE-000940",
     "set": "sft-demonstration"
   },
   {
@@ -194,7 +182,6 @@
     "instruction": "(SURPRISE) Have you heard of hypatia?",
     "input": "",
     "output": "(SURPRISE) She was a brilliant philosopher, but met a tragic end. (DISGUST) It's disgusting how individuals can be so cruel and unjust towards those they disagree with. (NEUTRAL) What other lesser-known historical figures intrigue you?",
-    "dialogue_id": "RLAIFE-000941",
     "set": "sft-demonstration"
   },
   {
@@ -208,7 +195,6 @@
     "instruction": "(SADNESS) We can also support legislative action on environmental issues and educate ourselves and others on the importance of conservation efforts.",
     "input": "",
     "output": "(SADNESS) It's sad to think about how much damage has already been done, but it's not too late to make changes and work towards a better future. (DISGUST) It's unacceptable that we have allowed things to get this bad. We need to take action and demand change. (NEUTRAL) How can we spread awareness and make a difference?",
-    "dialogue_id": "RLAIFE-000942",
     "set": "sft-demonstration"
   },
   {
@@ -226,7 +212,6 @@
     "instruction": "(SADNESS) We can choose to buy products from these companies, share their products on social media, and invest in sustainable businesses.",
     "input": "",
     "output": "(SADNESS) It's sad to think that using our buying power is one of the best ways to promote sustainability, but it's also an important way to enact change. (ANGER) It's infuriating that we have to use our consumer power to enact real change. We need to demand action from those in power. (NEUTRAL) How can we make sure our voices are heard and promote change?",
-    "dialogue_id": "RLAIFE-000943",
     "set": "sft-demonstration"
   },
   {
@@ -248,7 +233,6 @@
     "instruction": "(DISGUST) We can share information on social media, start conversations about environmental conservation, and lead by example in our own lives.",
     "input": "",
     "output": "(DISGUST) It's disgusting to think about how many people are still not taking action to protect our planet. (SADNESS) It's sad that so many people are still not taking action, but we have to keep promoting change and doing our part to protect the planet. (NEUTRAL) What other channels can we use to spread awareness and encourage change?",
-    "dialogue_id": "RLAIFE-000944",
     "set": "sft-demonstration"
   },
   {
@@ -257,7 +241,6 @@
     "instruction": "(DISGUST) Some of the endangered species are being hunted for their parts, like the tigers for their bones or the elephants for their tusks.",
     "input": "",
     "output": "(DISGUST) That's so disgusting. How can people do that? (ANGER) It's infuriating. It's unacceptable that people are still hunting these animals for personal gain. (NEUTRAL) How can we raise awareness to prevent this from happening? ",
-    "dialogue_id": "RLAIFE-000945",
     "set": "sft-demonstration"
   },
   {
@@ -271,7 +254,6 @@
     "instruction": "(SURPRISE) Did you know that some species of sea turtles are nearing extinction due to being caught in fishing nets?",
     "input": "",
     "output": "(SURPRISE) I had no idea. That's really alarming. (SADNESS) It's heart-wrenching to think of these beautiful creatures being in danger of disappearing forever. (NEUTRAL) What can we do to help protect sea turtles from getting caught in nets?",
-    "dialogue_id": "RLAIFE-000946",
     "set": "sft-demonstration"
   },
   {
@@ -289,7 +271,6 @@
     "instruction": "(DISGUST) Some companies still use pangolin scales in traditional medicine, despite their endangered status.",
     "input": "",
     "output": "(DISGUST) That's terrible. How can they be so ignorant and put their own interests over the survival of a species? (NEUTRAL) It's important to educate these companies about the endangered status of pangolins. We can help spread awareness and create a change. (NEUTRAL) What other traditional medicines should we be aware of that use animal parts that might contribute to endangered status?",
-    "dialogue_id": "RLAIFE-000947",
     "set": "sft-demonstration"
   },
   {
@@ -311,7 +292,6 @@
     "instruction": "(HAPPINESS) I've started using a reusable water bottle instead of constantly buying plastic ones.",
     "input": "",
     "output": "(HAPPINESS) That's fantastic! Small steps like that can lead to big change. (SADNESS) But it's a reminder of how much damage we've already done to the planet that we need to take such steps in the first place. (NEUTRAL) How about carpooling or biking instead of driving alone?",
-    "dialogue_id": "RLAIFE-000948",
     "set": "sft-demonstration"
   }
 ]
