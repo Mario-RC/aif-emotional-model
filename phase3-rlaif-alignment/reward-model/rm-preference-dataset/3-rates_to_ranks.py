@@ -36,20 +36,36 @@ def _row_identity(row: pd.Series) -> str:
 # ---------------------------------------------------------------------------
 
 def _rating_csv_path(llm_name: str, is_test: bool) -> Path:
-    current = Path("data") / llm_name / with_suffix(
+    path = Path("data") / llm_name / with_suffix(
         f"rm_preference_dataset_rate_{llm_name}", "csv", is_test
     )
-    alternate = Path("data") / llm_name / with_suffix(
-        f"comparison_data_rate_{llm_name}", "csv", is_test
-    )
-    for path in (current, alternate):
-        if path.exists():
-            return path
+    if path.exists():
+        return path
 
-    expected = "\n  - ".join(str(path) for path in (current, alternate))
     raise FileNotFoundError(
-        f"Missing rating CSV for {llm_name}. Expected one of:\n  - {expected}"
+        f"Missing rating CSV for {llm_name}: {path}. "
+        "Use the paid rating CSVs renamed to rm_preference_dataset_rate_*."
     )
+
+
+def _validate_rating_alignment(per_llm: dict[str, pd.DataFrame]) -> None:
+    """Ensure paid rating CSVs describe the same rows in the same order."""
+    base_llm = LLM_NAMES[0]
+    base = per_llm[base_llm]
+    base_ids = base["DIALOGUE_ID"].astype(str).tolist()
+    if len(base_ids) != len(set(base_ids)):
+        duplicated = base.loc[base["DIALOGUE_ID"].astype(str).duplicated(), "DIALOGUE_ID"]
+        raise ValueError(f"{base_llm} rating CSV has duplicated DIALOGUE_ID values: {duplicated.head().tolist()}")
+
+    base_prompts = base["PROMPT"].astype(str).tolist()
+    for llm in LLM_NAMES[1:]:
+        df = per_llm[llm]
+        ids = df["DIALOGUE_ID"].astype(str).tolist()
+        prompts = df["PROMPT"].astype(str).tolist()
+        if ids != base_ids:
+            raise ValueError(f"{llm} rating CSV DIALOGUE_ID order does not match {base_llm}.")
+        if prompts != base_prompts:
+            raise ValueError(f"{llm} rating CSV PROMPT order does not match {base_llm}.")
 
 
 def parse_llm_rates(llm_name: str, is_test: bool) -> pd.DataFrame:
@@ -240,6 +256,7 @@ def plot_rates(df: pd.DataFrame, column_suffix: str = "_RESCALED") -> None:
 
 def rates_to_ranks(is_test: bool = False, with_plots: bool = False) -> None:
     per_llm = {llm: parse_llm_rates(llm, is_test) for llm in LLM_NAMES}
+    _validate_rating_alignment(per_llm)
     df = combine_models(per_llm)
     df.to_csv(f"data/{with_suffix('rm_preference_dataset_models_results', 'csv', is_test)}", index=False)
 

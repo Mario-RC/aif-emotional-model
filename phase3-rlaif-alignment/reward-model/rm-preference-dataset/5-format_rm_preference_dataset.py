@@ -71,8 +71,8 @@ def format_rm_preference_dataset(is_test: bool = False) -> None:
 
     entries: list[dict] = []
     preference_id_col = "PREFERENCE_ID" if "PREFERENCE_ID" in df.columns else "UID"
-    for preference_id in df[preference_id_col].unique():
-        df_uid = df[df[preference_id_col] == preference_id].reset_index(drop=True)
+    for preference_id, df_uid in df.groupby(preference_id_col, sort=False):
+        df_uid = df_uid.reset_index(drop=True)
         entries.append(
             _build_entry(
                 preference_id=preference_id,
