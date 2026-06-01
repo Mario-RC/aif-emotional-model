@@ -35,10 +35,12 @@ venv/
 .claude/
 .vrlaif/
 .codex
+.codex_backups/
 *.pyc
 *.pyo
 *.pyd
 .ipynb_checkpoints/
+**/DATA_MANIFEST.md
 
 # =========================
 # Outputs
