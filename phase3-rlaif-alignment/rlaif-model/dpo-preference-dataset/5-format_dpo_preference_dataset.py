@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 
 import pandas as pd
 
 from _lib import with_suffix, write_json, read_json
 
 SET_ORDER = ("sft-demonstration", "rm-prompt", "ppo-unlabeled-prompts")
+PHASE3_DIR = Path(__file__).resolve().parent.parent.parent
+RM_PREFERENCE_DATA_DIR = PHASE3_DIR / "reward-model" / "rm-preference-dataset" / "data"
 
 
 def _sort_by_set(records: list[dict]) -> list[dict]:
@@ -89,7 +92,9 @@ def format_dpo_preference_dataset(is_test: bool = False, with_demonstration_conc
     write_json(_sort_by_set(entries), out)
 
     if with_demonstration_concat or is_test:
-        comparison = read_json(f"data/{with_suffix('rm_preference_dataset', 'json', is_test)}")
+        comparison = read_json(
+            RM_PREFERENCE_DATA_DIR / with_suffix("rm_preference_dataset", "json", is_test)
+        )
         rlaif = read_json(out)
         write_json(
             _sort_by_set(comparison + rlaif),

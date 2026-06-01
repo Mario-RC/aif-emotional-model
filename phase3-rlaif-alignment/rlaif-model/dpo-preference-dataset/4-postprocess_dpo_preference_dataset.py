@@ -8,7 +8,7 @@ import json
 
 import pandas as pd
 
-from _lib import create_pairwise_comparisons, with_suffix
+from _lib import create_pairwise_comparisons, with_suffix, write_csv
 
 IDENTITY_COLUMN = "DIALOGUE_ID"
 
@@ -52,37 +52,30 @@ def _preference_id_prefix(identity: str) -> str:
     return f"RLAIFEP-{text}"
 
 
-def _legacy_sft_identity_remap(
-    pairwise_df: pd.DataFrame, original: pd.DataFrame, id_col: str
-) -> dict[str, str]:
-    """Map legacy SFT rating IDs onto the current dialogue_id values."""
-    original_ids = set(original["dialogue_id"].astype(str))
-    ordered_pair_ids = [str(value) for value in pairwise_df[id_col].drop_duplicates()]
-    missing_ids = [identity for identity in ordered_pair_ids if identity not in original_ids]
-    if not missing_ids:
-        return {}
-
-    if "set" not in original.columns:
-        raise KeyError("Cannot remap legacy rating IDs because original data has no set column.")
-
-    sft_ids = [
-        str(value)
-        for value in original.loc[original["set"] == "sft-demonstration", "dialogue_id"].tolist()
-    ]
-    if len(missing_ids) != len(sft_ids):
-        raise KeyError(
-            "Cannot safely remap legacy rating IDs: "
-            f"{len(missing_ids)} missing IDs, but {len(sft_ids)} sft-demonstration rows."
+def _validate_dialogue_ids(df: pd.DataFrame, original: pd.DataFrame, id_col: str) -> None:
+    """Fail if rank/pairwise IDs do not exactly match the source dataset."""
+    source_ids = set(original["dialogue_id"].astype(str))
+    data_ids = set(df[id_col].astype(str))
+    missing = sorted(source_ids - data_ids)
+    extra = sorted(data_ids - source_ids)
+    if missing or extra:
+        raise ValueError(
+            "Rank outputs do not match dpo_preference_dataset_original IDs. "
+            f"missing={missing[:5]}, extra={extra[:5]}. "
+            "Do not remap legacy IDs silently; regenerate rating CSVs from the "
+            "current source dataset."
         )
-    return dict(zip(missing_ids, sft_ids))
 
 
 def add_modified_rank(is_test: bool) -> pd.DataFrame:
     in_path = f"data/{with_suffix('dpo_preference_dataset_models_results_rank', 'csv', is_test)}"
     out_path = f"data/{with_suffix('dpo_preference_dataset_models_results_rank_modified', 'csv', is_test)}"
 
-    df = pd.read_csv(in_path).apply(_add_extra_value_for_modified, axis=1)
-    df.to_csv(out_path, index=False)
+    df = pd.read_csv(in_path)
+    original = pd.read_json(f"data/{with_suffix('dpo_preference_dataset_original', 'json', is_test)}")
+    _validate_dialogue_ids(df, original, _identity_column(df))
+    df = df.apply(_add_extra_value_for_modified, axis=1)
+    write_csv(df, out_path)
     return df
 
 
@@ -97,7 +90,7 @@ def build_pairwise_dataframe(is_test: bool) -> pd.DataFrame:
         for winner, loser in create_pairwise_comparisons(ranking):
             rows.append({IDENTITY_COLUMN: row[id_col], "WINNER": winner, "LOSER": loser})
     pairwise_df = pd.DataFrame(rows)
-    pairwise_df.to_csv(f"data/{with_suffix('dpo_preference_dataset_df', 'csv', is_test)}", index=False)
+    write_csv(pairwise_df, f"data/{with_suffix('dpo_preference_dataset_df', 'csv', is_test)}")
     return pairwise_df
 
 
@@ -105,11 +98,7 @@ def combine_pairs_with_responses(is_test: bool) -> None:
     pairwise_df = pd.read_csv(f"data/{with_suffix('dpo_preference_dataset_df', 'csv', is_test)}")
     original = pd.read_json(f"data/{with_suffix('dpo_preference_dataset_original', 'json', is_test)}")
     id_col = _identity_column(pairwise_df)
-    legacy_remap = _legacy_sft_identity_remap(pairwise_df, original, id_col)
-    if legacy_remap:
-        pairwise_df[id_col] = pairwise_df[id_col].astype(str).map(
-            lambda identity: legacy_remap.get(identity, identity)
-        )
+    _validate_dialogue_ids(pairwise_df, original, id_col)
 
     instructions, histories, prompts = [], [], []
     winner_responses, loser_responses = [], []
@@ -146,10 +135,10 @@ def combine_pairs_with_responses(is_test: bool) -> None:
         + pairwise_df["PREFERENCE_ID"].astype(str).str.zfill(4)
     )
 
-    pairwise_df.to_csv(f"data/{with_suffix('dpo_preference_dataset_response', 'csv', is_test)}", index=False)
+    write_csv(pairwise_df, f"data/{with_suffix('dpo_preference_dataset_response', 'csv', is_test)}")
     pairwise_df = pairwise_df.rename(columns={"DIALOGUE_ID": "dialogue_id"})
 
-    json_records = ast.literal_eval(pairwise_df.to_json(orient="records"))
+    json_records = json.loads(pairwise_df.to_json(orient="records"))
     out_path = f"data/{with_suffix('dpo_preference_dataset_response', 'json', is_test)}"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(json_records, f, ensure_ascii=False, indent=2)

@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import argparse
 import ast
+import json
+from pathlib import Path
 from statistics import mean, stdev
 
 import matplotlib.pyplot as plt
@@ -21,7 +23,7 @@ import pandas as pd
 import seaborn as sns
 from scipy.stats import rankdata
 
-from _lib import expression_table, parse_completion_rates, with_suffix
+from _lib import expression_table, parse_completion_rates, with_suffix, write_csv
 
 LLM_NAMES = ["GPT-4O", "CLAUDE-3.5-SONNET", "GEMINI-1.5-PRO", "LLAMA-3.1-405B"]
 
@@ -49,6 +51,37 @@ def parse_llm_rates(llm_name: str, is_test: bool) -> pd.DataFrame:
     df.insert(6, "RATE", rates_list)
     df.insert(7, "TRANSFORMED_RATE", transformed_rates_list)
     return df
+
+
+def _expected_dialogue_ids(is_test: bool) -> list[str]:
+    source_path = Path("data") / with_suffix("dpo_preference_dataset_original", "json", is_test)
+    if not source_path.exists():
+        source_path = Path("data") / with_suffix("dpo_preference_dataset", "json", is_test)
+
+    with source_path.open("r", encoding="utf-8") as f:
+        rows = json.load(f)
+    return [str(row["dialogue_id"]) for row in rows]
+
+
+def _validate_rating_dialogue_ids(per_llm: dict[str, pd.DataFrame], is_test: bool) -> None:
+    expected_ids = _expected_dialogue_ids(is_test)
+    expected_set = set(expected_ids)
+
+    for llm, df in per_llm.items():
+        actual_ids = df["DIALOGUE_ID"].astype(str).tolist()
+        actual_set = set(actual_ids)
+        missing = sorted(expected_set - actual_set)
+        extra = sorted(actual_set - expected_set)
+        if missing or extra:
+            raise ValueError(
+                f"{llm} rating CSV dialogue IDs do not match the DPO preference source. "
+                f"missing={missing[:5]}, extra={extra[:5]}"
+            )
+        if actual_ids != expected_ids:
+            raise ValueError(
+                f"{llm} rating CSV contains the right IDs but in a different order "
+                "from the DPO preference source."
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -204,16 +237,17 @@ def plot_rates(df: pd.DataFrame, column_suffix: str = "_RESCALED") -> None:
 
 def rates_to_ranks(is_test: bool = False, with_plots: bool = False) -> None:
     per_llm = {llm: parse_llm_rates(llm, is_test) for llm in LLM_NAMES}
+    _validate_rating_dialogue_ids(per_llm, is_test)
     df = combine_models(per_llm)
-    df.to_csv(f"data/{with_suffix('dpo_preference_dataset_models_results', 'csv', is_test)}", index=False)
+    write_csv(df, f"data/{with_suffix('dpo_preference_dataset_models_results', 'csv', is_test)}")
 
     df = pd.read_csv(f"data/{with_suffix('dpo_preference_dataset_models_results', 'csv', is_test)}")
     df = normalize_and_rescale(df)
-    df.to_csv(f"data/{with_suffix('dpo_preference_dataset_models_results_nsr', 'csv', is_test)}", index=False)
+    write_csv(df, f"data/{with_suffix('dpo_preference_dataset_models_results_nsr', 'csv', is_test)}")
 
     df = pd.read_csv(f"data/{with_suffix('dpo_preference_dataset_models_results_nsr', 'csv', is_test)}")
     df = compute_overall_rank(df)
-    df.to_csv(f"data/{with_suffix('dpo_preference_dataset_models_results_rank', 'csv', is_test)}", index=False)
+    write_csv(df, f"data/{with_suffix('dpo_preference_dataset_models_results_rank', 'csv', is_test)}")
 
     if with_plots:
         plot_rates(df)
