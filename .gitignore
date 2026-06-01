@@ -35,10 +35,14 @@ venv/
 .claude/
 .vrlaif/
 .codex
+.codex_backups/
 *.pyc
 *.pyo
 *.pyd
 .ipynb_checkpoints/
+**/DATA_MANIFEST.md
+**/ANNOTATION_ID_MANIFEST.md
+**/6-analyze_dpo_rm_rates.py
 
 # =========================
 # Outputs
