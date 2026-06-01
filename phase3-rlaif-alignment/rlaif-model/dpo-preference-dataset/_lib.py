@@ -55,6 +55,7 @@ RATE_FACTORS = [
 ]
 
 DEFAULT_LLM_CONFIG_FILE = "config.json"
+CSV_FLOAT_FORMAT = "%.17g"
 
 SECRET_ENV_VARS = {
     "AZURE_OPENAI_ENDPOINT": ("AZURE_OPENAI_ENDPOINT",),
@@ -398,6 +399,12 @@ def write_json(data: Any, path: str | Path) -> None:
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def write_csv(df, path: str | Path) -> None:
+    """Write derived CSVs with stable double-precision float formatting."""
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(path, index=False, float_format=CSV_FLOAT_FORMAT)
 
 
 def with_suffix(base: str, ext: str, is_test: bool) -> str:

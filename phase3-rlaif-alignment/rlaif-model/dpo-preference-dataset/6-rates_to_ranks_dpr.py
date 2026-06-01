@@ -1,9 +1,8 @@
-"""Plot rates across all four data splits combined (train + test, comparison + rlaif).
+"""Plot rates across the RM and DPO preference data splits combined.
 
-Reads the four ``*_models_results_rank[*test].csv`` produced by
-:mod:`3-rates_to_ranks` and renders violin / box / bar / scatter / heatmap
-plots for both the per-LLM ``RESCALED`` rates and the per-LLM ``OVERALL``
-aggregated scores.
+Reads RM results from ``reward-model/rm-preference-dataset`` and DPO results
+from this folder. Keeping those sources explicit prevents stale
+``comparison_data_*`` files in the DPO folder from being treated as DPO data.
 """
 
 from __future__ import annotations
@@ -17,15 +16,17 @@ import seaborn as sns
 
 LLM_NAMES = ["GPT-4O", "CLAUDE-3.5-SONNET", "GEMINI-1.5-PRO", "LLAMA-3.1-405B"]
 LLM_LABELS = ["GPT-4o", "Claude 3.5 Sonnet", "Gemini 1.5 Pro", "Llama 3.1 405B"]
+RM_PREFERENCE_DATA_DIR = "../../reward-model/rm-preference-dataset/data"
+DPO_PREFERENCE_DATA_DIR = "data"
 
 
 def load_combined() -> pd.DataFrame:
     return pd.concat(
         [
-            pd.read_csv("data/comparison_data_models_results_rank.csv"),
-            pd.read_csv("data/comparison_data_models_results_rank_test.csv"),
-            pd.read_csv("data/dpo_preference_dataset_models_results_rank.csv"),
-            pd.read_csv("data/dpo_preference_dataset_models_results_rank_test.csv"),
+            pd.read_csv(f"{RM_PREFERENCE_DATA_DIR}/rm_preference_dataset_models_results_rank.csv"),
+            pd.read_csv(f"{RM_PREFERENCE_DATA_DIR}/rm_preference_dataset_models_results_rank_test.csv"),
+            pd.read_csv(f"{DPO_PREFERENCE_DATA_DIR}/dpo_preference_dataset_models_results_rank.csv"),
+            pd.read_csv(f"{DPO_PREFERENCE_DATA_DIR}/dpo_preference_dataset_models_results_rank_test.csv"),
         ],
         ignore_index=True,
     )
