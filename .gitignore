@@ -19,6 +19,7 @@ init_venv.sh
 # Large Files / Models
 # =========================
 saves/
+sml/
 *.safetensors
 *.bin
 *.pt
