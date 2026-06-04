@@ -448,10 +448,10 @@ Important generated paths:
 
 The final released emotional RLAIF adapters are published on Hugging Face:
 
-- `mario-rc/gemma-2-2b-it-emotional-rlaif-dpo`: <https://huggingface.co/mario-rc/gemma-2-2b-it-emotional-rlaif-dpo>
-- `mario-rc/gemma-2-9b-it-emotional-rlaif-dpo`: <https://huggingface.co/mario-rc/gemma-2-9b-it-emotional-rlaif-dpo>
-- `mario-rc/llama-3.2-1b-instruct-emotional-rlaif-ppo`: <https://huggingface.co/mario-rc/llama-3.2-1b-instruct-emotional-rlaif-ppo>
-- `mario-rc/llama-3.2-3b-instruct-emotional-rlaif-dpo`: <https://huggingface.co/mario-rc/llama-3.2-3b-instruct-emotional-rlaif-dpo>
+- [`mario-rc/gemma-2-2b-it-emotional-rlaif-dpo`](https://huggingface.co/mario-rc/gemma-2-2b-it-emotional-rlaif-dpo)
+- [`mario-rc/gemma-2-9b-it-emotional-rlaif-dpo`](https://huggingface.co/mario-rc/gemma-2-9b-it-emotional-rlaif-dpo)
+- [`mario-rc/llama-3.2-1b-instruct-emotional-rlaif-ppo`](https://huggingface.co/mario-rc/llama-3.2-1b-instruct-emotional-rlaif-ppo)
+- [`mario-rc/llama-3.2-3b-instruct-emotional-rlaif-dpo`](https://huggingface.co/mario-rc/llama-3.2-3b-instruct-emotional-rlaif-dpo)
 
 ## Reproducibility recommendations
 
