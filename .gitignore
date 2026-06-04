@@ -20,6 +20,7 @@ init_venv.sh
 # =========================
 saves/
 sml/
+gemma-4/
 *.safetensors
 *.bin
 *.pt
