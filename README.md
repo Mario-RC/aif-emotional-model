@@ -218,7 +218,7 @@ Recommended practice:
 The final RLAIF dataset release and best model are available on Hugging Face:
 
 - Dataset: [mario-rc/aif-emotional-generation](https://huggingface.co/datasets/mario-rc/aif-emotional-generation)
-- Best released model: <https://huggingface.co/mario-rc/gemma-2-9b-it-emotional-rlaif-dpo>
+- Best released model: <https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-9b-it>
 
 The key final JSON files are:
 
@@ -425,10 +425,10 @@ In practice, these runs are launched from inside the corresponding workspace wit
 
 The final released emotional RLAIF adapters are published on Hugging Face:
 
-- [`mario-rc/gemma-2-2b-it-emotional-rlaif-dpo`](https://huggingface.co/mario-rc/gemma-2-2b-it-emotional-rlaif-dpo)
-- [`mario-rc/gemma-2-9b-it-emotional-rlaif-dpo`](https://huggingface.co/mario-rc/gemma-2-9b-it-emotional-rlaif-dpo)
-- [`mario-rc/llama-3.2-1b-instruct-emotional-rlaif-ppo`](https://huggingface.co/mario-rc/llama-3.2-1b-instruct-emotional-rlaif-ppo)
-- [`mario-rc/llama-3.2-3b-instruct-emotional-rlaif-dpo`](https://huggingface.co/mario-rc/llama-3.2-3b-instruct-emotional-rlaif-dpo)
+- [`mario-rc/emotional-rlaif-dpo-gemma-2-2b-it`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-2b-it)
+- [`mario-rc/emotional-rlaif-dpo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-9b-it)
+- [`mario-rc/emotional-rlaif-ppo-llama-3.2-1b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-llama-3.2-1b-instruct)
+- [`mario-rc/emotional-rlaif-dpo-llama-3.2-3b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-llama-3.2-3b-instruct)
 
 ## Reproducibility recommendations
 
