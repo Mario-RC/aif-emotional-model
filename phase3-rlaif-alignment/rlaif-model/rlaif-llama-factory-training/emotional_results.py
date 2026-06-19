@@ -73,6 +73,32 @@ def _safe_three_emotions(text: str) -> tuple[str, str, str]:
     return tuple(found[:3])
 
 
+def _pct(count: int, total: int) -> float:
+    return round(count / total * 100, 2) if total else 0.0
+
+
+def _metric_row(
+    model: str,
+    dataset: str,
+    prediction_model: str,
+    total: int,
+    user_hits: int,
+    chatbot_hits: int,
+    neutral_hits: int,
+    results_file: str,
+) -> dict:
+    return {
+        "model": model,
+        "dataset": dataset,
+        "prediction_model": prediction_model,
+        "total_examples": total,
+        "results_file": results_file,
+        "user_emotion": {"correct": user_hits, "percentage": _pct(user_hits, total)},
+        "chatbot_emotion": {"correct": chatbot_hits, "percentage": _pct(chatbot_hits, total)},
+        "neutral_emotion": {"correct": neutral_hits, "percentage": _pct(neutral_hits, total)},
+    }
+
+
 def _load_predictions_for_runs(model: str, run_names: list[str]) -> dict[str, list[dict]]:
     return {
         name: _read_jsonl(f"./saves/{model}/predict/{name}/generated_predictions.jsonl")
@@ -96,11 +122,25 @@ def _merge_predictions(source_data: list[dict], predictions: dict[str, list[dict
     return source_data
 
 
-def _write_merged(model: str, output_filename: str, merged: list[dict]) -> None:
+def _write_merged(model: str, output_filename: str, merged: list[dict]) -> str:
     out_dir = f"./saves/{model}/emotional_balanced"
     os.makedirs(out_dir, exist_ok=True)
-    with open(f"{out_dir}/{output_filename}", "w", encoding="utf-8") as f:
+    output_path = f"{out_dir}/{output_filename}"
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(merged, f, ensure_ascii=False, indent=2)
+    return output_path
+
+
+def _summary_path(model: str) -> str:
+    return f"./saves/{model}/emotional_balanced/emotional_results_summary.json"
+
+
+def _write_summary(model: str, metrics: list[dict]) -> str:
+    output_path = _summary_path(model)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump({"model": model, "metrics": metrics}, f, ensure_ascii=False, indent=2)
+    return output_path
 
 
 def _prediction_run_names_in_data(merged: list[dict]) -> list[str]:
@@ -142,9 +182,18 @@ def _load_existing_output(model: str, group: PredictionGroup, source_data: list[
     return merged_data
 
 
-def _report_agreement(merged: list[dict], run_names: list[str], only_values: bool = False) -> None:
+def _report_agreement(
+    model: str,
+    group: PredictionGroup,
+    merged: list[dict],
+    run_names: list[str],
+    only_values: bool = False,
+) -> list[dict]:
     targets = [_safe_three_emotions(entry["target"]) for entry in merged]
     n_total = len(merged)
+    dataset = Path(group.source_file).stem
+    results_file = f"./saves/{model}/emotional_balanced/{group.output_file}"
+    metrics: list[dict] = []
 
     for run_name in run_names:
         u_hits, c_hits, neu_hits = 0, 0, 0
@@ -156,22 +205,28 @@ def _report_agreement(merged: list[dict], run_names: list[str], only_values: boo
 
         if only_values:
             if REPORT_USER:
-                print(f"\n{u_hits / n_total * 100:0.2f}%")
+                print(f"\n{_pct(u_hits, n_total):0.2f}%")
             if REPORT_CHATBOT:
-                print(f"{c_hits / n_total * 100:0.2f}%")
+                print(f"{_pct(c_hits, n_total):0.2f}%")
             if REPORT_NEUTRAL:
-                print(f"{neu_hits / n_total * 100:0.2f}%")
+                print(f"{_pct(neu_hits, n_total):0.2f}%")
         else:
             print(f"\nPREDICTION MODEL {run_name}")
             if REPORT_USER:
-                print(f"USER EMOTION: {u_hits / n_total * 100:0.2f}%")
+                print(f"USER EMOTION: {_pct(u_hits, n_total):0.2f}%")
             if REPORT_CHATBOT:
-                print(f"CHATBOT EMOTION: {c_hits / n_total * 100:0.2f}%")
+                print(f"CHATBOT EMOTION: {_pct(c_hits, n_total):0.2f}%")
             if REPORT_NEUTRAL:
-                print(f"NEUTRAL EMOTION: {neu_hits / n_total * 100:0.2f}%")
+                print(f"NEUTRAL EMOTION: {_pct(neu_hits, n_total):0.2f}%")
+
+        metrics.append(
+            _metric_row(model, dataset, run_name, n_total, u_hits, c_hits, neu_hits, results_file)
+        )
+
+    return metrics
 
 
-def _process_group(model: str, group: PredictionGroup, only_values: bool, regenerate_from_predictions: bool) -> None:
+def _process_group(model: str, group: PredictionGroup, only_values: bool, regenerate_from_predictions: bool) -> list[dict]:
     with open(group.source_file, "r", encoding="utf-8") as f:
         source_data = json.loads(f.read())
 
@@ -184,7 +239,7 @@ def _process_group(model: str, group: PredictionGroup, only_values: bool, regene
     else:
         report_run_names = _prediction_run_names_in_data(merged)
 
-    _report_agreement(merged, report_run_names, only_values=only_values)
+    return _report_agreement(model, group, merged, report_run_names, only_values=only_values)
 
 
 def run(
@@ -195,13 +250,19 @@ def run(
 ) -> None:
     for model in models:
         print(f"\n---------------------------------\nMODEL: {model}\n---------------------------------")
+        model_metrics: list[dict] = []
         for group in groups:
-            _process_group(
-                model,
-                group,
-                only_values=only_values,
-                regenerate_from_predictions=regenerate_from_predictions,
+            model_metrics.extend(
+                _process_group(
+                    model,
+                    group,
+                    only_values=only_values,
+                    regenerate_from_predictions=regenerate_from_predictions,
+                )
             )
+        summary_file = _write_summary(model, model_metrics)
+        if not only_values:
+            print(f"\nSaved emotional summary: {summary_file}")
 
 
 def _parse_args() -> argparse.Namespace:

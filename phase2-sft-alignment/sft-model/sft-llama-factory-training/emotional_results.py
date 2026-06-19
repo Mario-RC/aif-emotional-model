@@ -52,6 +52,36 @@ def _safe_three_emotions(text: str) -> tuple[str, str, str]:
     return tuple(found[:3])
 
 
+def _pct(count: int, total: int) -> float:
+    return round(count / total * 100, 2) if total else 0.0
+
+
+def _metric_row(
+    model: str,
+    dataset: str,
+    prediction_model: str,
+    total: int,
+    user_hits: int,
+    chatbot_hits: int,
+    neutral_hits: int,
+    results_file: str,
+    mean_emotions_per_turn: float | None = None,
+) -> dict:
+    row = {
+        "model": model,
+        "dataset": dataset,
+        "prediction_model": prediction_model,
+        "total_examples": total,
+        "results_file": results_file,
+        "user_emotion": {"correct": user_hits, "percentage": _pct(user_hits, total)},
+        "chatbot_emotion": {"correct": chatbot_hits, "percentage": _pct(chatbot_hits, total)},
+        "neutral_emotion": {"correct": neutral_hits, "percentage": _pct(neutral_hits, total)},
+    }
+    if mean_emotions_per_turn is not None:
+        row["mean_emotions_per_turn"] = round(mean_emotions_per_turn, 2)
+    return row
+
+
 def load_predictions(model: str) -> tuple[list[dict], list[dict]]:
     foundation = _read_jsonl(FOUNDATION_PATH_TPL.format(model=model))
     sft = _read_jsonl(SFT_PATH_TPL.format(model=model))
@@ -61,7 +91,8 @@ def load_predictions(model: str) -> tuple[list[dict], list[dict]]:
 def merge_predictions(
     test_data: list[dict], sft: list[dict], foundation: list[dict]
 ) -> list[dict]:
-    """Mutate ``test_data`` in place adding ``predict_sft`` and ``predict_foundation``."""
+    """Return records with both SFT and foundation predictions attached."""
+    merged = []
     for idx, (entry, sft_pred, fnd_pred) in enumerate(zip(test_data, sft, foundation)):
         entry.pop("input", None)
         entry["input"] = entry.pop("instruction")
@@ -69,18 +100,29 @@ def merge_predictions(
         entry["target"] = entry.pop("output")
         entry["predict_sft"] = sft_pred["predict"].replace("\n", "").strip()
         entry["predict_foundation"] = fnd_pred["predict"].replace("\n", "").strip()
-    return test_data
+        merged.append(entry)
+    return merged
 
 
-def write_merged(model: str, merged: list[dict]) -> None:
+def write_merged(model: str, merged: list[dict]) -> str:
     out_dir = f"./saves/{model}/emotional_balanced"
     os.makedirs(out_dir, exist_ok=True)
-    with open(f"{out_dir}/demonstration_data_emotional_balanced_test_results.json",
-              "w", encoding="utf-8") as f:
+    output_path = f"{out_dir}/demonstration_data_emotional_balanced_test_results.json"
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(merged, f, ensure_ascii=False, indent=2)
+    return output_path
 
 
-def report_agreement(merged: list[dict], only_values: bool = False) -> None:
+def write_summary(model: str, metrics: list[dict]) -> str:
+    out_dir = f"./saves/{model}/emotional_balanced"
+    os.makedirs(out_dir, exist_ok=True)
+    output_path = f"{out_dir}/emotional_results_summary.json"
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump({"model": model, "metrics": metrics}, f, ensure_ascii=False, indent=2)
+    return output_path
+
+
+def report_agreement(model: str, merged: list[dict], results_file: str, only_values: bool = False) -> list[dict]:
     sft_user, sft_chat, sft_neutral = 0, 0, 0
     fnd_user, fnd_chat, fnd_neutral = 0, 0, 0
     fnd_emotion_counts: list[int] = []
@@ -99,24 +141,31 @@ def report_agreement(merged: list[dict], only_values: bool = False) -> None:
         fnd_neutral += f_neutral == "(NEUTRAL)"
 
     n = len(merged)
+    foundation_mean = mean(fnd_emotion_counts) if fnd_emotion_counts else 0.0
     if only_values:
-        print(f"{fnd_user / n * 100:0.2f}%")
-        print(f"{fnd_chat / n * 100:0.2f}%")
-        print(f"{fnd_neutral / n * 100:0.2f}%")
-        print(f"{mean(fnd_emotion_counts):0.2f}")
-        print(f"\n\n{sft_user / n * 100:0.2f}%")
-        print(f"{sft_chat / n * 100:0.2f}%")
-        print(f"{sft_neutral / n * 100:0.2f}%")
+        print(f"{_pct(fnd_user, n):0.2f}%")
+        print(f"{_pct(fnd_chat, n):0.2f}%")
+        print(f"{_pct(fnd_neutral, n):0.2f}%")
+        print(f"{foundation_mean:0.2f}")
+        print(f"\n\n{_pct(sft_user, n):0.2f}%")
+        print(f"{_pct(sft_chat, n):0.2f}%")
+        print(f"{_pct(sft_neutral, n):0.2f}%")
     else:
         print("\nPREDICTION FOUNDATION MODEL")
-        print(f"USER EMOTION: {fnd_user / n * 100:0.2f}%")
-        print(f"CHATBOT EMOTION: {fnd_chat / n * 100:0.2f}%")
-        print(f"NEUTRAL EMOTION: {fnd_neutral / n * 100:0.2f}%")
-        print(f"MEAN EMOTIONS PER TURN: {mean(fnd_emotion_counts):0.2f}")
+        print(f"USER EMOTION: {_pct(fnd_user, n):0.2f}%")
+        print(f"CHATBOT EMOTION: {_pct(fnd_chat, n):0.2f}%")
+        print(f"NEUTRAL EMOTION: {_pct(fnd_neutral, n):0.2f}%")
+        print(f"MEAN EMOTIONS PER TURN: {foundation_mean:0.2f}")
         print("\nPREDICTION SFT MODEL")
-        print(f"USER EMOTION: {sft_user / n * 100:0.2f}%")
-        print(f"CHATBOT EMOTION: {sft_chat / n * 100:0.2f}%")
-        print(f"NEUTRAL EMOTION: {sft_neutral / n * 100:0.2f}%")
+        print(f"USER EMOTION: {_pct(sft_user, n):0.2f}%")
+        print(f"CHATBOT EMOTION: {_pct(sft_chat, n):0.2f}%")
+        print(f"NEUTRAL EMOTION: {_pct(sft_neutral, n):0.2f}%")
+
+    dataset = "sft_demonstration_dataset_test"
+    return [
+        _metric_row(model, dataset, "foundation", n, fnd_user, fnd_chat, fnd_neutral, results_file, foundation_mean),
+        _metric_row(model, dataset, "sft", n, sft_user, sft_chat, sft_neutral, results_file),
+    ]
 
 
 def run(models: Iterable[str] = MODELS, only_values: bool = True) -> None:
@@ -126,16 +175,24 @@ def run(models: Iterable[str] = MODELS, only_values: bool = True) -> None:
 
         foundation, sft = load_predictions(model)
         merged = merge_predictions(test_data, sft, foundation)
-        write_merged(model, merged)
+        results_file = write_merged(model, merged)
 
         print(f"\n---------------------------------\nMODEL: {model}\n---------------------------------")
-        report_agreement(merged, only_values=only_values)
+        metrics = report_agreement(model, merged, results_file, only_values=only_values)
+        summary_file = write_summary(model, metrics)
+        if not only_values:
+            print(f"\nSaved emotional summary: {summary_file}")
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models", nargs="+", default=MODELS)
     parser.add_argument("--verbose", action="store_true", help="Print labelled metrics instead of bare values.")
+    parser.add_argument(
+        "--regenerate-from-predictions",
+        action="store_true",
+        help="Accepted for CLI compatibility; phase2 always rebuilds results from current prediction files.",
+    )
     return parser.parse_args()
 
 
