@@ -20,6 +20,8 @@ init_venv.sh
 # =========================
 saves/
 sml/
+sml-rlaif-alignment/
+backup/
 gemma-4/
 *.safetensors
 *.bin
