@@ -1,5 +1,7 @@
 # RLAIF for Emotional Dialogue Alignment
 
+This repository contains the research workflow used to build, analyze and improve emotionally-aware conversational agents with reinforcement learning from AI feedback (RLAIF). The project combines dialogue generation, supervised fine-tuning, reward modeling, preference data creation and model evaluation around multi-turn conversations where both the user and the chatbot express controlled emotions.
+
 The codebase is organized as an experimental workspace rather than as a single Python package. It mixes custom data-generation and evaluation scripts with a single shared copy of [LLaMA-Factory](https://github.com/hiyouga/LlamaFactory) at [llama-factory/](./llama-factory), installed as an editable package. The per-stage `llama-factory-*` folders are thin **workspaces**: they keep only project-specific `data/`, `examples/`, `saves/`, `logs/`, shell launchers and small helper scripts, while all launchers use the same shared `llamafactory-cli`.
 
 ## What the project does
@@ -8,6 +10,7 @@ The codebase is organized as an experimental workspace rather than as a single P
 - Evaluates base foundation models on dialogue quality and emotional control.
 - Generates prompt, comparison and preference data with external LLM APIs.
 - Trains supervised, reward and RL-aligned dialogue models.
+- Compares model outputs with automatic metrics.
 
 ## Repository structure
 
@@ -141,6 +144,7 @@ Produces the preference dataset used to train the reward model, trains it, and e
   - [2-generate_rating_data.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/2-generate_rating_data.py): calls the LLM judges (OpenAI, Anthropic, Gemini, Llama) to rate each response.
   - [3-rates_to_ranks.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/3-rates_to_ranks.py): converts numeric ratings into pairwise rankings (chosen / rejected).
   - [4-postprocess_rm_preference_dataset.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/4-postprocess_rm_preference_dataset.py) and [5-format_rm_preference_dataset.py](./phase3-rlaif-alignment/reward-model/rm-preference-dataset/5-format_rm_preference_dataset.py): clean and export the `LLaMA-Factory`-compatible preference dataset.
+- [rm-llama-factory-training/](./phase3-rlaif-alignment/reward-model/rm-llama-factory-training) — LLaMA-Factory workspace where the reward model is trained and evaluated. Reward-model LoRA checkpoints are stored under `saves/<model>/lora/rm_*`; prediction metrics are stored under `saves/<model>/predict/rm_*`. The reward-model training YAMLs point back to the Phase 2 `sft_3ep` adapters by relative path instead of duplicating SFT checkpoints in Phase 3.
 
 #### [phase3-rlaif-alignment/rlaif-model/](./phase3-rlaif-alignment/rlaif-model)
 
@@ -168,7 +172,7 @@ Use Python `3.12.x` for the project environment. The development machine may alr
 The dependency manifest in `requirements.txt` was prepared to cover:
 
 - The custom scripts under `phase1-foundation-eval` and `phase3-rlaif-alignment`.
-- The analysis notebooks and annotation tooling.
+- The analysis notebooks and local review tooling.
 - The shared `LLaMA-Factory` workflows used throughout the project.
 
 ## Installation
@@ -214,6 +218,8 @@ Recommended practice:
 - Avoid committing API keys, endpoints or other sensitive data into notebooks and scripts.
 
 ## Released data, model and reproducibility policy
+
+The public repository is intended to contain the code, configuration and the minimum canonical data needed to understand, train and evaluate the final emotional-dialogue models. It is not intended to version every intermediate prediction, checkpoint, generated candidate file, private review spreadsheet or paid LLM-judge artifact.
 
 The final RLAIF dataset release and best model are available on Hugging Face:
 
@@ -425,10 +431,20 @@ In practice, these runs are launched from inside the corresponding workspace wit
 
 The final released emotional RLAIF adapters are published on Hugging Face:
 
-- [`mario-rc/emotional-rlaif-dpo-gemma-2-2b-it`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-2b-it)
-- [`mario-rc/emotional-rlaif-dpo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-9b-it)
-- [`mario-rc/emotional-rlaif-ppo-llama-3.2-1b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-llama-3.2-1b-instruct)
-- [`mario-rc/emotional-rlaif-dpo-llama-3.2-3b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-llama-3.2-3b-instruct)
+Local adapter paths are relative to
+`phase3-rlaif-alignment/rlaif-model/rlaif-llama-factory-training`.
+
+| Model | Base model | Alignment | Local adapter | Hugging Face |
+| --- | --- | :---: | --- | --- |
+| Gemma 2 9B IT PPO | `google/gemma-2-9b-it` | PPO | `saves/gemma-2-9b-it/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-gemma-2-9b-it) |
+| Gemma 2 9B IT DPO | `google/gemma-2-9b-it` | DPO | `saves/gemma-2-9b-it/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-9b-it) |
+| GLM 4 9B Chat 1M PPO | `THUDM/glm-4-9b-chat-1m` | PPO | `saves/glm-4-9b-chat-1m/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-glm-4-9b-chat-1m`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-glm-4-9b-chat-1m) |
+| GLM 4 9B Chat 1M DPO | `THUDM/glm-4-9b-chat-1m` | DPO | `saves/glm-4-9b-chat-1m/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-glm-4-9b-chat-1m`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-glm-4-9b-chat-1m) |
+| Meta-Llama 3 8B Instruct PPO | `meta-llama/Meta-Llama-3-8B-Instruct` | PPO | `saves/Meta-Llama-3-8B-Instruct/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-meta-llama-3-8b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-meta-llama-3-8b-instruct) |
+| Meta-Llama 3 8B Instruct DPO | `meta-llama/Meta-Llama-3-8B-Instruct` | DPO | `saves/Meta-Llama-3-8B-Instruct/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-meta-llama-3-8b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-meta-llama-3-8b-instruct) |
+| Mistral 7B Instruct v0.3 PPO | `mistralai/Mistral-7B-Instruct-v0.3` | PPO | `saves/Mistral-7B-Instruct-v0.3/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-mistral-7b-instruct-v0.3`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-mistral-7b-instruct-v0.3) |
+| Phi 3 Small 8K Instruct PPO | `microsoft/Phi-3-small-8k-instruct` | PPO | `saves/Phi-3-small-8k-instruct/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-phi-3-small-8k-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-phi-3-small-8k-instruct) |
+| Phi 3 Small 8K Instruct DPO | `microsoft/Phi-3-small-8k-instruct` | DPO | `saves/Phi-3-small-8k-instruct/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-phi-3-small-8k-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-phi-3-small-8k-instruct) |
 
 ## Reproducibility recommendations
 
