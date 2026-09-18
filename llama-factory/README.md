@@ -106,7 +106,7 @@ Compared to ChatGLM's [P-Tuning](https://github.com/THUDM/ChatGLM2-6B/tree/main/
 
 ## Changelog
 
-[25/02/05] We supported fine-tuning the **[Qwen2-Audio](Qwen/Qwen2-Audio-7B-Instruct)** and **[MiniCPM-o-2.6](https://huggingface.co/openbmb/MiniCPM-o-2_6)** on audio understanding tasks.
+[25/02/05] We supported fine-tuning the **[Qwen2-Audio](https://huggingface.co/Qwen/Qwen2-Audio-7B-Instruct)** and **[MiniCPM-o-2.6](https://huggingface.co/openbmb/MiniCPM-o-2_6)** on audio understanding tasks.
 
 [25/01/31] We supported fine-tuning the **[DeepSeek-R1](https://huggingface.co/deepseek-ai/DeepSeek-R1)** and **[Qwen2.5-VL](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct)** model.
 
@@ -206,7 +206,7 @@ Compared to ChatGLM's [P-Tuning](https://github.com/THUDM/ChatGLM2-6B/tree/main/
 
 [23/06/29] We provided a **reproducible example** of training a chat model using instruction-following datasets, see [Baichuan-7B-sft](https://huggingface.co/hiyouga/Baichuan-7B-sft) for details.
 
-[23/06/22] We aligned the [demo API](src/api_demo.py) with the [OpenAI's](https://platform.openai.com/docs/api-reference/chat) format where you can insert the fine-tuned model in **arbitrary ChatGPT-based applications**.
+[23/06/22] We aligned the [demo API](src/llamafactory/api/app.py) with the [OpenAI's](https://platform.openai.com/docs/api-reference/chat) format where you can insert the fine-tuned model in **arbitrary ChatGPT-based applications**.
 
 [23/06/03] We supported quantized training and inference (aka **[QLoRA](https://github.com/artidoro/qlora)**). See [examples](examples/README.md) for usage.
 
@@ -289,7 +289,7 @@ You also can add a custom chat template to [template.py](src/llamafactory/data/t
 
 <details><summary>Pre-training datasets</summary>
 
-- [Wiki Demo (en)](data/wiki_demo.txt)
+- [Wiki Demo (en)](https://github.com/hiyouga/LlamaFactory/blob/v0.9.2/data/wiki_demo.txt)
 - [RefinedWeb (en)](https://huggingface.co/datasets/tiiuae/falcon-refinedweb)
 - [RedPajama V2 (en)](https://huggingface.co/datasets/togethercomputer/RedPajama-Data-V2)
 - [Wikipedia (en)](https://huggingface.co/datasets/olm/olm-wikipedia-20221220)
@@ -305,7 +305,7 @@ You also can add a custom chat template to [template.py](src/llamafactory/data/t
 
 <details><summary>Supervised fine-tuning datasets</summary>
 
-- [Identity (en&zh)](data/identity.json)
+- [Identity (en&zh)](https://github.com/hiyouga/LlamaFactory/blob/main/data/identity.json)
 - [Stanford Alpaca (en)](https://github.com/tatsu-lab/stanford_alpaca)
 - [Stanford Alpaca (zh)](https://github.com/ymcui/Chinese-LLaMA-Alpaca-3)
 - [Alpaca GPT4 (en&zh)](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM)
@@ -518,7 +518,7 @@ pip install .
 
 ### Data Preparation
 
-Please refer to [data/README.md](data/README.md) for checking the details about the format of dataset files. You can either use datasets on HuggingFace / ModelScope / Modelers hub or load the dataset in local disk.
+Please refer to [data/README.md](https://github.com/hiyouga/LlamaFactory/blob/v0.9.2/data/README.md) for checking the details about the format of dataset files. You can either use datasets on HuggingFace / ModelScope / Modelers hub or load the dataset in local disk.
 
 > [!NOTE]
 > Please update `data/dataset_info.json` to use your custom dataset.

@@ -53,8 +53,8 @@ pip install -e ./llama-factory
 
 After this, the `llamafactory-cli` binary is on the venv's `PATH` and resolves `import llamafactory` to the canonical source tree. Every per-stage folder named `llama-factory-*/` (`sft-llama-factory-training`, `rm-llama-factory-training`, `llama-factory-predict`, `rlaif-llama-factory-training`) is a thin **workspace** that contains only project content:
 
-- `data/` — workspace-specific `dataset_info.json` plus the project datasets used in that stage. Upstream LLaMA-Factory default datasets (`alpaca_*`, `belle_multiturn`, `c4_demo`, `dpo_*_demo`, `glaive_toolcall_*`, `hh_rlhf_en`, `identity`, `kto_*`, `mllm_*`, `ultra_chat`, `wiki_demo`) are **not duplicated**; they live only at [llama-factory/data/](./llama-factory/data).
-- `examples/` — workspace-specific YAML configs for training / inference under [`train_lora/`](https://github.com/hiyouga/LLaMA-Factory/tree/main/examples/train_lora), with additional final-model training configs in `uniform_batch64/` and test-prediction configs in `current_test/` where applicable. The other LF default subfolders (`accelerate/`, `deepspeed/`, `extras/`, `merge_lora/`, `train_full/`, `train_qlora/`) live only at [llama-factory/examples/](./llama-factory/examples).
+- `data/` — workspace-specific `dataset_info.json` plus the project datasets used in that stage.
+- `examples/` — workspace-specific YAML configs for training / inference under [`train_lora/`](https://github.com/hiyouga/LLaMA-Factory/tree/main/examples/train_lora). The other LF default subfolders (`accelerate/`, `deepspeed/`, `extras/`, `merge_lora/`, `train_full/`, `train_qlora/`) live only at [llama-factory/examples/](./llama-factory/examples).
 - `saves/` — checkpoints and predictions for that stage's experiments.
 - `logs/` — log output.
 - `*.sh` — launchers that call `llamafactory-cli` on relative paths inside the workspace.
@@ -261,7 +261,7 @@ Use this order if you want to rebuild the project rather than use the released H
 
 Each numbered step starts from the repository root. The batch launchers run multiple experiments; inspect their YAML selection before running them.
 
-Several original training YAMLs set `overwrite_output_dir: true`, so rerunning them can overwrite existing results; preserve those results or choose a different output directory first. The configs in `examples/uniform_batch64/` instead set `overwrite_output_dir: false`.
+Several original training YAMLs set `overwrite_output_dir: true`, so rerunning them can overwrite existing results; preserve those results or choose a different output directory first.
 
 1. Generate the Phase 2 SFT demonstration data:
 
@@ -436,7 +436,7 @@ The repository includes several stage-specific LLaMA-Factory workspaces under `p
 
 In practice, these runs are launched from inside the corresponding workspace with project-specific YAML files and shell scripts. Reward-model and RLAIF training YAMLs should reference the Phase 2 `sft_3ep` adapters by relative path instead of copying SFT checkpoints between phases.
 
-The batch launcher reproduces the original experiment matrix. The released DPO models and Gemma-2 9B PPO use the effective-batch-64 configs in `examples/uniform_batch64/`; the released Llama-3 8B PPO uses the two-epoch config in `examples/train_lora/llama3/`.
+The batch launcher reproduces the original experiment matrix. The released Llama-3 8B PPO uses the two-epoch config in `examples/train_lora/llama3/`.
 
 The released DPO/PPO adapters were evaluated on the same 392 English dialogue examples from `mario-rc/aif-emotional-generation/dialogues`, split `test`. SFT and RM also have separate stage-specific evaluation sets.
 
