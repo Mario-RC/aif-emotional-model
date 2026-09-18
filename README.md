@@ -17,7 +17,7 @@ The codebase is organized as an experimental workspace rather than as a single P
 ## Repository structure
 
 ```text
-rlaif/
+aif-emotional-model/
 ├── llama-factory/
 ├── phase1-foundation-eval/
 │   └── 1-foundation_eval.py
