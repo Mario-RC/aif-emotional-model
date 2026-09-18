@@ -2,12 +2,14 @@
 
 This repository contains the research workflow used to build, analyze and improve emotionally-aware conversational agents with reinforcement learning from AI feedback (RLAIF). The project combines dialogue generation, supervised fine-tuning, reward modeling, preference data creation and model evaluation around multi-turn conversations where both the user and the chatbot express controlled emotions.
 
+This README covers Phase 1 foundation evaluation, Phase 2 SFT and Phase 3 RLAIF.
+
 The codebase is organized as an experimental workspace rather than as a single Python package. It mixes custom data-generation and evaluation scripts with a single shared copy of [LLaMA-Factory](https://github.com/hiyouga/LlamaFactory) at [llama-factory/](./llama-factory), installed as an editable package. The per-stage `llama-factory-*` folders are thin **workspaces**: they keep only project-specific `data/`, `examples/`, `saves/`, `logs/`, shell launchers and small helper scripts, while all launchers use the same shared `llamafactory-cli`.
 
 ## What the project does
 
 - Builds emotionally-structured dialogue datasets.
-- Evaluates base foundation models on dialogue quality and emotional control.
+- Evaluates base foundation models on emotion classification in DailyDialog.
 - Generates prompt, comparison and preference data with external LLM APIs.
 - Trains supervised, reward and RL-aligned dialogue models.
 - Compares model outputs with automatic metrics.
@@ -22,7 +24,7 @@ rlaif/
 ├── phase2-sft-alignment/
 │   └── sft-model/
 │       ├── sft-demonstration-dataset/
-│       ├── sft-llama-factory-training/
+│       └── sft-llama-factory-training/
 └── phase3-rlaif-alignment/
     ├── reward-model/
     │   ├── rm-prompt-dataset/
@@ -30,14 +32,14 @@ rlaif/
     │   │   ├── llama-factory-predict/
     │   │   └── candidate-curation/
     │   ├── rm-preference-dataset/
-    │   ├── rm-llama-factory-training/
+    │   └── rm-llama-factory-training/
     └── rlaif-model/
         ├── ppo-unlabeled-prompts-dataset/
         ├── dpo-comparison-dataset/
         │   ├── llama-factory-predict/
         │   └── candidate-curation/
         ├── dpo-preference-dataset/
-        ├── rlaif-llama-factory-training/
+        └── rlaif-llama-factory-training/
 ```
 
 ### LLaMA-Factory: canonical install + thin workspaces
@@ -52,7 +54,7 @@ pip install -e ./llama-factory
 After this, the `llamafactory-cli` binary is on the venv's `PATH` and resolves `import llamafactory` to the canonical source tree. Every per-stage folder named `llama-factory-*/` (`sft-llama-factory-training`, `rm-llama-factory-training`, `llama-factory-predict`, `rlaif-llama-factory-training`) is a thin **workspace** that contains only project content:
 
 - `data/` — workspace-specific `dataset_info.json` plus the project datasets used in that stage. Upstream LLaMA-Factory default datasets (`alpaca_*`, `belle_multiturn`, `c4_demo`, `dpo_*_demo`, `glaive_toolcall_*`, `hh_rlhf_en`, `identity`, `kto_*`, `mllm_*`, `ultra_chat`, `wiki_demo`) are **not duplicated**; they live only at [llama-factory/data/](./llama-factory/data).
-- `examples/` — workspace-specific YAML configs for training / inference, all under [`train_lora/`](https://github.com/hiyouga/LLaMA-Factory/tree/main/examples/train_lora). The other LF default subfolders (`accelerate/`, `deepspeed/`, `extras/`, `merge_lora/`, `train_full/`, `train_qlora/`) live only at [llama-factory/examples/](./llama-factory/examples).
+- `examples/` — workspace-specific YAML configs for training / inference under [`train_lora/`](https://github.com/hiyouga/LLaMA-Factory/tree/main/examples/train_lora), with additional final-model training configs in `uniform_batch64/` and test-prediction configs in `current_test/` where applicable. The other LF default subfolders (`accelerate/`, `deepspeed/`, `extras/`, `merge_lora/`, `train_full/`, `train_qlora/`) live only at [llama-factory/examples/](./llama-factory/examples).
 - `saves/` — checkpoints and predictions for that stage's experiments.
 - `logs/` — log output.
 - `*.sh` — launchers that call `llamafactory-cli` on relative paths inside the workspace.
@@ -64,7 +66,7 @@ Launchers run with the workspace as cwd, e.g.:
 
 ```bash
 cd phase3-rlaif-alignment/reward-model/rm-llama-factory-training
-bash <launcher>.sh   # internally: llamafactory-cli train examples/.../*.yaml
+bash rm_train_predict.sh
 ```
 
 This keeps every experiment self-contained on the data/config side while the framework code lives in exactly one place.
@@ -100,7 +102,7 @@ Preference datasets may keep `uid` because it identifies a preference pair or co
 
 ### Phase 1: Foundation model evaluation
 
-The first phase evaluates open foundation models on the target emotional dialogue task. The main entrypoint is [phase1-foundation-eval/1-foundation_eval.py](./phase1-foundation-eval/1-foundation_eval.py), which:
+The first phase evaluates open foundation models on emotion classification in DailyDialog, rather than the response-generation task used in later phases. The main entrypoint is [phase1-foundation-eval/1-foundation_eval.py](./phase1-foundation-eval/1-foundation_eval.py), which:
 
 - Downloads and preprocesses the `daily_dialog` dataset.
 - Filters dialogues to the structure required by the project.
@@ -158,7 +160,7 @@ Uses the same prompt → candidate → rating → preference flow as `reward-mod
 
 ## Main technologies
 
-- Python 3.12
+- Python 3.10
 - PyTorch
 - Hugging Face `transformers`, `datasets`, `accelerate`, `peft`, `trl` and `sentence-transformers`
 - `LLaMA-Factory`
@@ -167,7 +169,7 @@ Uses the same prompt → candidate → rating → preference flow as `reward-mod
 
 ## Environment
 
-Use Python `3.12.x` for the project environment. The development machine may already have a local `./.vrlaif` virtual environment, but it is treated as a local execution artifact rather than a source file.
+Use Python `3.10.x` for the project environment, matching `requirements.txt`. The development machine may already have a local `./.vrlaif` virtual environment, but it is treated as a local execution artifact rather than a source file.
 
 The dependency manifest in `requirements.txt` was prepared to cover:
 
@@ -177,6 +179,7 @@ The dependency manifest in `requirements.txt` was prepared to cover:
 ## Installation
 
 ```bash
+python3.10 -m venv .vrlaif  # only when creating a new environment
 source ./.vrlaif/bin/activate
 pip install -r requirements.txt
 pip install -e ./llama-factory
@@ -207,7 +210,7 @@ Several scripts expect local JSON configuration files. Naming follows a single c
 - `config.json` — non-secret model registry / template settings (e.g. [phase1-foundation-eval/config.json](./phase1-foundation-eval/config.json)).
 - `config.json` — local per-stage configuration. In generation stages it stores Azure OpenAI deployments keyed with normalized uppercase names such as `CHATGPT`, `GPT-4`, `GPT-4-TURBO` and `GPT-4O`; in preference-rating stages it stores the multi-provider LLM judges (Azure OpenAI + Anthropic + Gemini + Llama).
 
-The per-stage `config.json` files share the same nested-by-deployment schema (`{"<DEPLOYMENT>": {"MODEL": ..., "AZURE_OPENAI_ENDPOINT": ..., ...}}`) and uppercase top-level keys so the same naming convention works in every phase.
+Generation and preference-rating `config.json` files use a nested-by-deployment schema (`{"<DEPLOYMENT>": {"MODEL": ..., "AZURE_OPENAI_ENDPOINT": ..., ...}}`) with uppercase deployment keys. Phase 1 instead uses `args` and model-family/template settings.
 
 Recommended practice:
 
@@ -220,21 +223,23 @@ Recommended practice:
 
 The public repository is intended to contain the code, configuration and the minimum canonical data needed to understand, train and evaluate the final emotional-dialogue models. It is not intended to version every intermediate prediction, checkpoint, generated candidate file or paid LLM-judge artifact.
 
-The final RLAIF dataset release and best model are available on Hugging Face:
+The RLAIF dataset and selected model releases are available on Hugging Face:
 
 - Dataset: [mario-rc/aif-emotional-generation](https://huggingface.co/datasets/mario-rc/aif-emotional-generation)
-- Best released model: <https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-9b-it>
+- Models: see the [Phase 3 release catalogue](#released-hugging-face-models). Selection criteria and training protocols differ across campaigns; no single model is declared universally best.
 
-The key final JSON files are:
+The key final JSON files and their source paths in the Hugging Face dataset are:
 
-- `ppo_unlabeled_prompts_dataset.json`
-- `ppo_unlabeled_prompts_dataset_test.json`
-- `dpo_preference_dataset.json`
-- `dpo_preference_dataset_test.json`
+- `ppo_unlabeled_prompts_dataset.json` — `dialogues/train.json`
+- `ppo_unlabeled_prompts_dataset_test.json` — `dialogues/test.json`
+- `dpo_preference_dataset.json` — `aif_annotations/train.json`
+- `dpo_preference_dataset_test.json` — `aif_annotations/test.json`
+
+Copy the downloaded files into the corresponding workspace's `data/` directory using the local filenames on the left.
 
 These files can be used directly to train, evaluate or reuse the final RLAIF emotional-generation setup in other projects. The `ppo_unlabeled_prompts_dataset*.json` files contain the final prompt/dialogue pool, and the `dpo_preference_dataset*.json` files contain the derived preference pairs used for DPO/RLAIF training.
 
-The released artifacts support three levels of use:
+The released artifacts support two levels of use:
 
 - Use the Hugging Face dataset and model directly to train, test, inspect or build on the final system.
 - Analyze the JSON datasets, including the roughly 3000 generated emotional dialogues and the preference datasets derived from them.
@@ -254,6 +259,10 @@ python 1-foundation_eval.py
 
 Use this order if you want to rebuild the project rather than use the released Hugging Face dataset/model. Steps that generate dialogues, candidate responses or LLM-judge ratings can cost money or require GPU inference.
 
+Each numbered step starts from the repository root. The batch launchers run multiple experiments; inspect their YAML selection before running them.
+
+Several original training YAMLs set `overwrite_output_dir: true`, so rerunning them can overwrite existing results; preserve those results or choose a different output directory first. The configs in `examples/uniform_batch64/` instead set `overwrite_output_dir: false`.
+
 1. Generate the Phase 2 SFT demonstration data:
 
 ```bash
@@ -263,13 +272,14 @@ python 2-formatted_sft_demonstration_dataset.py
 python 3-train_test_sft_demonstration_dataset_json.py
 ```
 
-2. Train and predict SFT models with the Phase 2 LLaMA-Factory workspace:
+2. Train SFT models with the Phase 2 LLaMA-Factory workspace:
 
 ```bash
 cd phase2-sft-alignment/sft-model/sft-llama-factory-training
-bash <sft training/prediction launcher>.sh
-python emotional_results.py
+bash sft_train.sh
 ```
+
+Before running `emotional_results.py`, generate predictions with a YAML targeting the corresponding trained SFT adapter; the training launcher does not generate predictions.
 
 3. Generate the RM prompt dataset:
 
@@ -285,7 +295,7 @@ python 4-merge_demonstration_prompt_datasets.py
 
 ```bash
 cd phase3-rlaif-alignment/reward-model/rm-comparison-dataset/llama-factory-predict
-bash <SFT prediction launcher>.sh
+bash sft_predict.sh
 python emotional_results.py
 
 cd ../candidate-curation
@@ -317,7 +327,7 @@ python 5-format_rm_preference_dataset.py --test
 
 ```bash
 cd phase3-rlaif-alignment/reward-model/rm-llama-factory-training
-bash <reward-model training/prediction launcher>.sh
+bash rm_train_predict.sh
 ```
 
 7. Generate the RLAIF/PPO unlabeled prompt dataset:
@@ -334,7 +344,7 @@ python 4-merge_demonstration_prompt_ppo_unlabeled_prompts_datasets.py
 
 ```bash
 cd phase3-rlaif-alignment/rlaif-model/dpo-comparison-dataset/llama-factory-predict
-bash <SFT prediction launcher>.sh
+bash sft_predict.sh
 python emotional_results.py
 
 cd ../candidate-curation
@@ -366,7 +376,7 @@ python 5-format_dpo_preference_dataset.py --test
 
 ```bash
 cd phase3-rlaif-alignment/rlaif-model/rlaif-llama-factory-training
-bash <RLAIF training/prediction launcher>.sh
+bash rm_rlaif_train_eval_predict.sh
 python emotional_results.py
 ```
 
@@ -426,28 +436,30 @@ The repository includes several stage-specific LLaMA-Factory workspaces under `p
 
 In practice, these runs are launched from inside the corresponding workspace with project-specific YAML files and shell scripts. Reward-model and RLAIF training YAMLs should reference the Phase 2 `sft_3ep` adapters by relative path instead of copying SFT checkpoints between phases.
 
+The batch launcher reproduces the original experiment matrix. The released DPO models and Gemma-2 9B PPO use the effective-batch-64 configs in `examples/uniform_batch64/`; the released Llama-3 8B PPO uses the two-epoch config in `examples/train_lora/llama3/`.
+
+The released DPO/PPO adapters were evaluated on the same 392 English dialogue examples from `mario-rc/aif-emotional-generation/dialogues`, split `test`. SFT and RM also have separate stage-specific evaluation sets.
+
 ### Released Hugging Face models
 
-The final released emotional RLAIF adapters are published on Hugging Face:
+The Phase 3 release catalogue contains 10 emotional RLAIF adapters. Use the inference example and tokenizer from the corresponding Hugging Face repository; each model card documents its training parameters and license.
 
-Local adapter paths are relative to
-`phase3-rlaif-alignment/rlaif-model/rlaif-llama-factory-training`.
-
-| Model | Base model | Alignment | Local adapter | Hugging Face |
-| --- | --- | :---: | --- | --- |
-| Gemma 2 9B IT PPO | `google/gemma-2-9b-it` | PPO | `saves/gemma-2-9b-it/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-gemma-2-9b-it) |
-| Gemma 2 9B IT DPO | `google/gemma-2-9b-it` | DPO | `saves/gemma-2-9b-it/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-9b-it) |
-| GLM 4 9B Chat 1M PPO | `THUDM/glm-4-9b-chat-1m` | PPO | `saves/glm-4-9b-chat-1m/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-glm-4-9b-chat-1m`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-glm-4-9b-chat-1m) |
-| GLM 4 9B Chat 1M DPO | `THUDM/glm-4-9b-chat-1m` | DPO | `saves/glm-4-9b-chat-1m/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-glm-4-9b-chat-1m`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-glm-4-9b-chat-1m) |
-| Meta-Llama 3 8B Instruct PPO | `meta-llama/Meta-Llama-3-8B-Instruct` | PPO | `saves/Meta-Llama-3-8B-Instruct/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-meta-llama-3-8b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-meta-llama-3-8b-instruct) |
-| Meta-Llama 3 8B Instruct DPO | `meta-llama/Meta-Llama-3-8B-Instruct` | DPO | `saves/Meta-Llama-3-8B-Instruct/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-meta-llama-3-8b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-meta-llama-3-8b-instruct) |
-| Mistral 7B Instruct v0.3 PPO | `mistralai/Mistral-7B-Instruct-v0.3` | PPO | `saves/Mistral-7B-Instruct-v0.3/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-mistral-7b-instruct-v0.3`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-mistral-7b-instruct-v0.3) |
-| Phi 3 Small 8K Instruct PPO | `microsoft/Phi-3-small-8k-instruct` | PPO | `saves/Phi-3-small-8k-instruct/lora/ppo_1ep` | [`mario-rc/emotional-rlaif-ppo-phi-3-small-8k-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-phi-3-small-8k-instruct) |
-| Phi 3 Small 8K Instruct DPO | `microsoft/Phi-3-small-8k-instruct` | DPO | `saves/Phi-3-small-8k-instruct/lora/dpo_1ep` | [`mario-rc/emotional-rlaif-dpo-phi-3-small-8k-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-phi-3-small-8k-instruct) |
+| Model | Base model | Alignment | Hugging Face |
+| --- | --- | :---: | --- |
+| Gemma 2 9B IT | `google/gemma-2-9b-it` | PPO | [`mario-rc/emotional-rlaif-ppo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-gemma-2-9b-it) |
+| Gemma 2 9B IT | `google/gemma-2-9b-it` | DPO | [`mario-rc/emotional-rlaif-dpo-gemma-2-9b-it`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-gemma-2-9b-it) |
+| GLM-4 9B Chat 1M | `THUDM/glm-4-9b-chat-1m` | PPO | [`mario-rc/emotional-rlaif-ppo-glm-4-9b-chat-1m`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-glm-4-9b-chat-1m) |
+| GLM-4 9B Chat 1M | `THUDM/glm-4-9b-chat-1m` | DPO | [`mario-rc/emotional-rlaif-dpo-glm-4-9b-chat-1m`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-glm-4-9b-chat-1m) |
+| Meta-Llama 3 8B Instruct | `meta-llama/Meta-Llama-3-8B-Instruct` | PPO | [`mario-rc/emotional-rlaif-ppo-meta-llama-3-8b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-meta-llama-3-8b-instruct) |
+| Meta-Llama 3 8B Instruct | `meta-llama/Meta-Llama-3-8B-Instruct` | DPO | [`mario-rc/emotional-rlaif-dpo-meta-llama-3-8b-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-meta-llama-3-8b-instruct) |
+| Mistral 7B Instruct v0.3 | `mistralai/Mistral-7B-Instruct-v0.3` | PPO | [`mario-rc/emotional-rlaif-ppo-mistral-7b-instruct-v0.3`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-mistral-7b-instruct-v0.3) |
+| Mistral 7B Instruct v0.3 | `mistralai/Mistral-7B-Instruct-v0.3` | DPO | [`mario-rc/emotional-rlaif-dpo-mistral-7b-instruct-v0.3`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-mistral-7b-instruct-v0.3) |
+| Phi 3 Small 8K Instruct | `microsoft/Phi-3-small-8k-instruct` | PPO | [`mario-rc/emotional-rlaif-ppo-phi-3-small-8k-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-ppo-phi-3-small-8k-instruct) |
+| Phi 3 Small 8K Instruct | `microsoft/Phi-3-small-8k-instruct` | DPO | [`mario-rc/emotional-rlaif-dpo-phi-3-small-8k-instruct`](https://huggingface.co/mario-rc/emotional-rlaif-dpo-phi-3-small-8k-instruct) |
 
 ## Reproducibility recommendations
 
-- Use Python `3.12.x`.
+- Use Python `3.10.x`.
 - Install dependencies from `requirements.txt` before reproducing old experiments.
 - Record the exact CUDA, driver and PyTorch build used on each machine.
 - Keep track of the exact LLaMA-Factory workspace, YAML and launcher used for each run.
