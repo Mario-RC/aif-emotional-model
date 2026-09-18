@@ -474,4 +474,8 @@ The Phase 3 release catalogue contains 10 emotional RLAIF adapters. Use the infe
 
 ## License and provenance
 
+This project's code, configs, and documentation are released under the Apache License 2.0. See [LICENSE](./LICENSE).
+
+Third-party model weights, datasets, and Hugging Face artifacts remain under their own licenses and terms.
+
 This repository contains custom project code together with the shared upstream [LLaMA-Factory](https://github.com/hiyouga/LlamaFactory) source under [llama-factory/](./llama-factory). The licensing and attribution of upstream components should be preserved in their respective subdirectories.
