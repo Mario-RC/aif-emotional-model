@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # GEMMA2 - google/gemma-2-9b-it
 # gemma2/gemma-2-9b-it
 CUDA_VISIBLE_DEVICES=0 llamafactory-cli train examples/train_lora/gemma2/gemma-2-9b-it_lora_dpo_1ep.yaml
